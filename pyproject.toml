@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "nxus-qbd"
+version = "0.1.0"
+description = "Official Python SDK for the Nxus QuickBooks Desktop API"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = [
+    "httpx>=0.25.0",
+    "pydantic>=2.0",
+]
+keywords = ["nxus", "quickbooks", "quickbooks-desktop", "qbd", "sdk", "api", "accounting"]
+
+[project.urls]
+Homepage = "https://nxus.app"
+Repository = "https://github.com/nxus-app/nxus-qbd-python"
+Documentation = "https://docs.nxus.app"
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-asyncio", "respx", "python-dotenv>=1.2.1"]
+codegen = ["datamodel-code-generator[http]>=0.26.0"]
+
+[tool.datamodel-codegen]
+input-file-type = "openapi"
+output-model-type = "pydantic_v2.BaseModel"
+target-python-version = "3.10"
+use-standard-collections = true
+use-union-operator = true
+field-constraints = true
+capitalise-enum-members = true
+snake-case-field = true
+use-default = true
+reuse-model = true
+use-annotated = true
+allow-population-by-field-name = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
