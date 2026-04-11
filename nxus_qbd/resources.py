@@ -77,6 +77,32 @@ def _serialize_body(kwargs: dict) -> Optional[dict]:
     return {to_wire_key(k): to_wire_value(v) for k, v in kwargs.items()}
 
 
+def _serialize_params(kwargs: dict) -> Optional[dict]:
+    """Turn flat query kwargs into API wire-format params.
+
+    Supports Pythonic snake_case while remaining backward-compatible with
+    callers that already pass camelCase query keys.
+    """
+    if not kwargs:
+        return None
+
+    def to_wire_key(key: str) -> str:
+        if "_" not in key:
+            return key
+        parts = key.rstrip("_").split("_")
+        head, *tail = parts
+        return head + "".join(part[:1].upper() + part[1:] for part in tail)
+
+    def to_wire_value(value: Any) -> Any:
+        if isinstance(value, BaseModel):
+            return value.model_dump(by_alias=True, exclude_none=True)
+        if isinstance(value, list):
+            return [to_wire_value(v) for v in value]
+        return value
+
+    return {to_wire_key(k): to_wire_value(v) for k, v in kwargs.items()}
+
+
 def _parse_one(body: Any, model: Optional[type]) -> Any:
     """Parse a single-resource response through a Pydantic model if set."""
     if model is None or body is None:
@@ -174,7 +200,7 @@ class _SyncList:
         cursor = kwargs.pop("cursor", None)
         limit = kwargs.pop("limit", None)
         # Remaining kwargs become query params
-        params = {**kwargs}
+        params = _serialize_params(kwargs) or {}
         if cursor is not None:
             params["cursor"] = cursor
         if limit is not None:
@@ -297,7 +323,7 @@ class _AsyncList:
         connection_id, headers, timeout = _extract_options(kwargs)
         cursor = kwargs.pop("cursor", None)
         limit = kwargs.pop("limit", None)
-        params = {**kwargs}
+        params = _serialize_params(kwargs) or {}
         if cursor is not None:
             params["cursor"] = cursor
         if limit is not None:
@@ -770,7 +796,7 @@ class AsyncReports(_AsyncResourceBase):
 def _make_sync_report_method(path: str):
     def method(self, **kwargs: Any) -> Any:
         connection_id, headers, timeout = _extract_options(kwargs)
-        params = kwargs or None
+        params = _serialize_params(kwargs)
         kw = _build_request_kwargs(connection_id, headers, timeout, params=params)
         return self._t.request("GET", path, **kw)
     return method
@@ -779,7 +805,7 @@ def _make_sync_report_method(path: str):
 def _make_async_report_method(path: str):
     async def method(self, **kwargs: Any) -> Any:
         connection_id, headers, timeout = _extract_options(kwargs)
-        params = kwargs or None
+        params = _serialize_params(kwargs)
         kw = _build_request_kwargs(connection_id, headers, timeout, params=params)
         return await self._t.request("GET", path, **kw)
     return method
@@ -882,7 +908,7 @@ class SyncConnections(_SyncResourceBase, _SyncList, _SyncRetrieve, _SyncCreate, 
         connection_id, headers, timeout = _extract_options(kwargs)
         cursor = kwargs.pop("cursor", None)
         limit = kwargs.pop("limit", None)
-        params = {**kwargs}
+        params = _serialize_params(kwargs) or {}
         if cursor is not None:
             params["cursor"] = cursor
         if limit is not None:
@@ -941,7 +967,7 @@ class AsyncConnections(_AsyncResourceBase, _AsyncList, _AsyncRetrieve, _AsyncCre
         connection_id, headers, timeout = _extract_options(kwargs)
         cursor = kwargs.pop("cursor", None)
         limit = kwargs.pop("limit", None)
-        params = {**kwargs}
+        params = _serialize_params(kwargs) or {}
         if cursor is not None:
             params["cursor"] = cursor
         if limit is not None:

@@ -366,6 +366,19 @@ def main() -> None:
     write_subpkg_init("core", CORE_DIR)
     write_subpkg_init("qbd", QBD_DIR)
 
+    # Tactical compatibility fix: the live BarCode response currently omits
+    # revisionNumber even though the schema marks it required. This endpoint is
+    # list/retrieve/delete only, so making the field optional in Python keeps
+    # the SDK usable while the backend/spec contract is corrected.
+    bar_code_file = QBD_DIR / "bar_code.py"
+    if bar_code_file.exists():
+        bar_code_text = bar_code_file.read_text(encoding="utf-8")
+        bar_code_text = bar_code_text.replace(
+            "revision_number: Annotated[str, Field(alias='revisionNumber')]",
+            "revision_number: Annotated[str | None, Field(alias='revisionNumber')] = None",
+        )
+        bar_code_file.write_text(bar_code_text, encoding="utf-8")
+
     # Build top-level models/__init__.py that re-exports everything flat
     init_lines = ['"""Auto-generated. Do not edit by hand."""', ""]
     # _shared first (no dependencies on subpackages)
