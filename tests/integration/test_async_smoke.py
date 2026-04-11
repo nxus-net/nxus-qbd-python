@@ -6,6 +6,7 @@ absent (via the session-scoped ``api_key`` fixture in conftest.py).
 """
 
 import pytest
+import httpx
 
 from nxus_qbd import AsyncNxusClient
 from nxus_qbd.errors import NxusApiError
@@ -28,6 +29,8 @@ async def test_async_list_vendors(async_client, connection_id):
         except NxusApiError as exc:
             _skip_if_rate_limited(exc)
             raise
+        except httpx.ReadTimeout:
+            pytest.skip("Async smoke skipped due to live API read timeout")
         assert isinstance(page, CursorPage)
         assert isinstance(page.data, list)
         assert isinstance(page.has_more, bool)
@@ -48,6 +51,8 @@ async def test_async_auto_pagination(async_client, connection_id):
         except NxusApiError as exc:
             _skip_if_rate_limited(exc)
             raise
+        except httpx.ReadTimeout:
+            pytest.skip("Async smoke skipped due to live API read timeout")
     assert len(items) >= 0
     if items:
         assert items[0] is not None
