@@ -8,6 +8,8 @@ import httpx
 
 from nxus_qbd.errors import NxusApiError
 
+DEFAULT_TIMEOUT_SECONDS = 100.0
+
 
 class SyncTransport:
     """Synchronous HTTP transport backed by ``httpx.Client``."""
@@ -18,7 +20,7 @@ class SyncTransport:
         base_url: str,
         api_key: str,
         headers: Optional[Dict[str, str]] = None,
-        timeout: float = 30.0,
+        timeout: float = DEFAULT_TIMEOUT_SECONDS,
         verify: bool = True,
     ) -> None:
         merged_headers = {
@@ -87,7 +89,7 @@ class AsyncTransport:
         base_url: str,
         api_key: str,
         headers: Optional[Dict[str, str]] = None,
-        timeout: float = 30.0,
+        timeout: float = DEFAULT_TIMEOUT_SECONDS,
         verify: bool = True,
     ) -> None:
         merged_headers = {

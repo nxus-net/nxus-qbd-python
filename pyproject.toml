@@ -18,7 +18,7 @@ keywords = ["nxus", "quickbooks", "quickbooks-desktop", "qbd", "sdk", "api", "ac
 [project.urls]
 Homepage = "https://nxus.app"
 Repository = "https://github.com/nxus-app/nxus-qbd-python"
-Documentation = "https://docs.nxus.app"
+Documentation = "https://nx-us.net/docs/"
 
 [project.optional-dependencies]
 dev = ["pytest", "pytest-asyncio", "respx", "python-dotenv>=1.2.1"]

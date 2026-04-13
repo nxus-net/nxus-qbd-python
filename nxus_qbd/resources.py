@@ -56,7 +56,7 @@ def _serialize_body(kwargs: dict) -> Optional[dict]:
     if len(kwargs) == 1:
         (only_val,) = kwargs.values()
         if isinstance(only_val, BaseModel):
-            return only_val.model_dump(by_alias=True, exclude_none=True)
+            return only_val.model_dump(mode="json", by_alias=True, exclude_none=True)
 
     def to_wire_key(key: str) -> str:
         if "_" not in key:
@@ -67,7 +67,7 @@ def _serialize_body(kwargs: dict) -> Optional[dict]:
 
     def to_wire_value(value: Any) -> Any:
         if isinstance(value, BaseModel):
-            return value.model_dump(by_alias=True, exclude_none=True)
+            return value.model_dump(mode="json", by_alias=True, exclude_none=True)
         if isinstance(value, dict):
             return {to_wire_key(str(k)): to_wire_value(v) for k, v in value.items()}
         if isinstance(value, list):
@@ -95,7 +95,7 @@ def _serialize_params(kwargs: dict) -> Optional[dict]:
 
     def to_wire_value(value: Any) -> Any:
         if isinstance(value, BaseModel):
-            return value.model_dump(by_alias=True, exclude_none=True)
+            return value.model_dump(mode="json", by_alias=True, exclude_none=True)
         if isinstance(value, list):
             return [to_wire_value(v) for v in value]
         return value
@@ -493,9 +493,8 @@ def _async_resource(
 # ---------------------------------------------------------------------------
 # Resource registry — (namespace, list_path, singular_path, create_path, methods)
 # ---------------------------------------------------------------------------
-
+# BEGIN AUTO-GENERATED RESOURCE DEFS
 _RESOURCE_DEFS: list[tuple[str, str, str, str, tuple[str, ...]]] = [
-    # -- Transactions --------------------------------------------------------
     ("ar_refund_credit_cards", "/api/v1/ar-refund-credit-cards", "/api/v1/ar-refund-credit-card/{id}", "/api/v1/ar-refund-credit-card", ("list", "retrieve", "create", "update", "delete")),
     ("bills", "/api/v1/bills", "/api/v1/bill/{id}", "/api/v1/bill", ("list", "retrieve", "create", "update", "delete")),
     ("check_bills", "/api/v1/check-bills", "/api/v1/check-bill/{id}", "/api/v1/check-bill", ("list", "retrieve", "create", "update", "delete")),
@@ -519,10 +518,9 @@ _RESOURCE_DEFS: list[tuple[str, str, str, str, tuple[str, ...]]] = [
     ("inventory_adjustments", "/api/v1/inventory-adjustments", "/api/v1/inventory-adjustment/{id}", "/api/v1/inventory-adjustment", ("list", "retrieve", "create", "update", "delete")),
     ("invoices", "/api/v1/invoices", "/api/v1/invoice/{id}", "/api/v1/invoice", ("list", "retrieve", "create", "update", "delete")),
     ("receive_payments", "/api/v1/receive-payments", "/api/v1/receive-payment/{id}", "/api/v1/receive-payment", ("list", "retrieve", "create", "update", "delete")),
-    # -- Lists ---------------------------------------------------------------
     ("accounts", "/api/v1/accounts", "/api/v1/account/{id}", "/api/v1/account", ("list", "retrieve", "create", "update", "delete")),
-    ("account_tax_line_infos", "/api/v1/account-tax-line-info", "/api/v1/account-tax-line-info/{id}", "/api/v1/account-tax-line-info", ("retrieve",)),
-    ("bar_codes", "/api/v1/bar-codes", "/api/v1/bar-code/{id}", "/api/v1/bar-code", ("list", "retrieve", "delete")),
+    ("account_tax_line_infos", "/api/v1/accounts-tax-line-info", "/api/v1/account-tax-line-info/{id}", "/api/v1/account-tax-line-info", ("list", "retrieve")),
+    ("bar_codes", "/api/v1/bar-codes", "/api/v1/bar-code/{id}", "/api/v1/bar-code", ("list", "delete")),
     ("billing_rates", "/api/v1/billing-rates", "/api/v1/billing-rate/{id}", "/api/v1/billing-rate", ("list", "retrieve", "create", "delete")),
     ("qbd_classes", "/api/v1/classes", "/api/v1/class/{id}", "/api/v1/class", ("list", "retrieve", "create", "update", "delete")),
     ("currencies", "/api/v1/currencies", "/api/v1/currency/{id}", "/api/v1/currency", ("list", "retrieve", "create", "update")),
@@ -541,25 +539,24 @@ _RESOURCE_DEFS: list[tuple[str, str, str, str, tuple[str, ...]]] = [
     ("vendors", "/api/v1/vendors", "/api/v1/vendor/{id}", "/api/v1/vendor", ("list", "retrieve", "create", "update", "delete")),
     ("vendor_types", "/api/v1/vendor-types", "/api/v1/vendor-type/{id}", "/api/v1/vendor-type", ("list", "retrieve", "create", "delete")),
     ("bill_to_pay", "/api/v1/bills-to-pay", "/api/v1/bill-to-pay/{id}", "/api/v1/bill-to-pay", ("list", "retrieve")),
-    # -- Items ---------------------------------------------------------------
     ("items", "/api/v1/items", "/api/v1/item/{id}", "/api/v1/item", ("list", "retrieve")),
     ("inventory_items", "/api/v1/inventory-items", "/api/v1/inventory-item/{id}", "/api/v1/inventory-item", ("list", "retrieve", "create", "update", "delete")),
-    ("item_discounts", "/api/v1/item-discounts", "/api/v1/item-discount/{id}", "/api/v1/item-discount", ("list", "retrieve", "create", "update", "delete")),
-    ("item_fixed_assets", "/api/v1/item-fixed-assets", "/api/v1/item-fixed-asset/{id}", "/api/v1/item-fixed-asset", ("list", "retrieve", "create", "update", "delete")),
-    ("item_groups", "/api/v1/item-groups", "/api/v1/item-group/{id}", "/api/v1/item-group", ("list", "retrieve", "create", "update", "delete")),
-    ("item_inventory_assemblies", "/api/v1/item-inventory-assemblies", "/api/v1/item-inventory-assembly/{id}", "/api/v1/item-inventory-assembly", ("list", "retrieve", "create", "update", "delete")),
-    ("item_non_inventory", "/api/v1/item-non-inventories", "/api/v1/item-non-inventory/{id}", "/api/v1/item-non-inventory", ("list", "retrieve", "create", "update", "delete")),
-    ("item_other_charges", "/api/v1/item-other-charges", "/api/v1/item-other-charge/{id}", "/api/v1/item-other-charge", ("list", "retrieve", "create", "update", "delete")),
-    ("item_payments", "/api/v1/item-payments", "/api/v1/item-payment/{id}", "/api/v1/item-payment", ("list", "retrieve", "create", "update", "delete")),
-    ("item_sales_tax", "/api/v1/item-sales-taxes", "/api/v1/item-sales-tax/{id}", "/api/v1/item-sales-tax", ("list", "retrieve", "create", "update", "delete")),
-    ("item_sales_tax_groups", "/api/v1/item-sales-tax-groups", "/api/v1/item-sales-tax-group/{id}", "/api/v1/item-sales-tax-group", ("list", "retrieve", "create", "update", "delete")),
-    ("service_items", "/api/v1/service-items", "/api/v1/service-item/{id}", "/api/v1/service-item", ("list", "retrieve", "create", "update", "delete")),
-    ("item_subtotals", "/api/v1/item-subtotals", "/api/v1/item-subtotal/{id}", "/api/v1/item-subtotal", ("list", "retrieve", "create", "update", "delete")),
-    # -- Payroll -------------------------------------------------------------
+    ("item_discounts", "/api/v1/items-discount", "/api/v1/item-discount/{id}", "/api/v1/item-discount", ("list", "retrieve", "create", "update", "delete")),
+    ("item_fixed_assets", "/api/v1/items-fixed-asset", "/api/v1/item-fixed-asset/{id}", "/api/v1/item-fixed-asset", ("list", "retrieve", "create", "update", "delete")),
+    ("item_groups", "/api/v1/items-group", "/api/v1/item-group/{id}", "/api/v1/item-group", ("list", "retrieve", "create", "update", "delete")),
+    ("item_inventory_assemblies", "/api/v1/items-inventory-assembly", "/api/v1/item-inventory-assembly/{id}", "/api/v1/item-inventory-assembly", ("list", "retrieve", "create", "update", "delete")),
+    ("item_non_inventory", "/api/v1/items-non-inventory", "/api/v1/item-non-inventory/{id}", "/api/v1/item-non-inventory", ("list", "retrieve", "create", "update", "delete")),
+    ("item_other_charges", "/api/v1/items-other-charge", "/api/v1/item-other-charge/{id}", "/api/v1/item-other-charge", ("list", "retrieve", "create", "update", "delete")),
+    ("item_payments", "/api/v1/items-payment", "/api/v1/item-payment/{id}", "/api/v1/item-payment", ("list", "retrieve", "create", "update", "delete")),
+    ("item_sales_tax", "/api/v1/items-sales-tax", "/api/v1/item-sales-tax/{id}", "/api/v1/item-sales-tax", ("list", "retrieve", "create", "update", "delete")),
+    ("item_sales_tax_groups", "/api/v1/items-sales-tax-group", "/api/v1/item-sales-tax-group/{id}", "/api/v1/item-sales-tax-group", ("list", "retrieve", "create", "update", "delete")),
+    ("service_items", "/api/v1/items-service", "/api/v1/item-service/{id}", "/api/v1/item-service", ("list", "retrieve", "create", "update", "delete")),
+    ("item_subtotals", "/api/v1/items-subtotal", "/api/v1/item-subtotal/{id}", "/api/v1/item-subtotal", ("list", "retrieve", "create", "update", "delete")),
     ("payroll_item_non_wages", "/api/v1/payroll-item-non-wages", "/api/v1/payroll-item-non-wage/{id}", "/api/v1/payroll-item-non-wage", ("list", "retrieve", "delete")),
     ("payroll_item_wages", "/api/v1/payroll-item-wages", "/api/v1/payroll-item-wage/{id}", "/api/v1/payroll-item-wage", ("list", "retrieve", "create", "delete")),
     ("workers_comp_codes", "/api/v1/workers-comp-codes", "/api/v1/workers-comp-code/{id}", "/api/v1/workers-comp-code", ("list", "retrieve", "create", "update", "delete")),
 ]
+# END AUTO-GENERATED RESOURCE DEFS
 
 # ---------------------------------------------------------------------------
 # Namespace → Pydantic model class registry

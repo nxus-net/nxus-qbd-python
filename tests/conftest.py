@@ -51,7 +51,7 @@ def _probe_backend(base_url: str, verify: bool) -> None:
 @pytest.fixture(scope="session")
 def client(api_key, base_url, dev_mode):
     _probe_backend(base_url, verify=not dev_mode)
-    timeout = float(os.environ.get("NXUS_TEST_TIMEOUT_SECONDS", "60"))
+    timeout = float(os.environ.get("NXUS_TEST_TIMEOUT_SECONDS", "100"))
 
     from nxus_qbd import NxusClient
     with NxusClient(
@@ -67,7 +67,7 @@ def client(api_key, base_url, dev_mode):
 def async_client(api_key, base_url, dev_mode):
     """Provide the constructor args; tests create their own async client."""
     _probe_backend(base_url, verify=not dev_mode)
-    timeout = float(os.environ.get("NXUS_TEST_TIMEOUT_SECONDS", "60"))
+    timeout = float(os.environ.get("NXUS_TEST_TIMEOUT_SECONDS", "100"))
     return {
         "api_key": api_key,
         "base_url": base_url,

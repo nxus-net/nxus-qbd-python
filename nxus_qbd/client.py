@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
-from nxus_qbd._transport import AsyncTransport, SyncTransport
+from nxus_qbd._transport import AsyncTransport, SyncTransport, DEFAULT_TIMEOUT_SECONDS
 from nxus_qbd.config import (
     NxusEnvironment,
     resolve_base_url,
@@ -41,7 +41,8 @@ class NxusClient:
     headers:
         Extra headers merged into every request (e.g. ``X-Connection-Id``).
     timeout:
-        Default request timeout in seconds.  Defaults to ``30.0``.
+        Default request timeout in seconds. Defaults to ``100.0`` so the SDK
+        waits slightly longer than the backend's structured timeout budgets.
     verify:
         TLS verification override. Defaults to ``True`` in production and
         ``False`` in development unless explicitly set.
@@ -54,7 +55,7 @@ class NxusClient:
         base_url: Optional[str] = None,
         environment: Optional[str | NxusEnvironment] = None,
         headers: Optional[Dict[str, str]] = None,
-        timeout: float = 30.0,
+        timeout: float = DEFAULT_TIMEOUT_SECONDS,
         verify: Optional[bool] = None,
     ) -> None:
         resolved_base_url = resolve_base_url(base_url=base_url, environment=environment)
@@ -439,7 +440,8 @@ class AsyncNxusClient:
     headers:
         Extra headers merged into every request.
     timeout:
-        Default request timeout in seconds.  Defaults to ``30.0``.
+        Default request timeout in seconds. Defaults to ``100.0`` so the SDK
+        waits slightly longer than the backend's structured timeout budgets.
     verify:
         TLS verification override. Defaults to ``True`` in production and
         ``False`` in development unless explicitly set.
@@ -452,7 +454,7 @@ class AsyncNxusClient:
         base_url: Optional[str] = None,
         environment: Optional[str | NxusEnvironment] = None,
         headers: Optional[Dict[str, str]] = None,
-        timeout: float = 30.0,
+        timeout: float = DEFAULT_TIMEOUT_SECONDS,
         verify: Optional[bool] = None,
     ) -> None:
         resolved_base_url = resolve_base_url(base_url=base_url, environment=environment)

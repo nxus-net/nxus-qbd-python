@@ -379,6 +379,19 @@ def main() -> None:
         )
         bar_code_file.write_text(bar_code_text, encoding="utf-8")
 
+    # Tactical compatibility fix: many nested QBD refs in live responses only
+    # include fullName and omit id. Making QbdRef.id optional keeps model
+    # parsing aligned with those payloads while the backend/spec contract is
+    # tightened.
+    shared_file = OUT_DIR / "_shared.py"
+    if shared_file.exists():
+        shared_text = shared_file.read_text(encoding="utf-8")
+        shared_text = shared_text.replace(
+            "class QbdRef(BaseModel):\n    model_config = ConfigDict(populate_by_name=True)\n    id: str\n    full_name:",
+            "class QbdRef(BaseModel):\n    model_config = ConfigDict(populate_by_name=True)\n    id: str | None = None\n    full_name:",
+        )
+        shared_file.write_text(shared_text, encoding="utf-8")
+
     # Build top-level models/__init__.py that re-exports everything flat
     init_lines = ['"""Auto-generated. Do not edit by hand."""', ""]
     # _shared first (no dependencies on subpackages)

@@ -1,6 +1,6 @@
 # nxus-qbd
 
-Official Python SDK for the [Nxus](https://nxus.app) QuickBooks Desktop API.
+Official Python SDK for the [Nxus](https://nx-us.net/docs) QuickBooks Desktop API.
 
 ## Installation
 
@@ -40,6 +40,15 @@ async with AsyncNxusClient(api_key="sk_live_…") as client:
     vendors = await client.vendors.list(connection_id="conn_abc123")
 ```
 
+The SDK defaults to a `100s` client timeout so normal callers can receive the
+API's structured timeout responses for heavier QuickBooks operations. Advanced
+callers can still override this globally or per request:
+
+```python
+client = NxusClient(api_key="sk_live_…", timeout=120)
+vendors = client.vendors.list(connection_id="conn_abc123", timeout=30)
+```
+
 ## Environments
 
 Production is the default and uses `https://api.nx-us.net/`.
@@ -75,6 +84,26 @@ client = NxusClient(
 )
 ```
 
+## Pagination
+
+All list methods return a paginated response that supports both manual page navigation and auto-iteration:
+
+```python
+# Auto-paginate through all records (sync)
+for vendor in client.vendors.list(limit=100):
+    print(vendor.name)
+
+# Auto-paginate through all records (async)
+async for vendor in await async_client.vendors.list(limit=100):
+    print(vendor.name)
+```
+
+> [!IMPORTANT]
+> **Processing Constraints**: Each paginated request must either complete or be cancelled before the subsequent request for that connection can be processed by the backend.
+>
+> - **Async API (Primary)**: The Async API is the recommended way to handle these requests as it allows for better lifecycle management.
+> - **Sync Wrappers**: While sync wrappers are provided for convenience, you may need to increase your client-side timeouts to ensure large paginated sets complete successfully.
+
 ## Examples
 
 Runnable examples live in [`examples/`](examples/) and cover both sync and async usage:
@@ -86,6 +115,7 @@ Runnable examples live in [`examples/`](examples/) and cover both sync and async
 | [`auto_pagination.py`](examples/auto_pagination.py) | Sync and async auto-iteration across pages |
 | [`error_handling.py`](examples/error_handling.py) | Error categorization, retry with backoff, validation errors |
 | [`connection_scoped.py`](examples/connection_scoped.py) | Multi-company isolation with `connection_id` |
+| [`timeout_tuning.py`](examples/timeout_tuning.py) | Default timeout behavior, client-wide overrides, and per-request timeout tuning |
 | [`reports.py`](examples/reports.py) | Aging, general detail, and general summary reports |
 | [`async_basic_crud.py`](examples/async_basic_crud.py) | Async CRUD lifecycle |
 | [`async_error_handling.py`](examples/async_error_handling.py) | Async error handling and retry patterns |

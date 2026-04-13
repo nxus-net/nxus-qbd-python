@@ -27,11 +27,13 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 MODELS_DIR = REPO_ROOT / "nxus_qbd" / "models"
 PREVIEW_FILE = MODELS_DIR / "_preview"
 SPLIT_SCRIPT = REPO_ROOT / "scripts" / "split_models.py"
+RESOURCE_REGISTRY_SCRIPT = REPO_ROOT / "scripts" / "generate_resource_registry.py"
 DEFAULT_URL = "https://api.nx-us.net/openapi/v1.json"
+LOCAL_FALLBACK_URL = "https://localhost:7242/openapi/v1.json"
 
 
-def download_spec(url: str) -> Path:
-    """Download the OpenAPI spec, bypassing TLS verification for localhost."""
+def _fetch_spec(url: str) -> bytes:
+    """Fetch the OpenAPI spec, bypassing TLS verification for localhost."""
     try:
         import httpx
     except ImportError:
@@ -40,14 +42,34 @@ def download_spec(url: str) -> Path:
 
     verify = "localhost" not in url and "127.0.0.1" not in url
     print(f"Downloading spec from {url} (verify_tls={verify})")
-    r = httpx.get(url, verify=verify, timeout=30)
-    r.raise_for_status()
+    response = httpx.get(url, verify=verify, timeout=30)
+    response.raise_for_status()
+    return response.content
+
+
+def download_spec(url: str, *, allow_default_fallback: bool = False) -> Path:
+    """Download the OpenAPI spec, optionally falling back to localhost for the default URL."""
+    try:
+        content = _fetch_spec(url)
+        source_url = url
+    except Exception as exc:
+        if allow_default_fallback and url == DEFAULT_URL:
+            print(
+                f"Production spec unavailable, falling back to local dev spec at {LOCAL_FALLBACK_URL}"
+            )
+            try:
+                content = _fetch_spec(LOCAL_FALLBACK_URL)
+                source_url = LOCAL_FALLBACK_URL
+            except Exception:
+                raise exc
+        else:
+            raise
 
     spec_dir = REPO_ROOT / "spec"
     spec_dir.mkdir(exist_ok=True)
     spec_file = spec_dir / "openapi.json"
-    spec_file.write_bytes(r.content)
-    print(f"Downloaded {len(r.content):,} bytes → {spec_file}\n")
+    spec_file.write_bytes(content)
+    print(f"Downloaded {len(content):,} bytes from {source_url} → {spec_file}\n")
     return spec_file
 
 
@@ -70,7 +92,10 @@ def main() -> None:
     if args.file:
         spec_file = args.file
     else:
-        spec_file = download_spec(args.url)
+        spec_file = download_spec(
+            args.url,
+            allow_default_fallback=args.url == DEFAULT_URL,
+        )
 
     # Clean previous preview artifact
     if PREVIEW_FILE.exists():
@@ -131,6 +156,21 @@ def main() -> None:
     if split_result.returncode != 0:
         print(f"\n[fail] Split failed (exit code {split_result.returncode})")
         sys.exit(split_result.returncode)
+
+    # Regenerate resource route registry from the same spec
+    print("\nSyncing resource route registry from OpenAPI...")
+    registry_result = subprocess.run(
+        [sys.executable, str(RESOURCE_REGISTRY_SCRIPT), "--file", str(spec_file), "--apply"],
+        capture_output=True,
+        text=True,
+    )
+    if registry_result.stdout:
+        print(registry_result.stdout)
+    if registry_result.stderr:
+        print(registry_result.stderr, file=sys.stderr)
+    if registry_result.returncode != 0:
+        print(f"\n[fail] Resource registry sync failed (exit code {registry_result.returncode})")
+        sys.exit(registry_result.returncode)
 
     # Clean up preview artifact
     PREVIEW_FILE.unlink(missing_ok=True)
