@@ -22,6 +22,7 @@ class SyncTransport:
         headers: Optional[Dict[str, str]] = None,
         timeout: float = DEFAULT_TIMEOUT_SECONDS,
         verify: bool = True,
+        server_timeout_seconds: Optional[int] = None,
     ) -> None:
         merged_headers = {
             "Authorization": f"Bearer {api_key}",
@@ -29,6 +30,11 @@ class SyncTransport:
             "Accept": "application/json",
             **(headers or {}),
         }
+        if server_timeout_seconds is not None:
+            merged_headers.setdefault(
+                "X-Nxus-Timeout-Seconds", str(server_timeout_seconds)
+            )
+        self._default_server_timeout_seconds = server_timeout_seconds
         self._client = httpx.Client(
             base_url=base_url,
             headers=merged_headers,
@@ -45,6 +51,7 @@ class SyncTransport:
         params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
         timeout: Optional[float] = None,
+        server_timeout_seconds: Optional[int] = None,
     ) -> Any:
         """Send a request and return parsed JSON (or raw response on non-JSON).
 
@@ -56,8 +63,15 @@ class SyncTransport:
             kwargs["json"] = json
         if params:
             kwargs["params"] = params
+        merged_request_headers: Dict[str, str] = {}
+        if server_timeout_seconds is not None:
+            merged_request_headers["X-Nxus-Timeout-Seconds"] = str(
+                server_timeout_seconds
+            )
         if headers:
-            kwargs["headers"] = headers
+            merged_request_headers.update(headers)
+        if merged_request_headers:
+            kwargs["headers"] = merged_request_headers
         if timeout is not None:
             kwargs["timeout"] = timeout
 
@@ -91,6 +105,7 @@ class AsyncTransport:
         headers: Optional[Dict[str, str]] = None,
         timeout: float = DEFAULT_TIMEOUT_SECONDS,
         verify: bool = True,
+        server_timeout_seconds: Optional[int] = None,
     ) -> None:
         merged_headers = {
             "Authorization": f"Bearer {api_key}",
@@ -98,6 +113,11 @@ class AsyncTransport:
             "Accept": "application/json",
             **(headers or {}),
         }
+        if server_timeout_seconds is not None:
+            merged_headers.setdefault(
+                "X-Nxus-Timeout-Seconds", str(server_timeout_seconds)
+            )
+        self._default_server_timeout_seconds = server_timeout_seconds
         self._client = httpx.AsyncClient(
             base_url=base_url,
             headers=merged_headers,
@@ -114,6 +134,7 @@ class AsyncTransport:
         params: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
         timeout: Optional[float] = None,
+        server_timeout_seconds: Optional[int] = None,
     ) -> Any:
         """Send a request and return parsed JSON (or raw response on non-JSON).
 
@@ -125,8 +146,15 @@ class AsyncTransport:
             kwargs["json"] = json
         if params:
             kwargs["params"] = params
+        merged_request_headers: Dict[str, str] = {}
+        if server_timeout_seconds is not None:
+            merged_request_headers["X-Nxus-Timeout-Seconds"] = str(
+                server_timeout_seconds
+            )
         if headers:
-            kwargs["headers"] = headers
+            merged_request_headers.update(headers)
+        if merged_request_headers:
+            kwargs["headers"] = merged_request_headers
         if timeout is not None:
             kwargs["timeout"] = timeout
 

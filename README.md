@@ -47,7 +47,14 @@ callers can still override this globally or per request:
 ```python
 client = NxusClient(api_key="sk_live_…", timeout=120)
 vendors = client.vendors.list(connection_id="conn_abc123", timeout=30)
+customer = client.customers.retrieve("cust_123", connection_id="conn_abc123", timeout=30)
 ```
+
+For cursor-paginated list endpoints, the per-request `timeout` still controls
+the local client timeout and is also sent to the API as the
+`X-Nxus-Timeout-Seconds` request header so cursor continuation reuses the same
+backend timeout hint automatically. CRUD-style requests keep treating
+`timeout` as a client-side override only.
 
 ## Environments
 
@@ -98,6 +105,14 @@ async for vendor in await async_client.vendors.list(limit=100):
     print(vendor.name)
 ```
 
+Manual continuation also replays the original filters, connection scoping, and
+list timeout hint:
+
+```python
+page = client.vendors.list(connection_id="conn_abc123", limit=100, timeout=45)
+page_2 = page.get_next_page()
+```
+
 > [!IMPORTANT]
 > **Processing Constraints**: Each paginated request must either complete or be cancelled before the subsequent request for that connection can be processed by the backend.
 >
@@ -115,7 +130,7 @@ Runnable examples live in [`examples/`](examples/) and cover both sync and async
 | [`auto_pagination.py`](examples/auto_pagination.py) | Sync and async auto-iteration across pages |
 | [`error_handling.py`](examples/error_handling.py) | Error categorization, retry with backoff, validation errors |
 | [`connection_scoped.py`](examples/connection_scoped.py) | Multi-company isolation with `connection_id` |
-| [`timeout_tuning.py`](examples/timeout_tuning.py) | Default timeout behavior, client-wide overrides, and per-request timeout tuning |
+| [`timeout_tuning.py`](examples/timeout_tuning.py) | Client timeout defaults, paginated list timeout hints, and CRUD timeout overrides |
 | [`reports.py`](examples/reports.py) | Aging, general detail, and general summary reports |
 | [`async_basic_crud.py`](examples/async_basic_crud.py) | Async CRUD lifecycle |
 | [`async_error_handling.py`](examples/async_error_handling.py) | Async error handling and retry patterns |

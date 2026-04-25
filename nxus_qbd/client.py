@@ -46,6 +46,13 @@ class NxusClient:
     verify:
         TLS verification override. Defaults to ``True`` in production and
         ``False`` in development unless explicitly set.
+    server_timeout_seconds:
+        Default value for the ``X-Nxus-Timeout-Seconds`` request header. Tells
+        the server how long to wait for the queued QuickBooks Desktop job to
+        complete before returning a 504. The server enforces operation-specific
+        ceilings and may clamp this value based on its deployment config.
+        Current defaults are typically 120 seconds for CRUD and 90 seconds for
+        list/report operations. Omit to let the server apply its own default.
     """
 
     def __init__(
@@ -57,6 +64,7 @@ class NxusClient:
         headers: Optional[Dict[str, str]] = None,
         timeout: float = DEFAULT_TIMEOUT_SECONDS,
         verify: Optional[bool] = None,
+        server_timeout_seconds: Optional[int] = None,
     ) -> None:
         resolved_base_url = resolve_base_url(base_url=base_url, environment=environment)
         resolved_verify = resolve_verify(
@@ -70,6 +78,7 @@ class NxusClient:
             headers=headers,
             timeout=timeout,
             verify=resolved_verify,
+            server_timeout_seconds=server_timeout_seconds,
         )
 
         # Eagerly build every resource namespace so attribute access is O(1)
@@ -445,6 +454,13 @@ class AsyncNxusClient:
     verify:
         TLS verification override. Defaults to ``True`` in production and
         ``False`` in development unless explicitly set.
+    server_timeout_seconds:
+        Default value for the ``X-Nxus-Timeout-Seconds`` request header. Tells
+        the server how long to wait for the queued QuickBooks Desktop job to
+        complete before returning a 504. The server enforces operation-specific
+        ceilings and may clamp this value based on its deployment config.
+        Current defaults are typically 120 seconds for CRUD and 90 seconds for
+        list/report operations. Omit to let the server apply its own default.
     """
 
     def __init__(
@@ -456,6 +472,7 @@ class AsyncNxusClient:
         headers: Optional[Dict[str, str]] = None,
         timeout: float = DEFAULT_TIMEOUT_SECONDS,
         verify: Optional[bool] = None,
+        server_timeout_seconds: Optional[int] = None,
     ) -> None:
         resolved_base_url = resolve_base_url(base_url=base_url, environment=environment)
         resolved_verify = resolve_verify(
@@ -469,6 +486,7 @@ class AsyncNxusClient:
             headers=headers,
             timeout=timeout,
             verify=resolved_verify,
+            server_timeout_seconds=server_timeout_seconds,
         )
 
         self._resources: Dict[str, Any] = {}

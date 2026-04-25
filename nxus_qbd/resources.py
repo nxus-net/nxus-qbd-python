@@ -8,7 +8,9 @@ Nxus REST convention where the *list* path is plural and the *singular* path
 All consumer-facing methods accept **flat keyword arguments** — no ``data={}``,
 ``params={}``, or ``body={}`` wrappers.  ``connection_id``, ``headers``, and
 ``timeout`` are extracted before the remaining kwargs are forwarded as the
-JSON body (create/update) or query parameters (list/reports).
+JSON body (create/update) or query parameters (list/reports). Cursor-paginated
+list requests also mirror ``timeout`` into the ``X-Nxus-Timeout-Seconds``
+header so backend timeout hints persist across page fetches.
 """
 
 from __future__ import annotations
@@ -31,12 +33,38 @@ if TYPE_CHECKING:
 # Helpers
 # ---------------------------------------------------------------------------
 
+TIMEOUT_HINT_HEADER = "X-Nxus-Timeout-Seconds"
+
 def _extract_options(kwargs: dict) -> tuple[Optional[str], Optional[dict], Optional[float]]:
-    """Pop connection_id, headers, and timeout from kwargs, returning them."""
+    """Pop transport options from kwargs, returning connection, headers, timeout."""
     connection_id = kwargs.pop("connection_id", None)
     headers = kwargs.pop("headers", None)
     timeout = kwargs.pop("timeout", None)
+    server_timeout_seconds = kwargs.pop("server_timeout_seconds", None)
+    if server_timeout_seconds is not None:
+        headers = dict(headers or {})
+        headers.setdefault(TIMEOUT_HINT_HEADER, _format_timeout_hint(server_timeout_seconds))
     return connection_id, headers, timeout
+
+
+def _format_timeout_hint(timeout: float) -> str:
+    """Render a timeout value as a stable header string."""
+    timeout_value = float(timeout)
+    if timeout_value.is_integer():
+        return str(int(timeout_value))
+    return str(timeout)
+
+
+def _list_headers_with_timeout_hint(
+    headers: Optional[Dict[str, str]],
+    timeout: Optional[float],
+) -> Optional[Dict[str, str]]:
+    """Attach the backend timeout hint header for paginated list requests."""
+    if timeout is None:
+        return headers
+    merged_headers = dict(headers or {})
+    merged_headers.setdefault(TIMEOUT_HINT_HEADER, _format_timeout_hint(timeout))
+    return merged_headers
 
 
 def _serialize_body(kwargs: dict) -> Optional[dict]:
@@ -206,7 +234,12 @@ class _SyncList:
         if limit is not None:
             params["limit"] = limit
 
-        kw = _build_request_kwargs(connection_id, headers, timeout, params=params or None)
+        kw = _build_request_kwargs(
+            connection_id,
+            _list_headers_with_timeout_hint(headers, timeout),
+            timeout,
+            params=params or None,
+        )
         body = self._t.request("GET", self._list_path, **kw)  # type: ignore[attr-defined]
         body = _parse_list_items(body, getattr(self, "_model", None))
 
@@ -329,7 +362,12 @@ class _AsyncList:
         if limit is not None:
             params["limit"] = limit
 
-        kw = _build_request_kwargs(connection_id, headers, timeout, params=params or None)
+        kw = _build_request_kwargs(
+            connection_id,
+            _list_headers_with_timeout_hint(headers, timeout),
+            timeout,
+            params=params or None,
+        )
         body = await self._t.request("GET", self._list_path, **kw)  # type: ignore[attr-defined]
         body = _parse_list_items(body, getattr(self, "_model", None))
 
