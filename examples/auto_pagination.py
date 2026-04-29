@@ -3,8 +3,16 @@
 Demonstrates:
   - Sync auto-iteration: ``for customer in client.customers.list()``
   - Manual page-by-page navigation with ``page.get_next_page()``
+  - Find-and-stop: breaking out of an auto-iterator early
   - Passing query parameters like ``limit``
   - Async auto-iteration with ``AsyncNxusClient`` and ``async for``
+
+A note on ``break`` and lane release:
+  When you ``break`` out of an auto-iterating ``for`` / ``async for`` loop, the
+  SDK quietly tells the backend you are done with the cursor. The QuickBooks
+  Desktop connection lane is released within milliseconds — your *next* call on
+  the same connection does not have to wait for the silent-client timeout to
+  expire. There is nothing extra to do; just ``break``.
 
 Usage:
     export NXUS_API_KEY="sk_test_..."
@@ -78,6 +86,38 @@ def sync_manual_pages(client: NxusClient, connection_id: str) -> None:
     print()
 
 
+def sync_find_and_stop(client: NxusClient, connection_id: str) -> None:
+    """Iterate until you find what you need, then ``break``.
+
+    This is the most common real-world pagination pattern: you don't always
+    want every record, you just want the first one that matches some predicate.
+
+    The auto-iterator handles the cleanup for you — when the ``for`` loop exits
+    via ``break`` (instead of running out of pages naturally), the SDK fires a
+    best-effort ``POST /api/v1/cursors/{cursor}/close`` so the QBD lane is
+    released right away. Your next API call on this connection won't sit waiting
+    for the silent-client timeout to expire.
+    """
+    print("=== Sync Find-and-Stop ===\n")
+
+    target_substring = "Store"
+    found = None
+
+    # The SDK fetches more pages on demand as the loop consumes items. As soon
+    # as we `break`, the SDK signals the backend to release the cursor.
+    for customer in client.customers.list(connection_id=connection_id, limit=10):
+        name = getattr(customer, "name", None) or getattr(customer, "full_name", None) or ""
+        if target_substring.lower() in name.lower():
+            found = name
+            break  # ← SDK auto-closes the cursor here
+
+    if found:
+        print(f"  Matched {found!r} — stopped early.")
+    else:
+        print(f"  No customer matched {target_substring!r}.")
+    print()
+
+
 async def async_auto_iterate(connection_id: str, **kwargs) -> None:
     """Iterate over ALL customers asynchronously with ``async for``.
 
@@ -100,6 +140,31 @@ async def async_auto_iterate(connection_id: str, **kwargs) -> None:
                 print("  ...")
 
         print(f"\n  Total customers iterated (async): {total}\n")
+
+
+async def async_find_and_stop(connection_id: str, **kwargs) -> None:
+    """Async equivalent of :func:`sync_find_and_stop`.
+
+    Same shape, same close-on-break behavior — the SDK signals the backend
+    that the cursor can be released as soon as ``break`` exits the loop.
+    """
+    print("=== Async Find-and-Stop ===\n")
+
+    target_substring = "Store"
+    found = None
+
+    async with AsyncNxusClient(**kwargs) as client:
+        async for customer in await client.customers.list(connection_id=connection_id, limit=10):
+            name = getattr(customer, "name", None) or getattr(customer, "full_name", None) or ""
+            if target_substring.lower() in name.lower():
+                found = name
+                break  # ← SDK auto-closes the cursor here
+
+    if found:
+        print(f"  Matched {found!r} — stopped early.")
+    else:
+        print(f"  No customer matched {target_substring!r}.")
+    print()
 
 
 def main() -> None:
@@ -169,7 +234,15 @@ def main() -> None:
                 (stopped after 3 pages for demo purposes)
             """
 
-        # Run the async example
+            sync_find_and_stop(client, connection_id)
+
+            """ sync_find_and_stop() OUTPUT:
+                === Sync Find-and-Stop ===
+
+                  Matched 'Store #55' — stopped early.
+            """
+
+        # Run the async examples
         asyncio.run(async_auto_iterate(connection_id, **options))
 
         """ async_auto_iterate() OUTPUT:
@@ -183,6 +256,14 @@ def main() -> None:
             ...
 
             Total customers iterated (async): 68
+        """
+
+        asyncio.run(async_find_and_stop(connection_id, **options))
+
+        """ async_find_and_stop() OUTPUT:
+            === Async Find-and-Stop ===
+
+              Matched 'Store #55' — stopped early.
         """
 
     except NxusApiError as exc:

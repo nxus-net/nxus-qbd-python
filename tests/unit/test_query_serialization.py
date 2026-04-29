@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 from typing import Any
 
 import pytest
@@ -223,3 +224,56 @@ async def test_async_list_sends_timeout_hint_header_and_preserves_it_across_next
     assert second_call["headers"]["X-Nxus-Timeout-Seconds"] == "60"
     assert first_call["timeout"] == 60
     assert second_call["timeout"] == 60
+
+
+def test_sync_auto_pagination_closes_cursor_on_early_exit():
+    transport = QueuedSyncTransport(
+        {
+            "data": [_wire_vendor("vendor-1")],
+            "hasMore": True,
+            "nextCursor": "cursor-2",
+            "count": 1,
+        },
+        None,
+    )
+    resource = SYNC_RESOURCES["vendors"](transport)
+
+    page = resource.list(limit=1)
+
+    for item in page:
+        assert item.id == "vendor-1"
+        break
+
+    assert transport.calls[0]["method"] == "GET"
+    assert transport.calls[0]["path"] == "/api/v1/vendors"
+    assert transport.calls[1]["method"] == "POST"
+    assert transport.calls[1]["path"] == "/api/v1/cursors/cursor-2/close"
+    assert "X-Connection-Id" not in transport.calls[1].get("headers", {})
+
+
+@pytest.mark.asyncio
+async def test_async_auto_pagination_closes_cursor_on_early_exit():
+    transport = QueuedAsyncTransport(
+        {
+            "data": [_wire_vendor("vendor-1")],
+            "hasMore": True,
+            "nextCursor": "cursor-2",
+            "count": 1,
+        },
+        None,
+    )
+    resource = ASYNC_RESOURCES["vendors"](transport)
+
+    page = await resource.list(limit=1)
+
+    async for item in page:
+        assert item.id == "vendor-1"
+        break
+
+    await asyncio.sleep(0.01)
+
+    assert transport.calls[0]["method"] == "GET"
+    assert transport.calls[0]["path"] == "/api/v1/vendors"
+    assert transport.calls[1]["method"] == "POST"
+    assert transport.calls[1]["path"] == "/api/v1/cursors/cursor-2/close"
+    assert "X-Connection-Id" not in transport.calls[1].get("headers", {})

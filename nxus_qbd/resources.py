@@ -34,6 +34,7 @@ if TYPE_CHECKING:
 # ---------------------------------------------------------------------------
 
 TIMEOUT_HINT_HEADER = "X-Nxus-Timeout-Seconds"
+CURSOR_CLOSE_PATH = "/api/v1/cursors/{cursor}/close"
 
 def _extract_options(kwargs: dict) -> tuple[Optional[str], Optional[dict], Optional[float]]:
     """Pop transport options from kwargs, returning connection, headers, timeout."""
@@ -256,10 +257,23 @@ class _SyncList:
         # Forward any extra filter kwargs
         fetch_kwargs.update(kwargs)
 
+        def close_cursor(cursor_token: str) -> None:
+            close_kwargs = _build_request_kwargs(
+                None,
+                headers,
+                timeout,
+            )
+            self._t.request(
+                "POST",
+                CURSOR_CLOSE_PATH.format(cursor=cursor_token),
+                **close_kwargs,
+            )  # type: ignore[attr-defined]
+
         return build_sync_cursor_page(
             body,
             fetcher=self.list,  # type: ignore[attr-defined]
             fetch_kwargs=fetch_kwargs,
+            close_cursor=close_cursor,
         )
 
 
@@ -382,10 +396,23 @@ class _AsyncList:
             fetch_kwargs["limit"] = limit
         fetch_kwargs.update(kwargs)
 
+        async def close_cursor(cursor_token: str) -> None:
+            close_kwargs = _build_request_kwargs(
+                None,
+                headers,
+                timeout,
+            )
+            await self._t.request(
+                "POST",
+                CURSOR_CLOSE_PATH.format(cursor=cursor_token),
+                **close_kwargs,
+            )  # type: ignore[attr-defined]
+
         return build_async_cursor_page(
             body,
             fetcher=self.list,  # type: ignore[attr-defined]
             fetch_kwargs=fetch_kwargs,
+            close_cursor=close_cursor,
         )
 
 
@@ -978,7 +1005,24 @@ class SyncConnections(_SyncResourceBase, _SyncList, _SyncRetrieve, _SyncCreate, 
             fetch_kwargs["limit"] = limit
         fetch_kwargs.update(kwargs)
 
-        return build_sync_cursor_page(body, fetcher=self.list, fetch_kwargs=fetch_kwargs)
+        def close_cursor(cursor_token: str) -> None:
+            close_kwargs = _build_request_kwargs(
+                None,
+                headers,
+                timeout,
+            )
+            self._t.request(
+                "POST",
+                CURSOR_CLOSE_PATH.format(cursor=cursor_token),
+                **close_kwargs,
+            )
+
+        return build_sync_cursor_page(
+            body,
+            fetcher=self.list,
+            fetch_kwargs=fetch_kwargs,
+            close_cursor=close_cursor,
+        )
 
     def retrieve_status_authenticated(self, connection_id: str, **kwargs: Any) -> Any:
         _, headers, timeout = _extract_options(kwargs)
@@ -1037,7 +1081,24 @@ class AsyncConnections(_AsyncResourceBase, _AsyncList, _AsyncRetrieve, _AsyncCre
             fetch_kwargs["limit"] = limit
         fetch_kwargs.update(kwargs)
 
-        return build_async_cursor_page(body, fetcher=self.list, fetch_kwargs=fetch_kwargs)
+        async def close_cursor(cursor_token: str) -> None:
+            close_kwargs = _build_request_kwargs(
+                None,
+                headers,
+                timeout,
+            )
+            await self._t.request(
+                "POST",
+                CURSOR_CLOSE_PATH.format(cursor=cursor_token),
+                **close_kwargs,
+            )
+
+        return build_async_cursor_page(
+            body,
+            fetcher=self.list,
+            fetch_kwargs=fetch_kwargs,
+            close_cursor=close_cursor,
+        )
 
     async def retrieve_status_authenticated(self, connection_id: str, **kwargs: Any) -> Any:
         _, headers, timeout = _extract_options(kwargs)

@@ -84,6 +84,8 @@ class CursorPage(Generic[T]):
         "_sync_fetcher",
         "_async_fetcher",
         "_fetch_kwargs",
+        "_sync_close_cursor",
+        "_async_close_cursor",
     )
 
     def __init__(
@@ -111,6 +113,8 @@ class CursorPage(Generic[T]):
         self._sync_fetcher: Optional[SyncFetcher] = None
         self._async_fetcher: Optional[AsyncFetcher] = None
         self._fetch_kwargs: Dict[str, Any] = {}
+        self._sync_close_cursor: Optional[Callable[[str], None]] = None
+        self._async_close_cursor: Optional[Callable[[str], Coroutine[Any, Any, None]]] = None
 
     # -- navigation ----------------------------------------------------------
 
@@ -159,11 +163,23 @@ class CursorPage(Generic[T]):
                 print(item)
         """
         page: CursorPage[T] = self
-        while True:
-            yield from page.data
-            if not page.has_next_page():
-                return
-            page = page.get_next_page()
+        completed = False
+        live_cursor: Optional[str] = page.next_cursor if page.has_next_page() else None
+
+        try:
+            while True:
+                live_cursor = page.next_cursor if page.has_next_page() else None
+                yield from page.data
+                if not page.has_next_page():
+                    completed = True
+                    return
+                page = page.get_next_page()
+        finally:
+            if not completed and live_cursor and self._sync_close_cursor is not None:
+                try:
+                    self._sync_close_cursor(live_cursor)
+                except Exception:
+                    pass
 
     # -- async iteration -----------------------------------------------------
 
@@ -179,12 +195,24 @@ class CursorPage(Generic[T]):
 
     async def _async_iter(self) -> AsyncIterator[T]:
         page: CursorPage[T] = self
-        while True:
-            for item in page.data:
-                yield item
-            if not page.has_next_page():
-                return
-            page = await page.get_next_page_async()
+        completed = False
+        live_cursor: Optional[str] = page.next_cursor if page.has_next_page() else None
+
+        try:
+            while True:
+                live_cursor = page.next_cursor if page.has_next_page() else None
+                for item in page.data:
+                    yield item
+                if not page.has_next_page():
+                    completed = True
+                    return
+                page = await page.get_next_page_async()
+        finally:
+            if not completed and live_cursor and self._async_close_cursor is not None:
+                try:
+                    await self._async_close_cursor(live_cursor)
+                except Exception:
+                    pass
 
     # -- repr ----------------------------------------------------------------
 
@@ -237,12 +265,14 @@ def build_sync_cursor_page(
     *,
     fetcher: SyncFetcher,
     fetch_kwargs: Dict[str, Any],
+    close_cursor: Optional[Callable[[str], None]] = None,
 ) -> CursorPage:
     """Build a ``CursorPage`` from a raw JSON body with a sync fetcher attached."""
     fields = _normalize_page(body)
     page: CursorPage = CursorPage(**fields)
     page._sync_fetcher = fetcher
     page._fetch_kwargs = fetch_kwargs
+    page._sync_close_cursor = close_cursor
     return page
 
 
@@ -251,10 +281,12 @@ def build_async_cursor_page(
     *,
     fetcher: AsyncFetcher,
     fetch_kwargs: Dict[str, Any],
+    close_cursor: Optional[Callable[[str], Coroutine[Any, Any, None]]] = None,
 ) -> CursorPage:
     """Build a ``CursorPage`` from a raw JSON body with an async fetcher attached."""
     fields = _normalize_page(body)
     page: CursorPage = CursorPage(**fields)
     page._async_fetcher = fetcher
     page._fetch_kwargs = fetch_kwargs
+    page._async_close_cursor = close_cursor
     return page

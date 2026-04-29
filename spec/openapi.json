@@ -106,7 +106,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -117,7 +117,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -1842,7 +1842,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -1853,7 +1853,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -3585,7 +3585,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -3596,7 +3596,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -5333,7 +5333,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -5344,7 +5344,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -7058,7 +7058,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -7069,7 +7069,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -8801,7 +8801,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -8812,7 +8812,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -10538,7 +10538,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -10549,7 +10549,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -12274,7 +12274,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -12285,7 +12285,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -13999,7 +13999,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -14010,7 +14010,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -15752,7 +15752,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -15763,7 +15763,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -17486,7 +17486,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -17497,7 +17497,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -19219,7 +19219,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -19230,7 +19230,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -20955,7 +20955,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -20966,7 +20966,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -22734,7 +22734,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -22745,7 +22745,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -24475,7 +24475,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -24486,7 +24486,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -25642,7 +25642,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -25653,7 +25653,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -55244,7 +55244,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -55255,7 +55255,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -55411,7 +55411,7 @@
             "description": "(Optional) Filter for bills coming due by this date.",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             }
           },
@@ -56089,7 +56089,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -56100,7 +56100,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -57831,7 +57831,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -57842,7 +57842,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -59564,7 +59564,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -59575,7 +59575,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -61288,7 +61288,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -61299,7 +61299,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -63019,7 +63019,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -63030,7 +63030,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -64752,7 +64752,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -64763,7 +64763,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -66496,7 +66496,7 @@
             "description": "Filter by transaction date (end).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2025-01-01"
@@ -66507,7 +66507,7 @@
             "description": "Filter by transaction date (start).",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             },
             "example": "2024-01-01"
@@ -68315,7 +68315,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             }
           },
@@ -68496,7 +68496,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             }
           },
@@ -68977,7 +68977,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             }
           },
@@ -69150,7 +69150,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             }
           },
@@ -69623,7 +69623,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             }
           },
@@ -69804,7 +69804,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             }
           },
@@ -70303,7 +70303,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             }
           },
@@ -70492,7 +70492,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             }
           },
@@ -70965,7 +70965,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             }
           },
@@ -71146,7 +71146,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             }
           },
@@ -71619,7 +71619,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             }
           },
@@ -71800,7 +71800,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             }
           },
@@ -72281,7 +72281,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             }
           },
@@ -72454,7 +72454,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             }
           },
@@ -72935,7 +72935,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             }
           },
@@ -73108,7 +73108,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             }
           },
@@ -73581,7 +73581,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             }
           },
@@ -73762,7 +73762,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             }
           },
@@ -78171,7 +78171,7 @@
             "description": "(Optional) Filter for codes with effective dates on or after this date.",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             }
           },
@@ -78181,7 +78181,7 @@
             "description": "(Optional) Filter for codes with effective dates on or before this date.",
             "schema": {
               "type": "string",
-              "format": "date-time",
+              "format": "date",
               "nullable": true
             }
           },
@@ -103410,7 +103410,7 @@
           },
           "date": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "note": {
@@ -103680,7 +103680,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -103826,7 +103826,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -107453,15 +107453,15 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "dueDate": {
             "type": "string",
             "description": "The date by which the bill must be paid.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true,
-            "example": "\u00222024-11-28\u0022"
+            "example": "\u00222024-11-28T00:00:00Z\u0022"
           },
           "amountDue": {
             "type": "number",
@@ -107491,9 +107491,7 @@
           },
           "isPending": {
             "type": "boolean",
-            "description": "Indicates whether the bill is currently marked as pending.",
-            "nullable": true,
-            "example": "false"
+            "nullable": true
           },
           "terms": {
             "description": "The payment terms associated with the bill (e.g., Net 30), which calculate the DueDate.",
@@ -107768,7 +107766,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -107808,7 +107806,7 @@
           },
           "dueDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "entity": {
@@ -107936,7 +107934,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -108163,7 +108161,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -108251,13 +108249,13 @@
           "billedDate": {
             "type": "string",
             "description": "(Optional) The date the charge was billed.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "dueDate": {
             "type": "string",
             "description": "(Optional) The due date for the charge.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "isPaid": {
@@ -108355,7 +108353,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -108500,7 +108498,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -109000,7 +108998,7 @@
           "openBalanceDate": {
             "type": "string",
             "description": "Opening balance date (optional, defaults to today)",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "bankNumber": {
@@ -109061,7 +109059,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -109212,12 +109210,12 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time"
+            "format": "date"
           },
           "dueDate": {
             "type": "string",
             "description": "Due date for the bill.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -109334,7 +109332,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -109385,7 +109383,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -109448,13 +109446,13 @@
           "billedDate": {
             "type": "string",
             "description": "(Optional) The date the charge was billed.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "dueDate": {
             "type": "string",
             "description": "(Optional) The due date for the charge.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "overrideItemAccountId": {
@@ -109481,7 +109479,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -109556,7 +109554,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "accountId": {
@@ -109698,7 +109696,7 @@
         "properties": {
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -109780,7 +109778,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -109857,7 +109855,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -110033,7 +110031,7 @@
           "serviceDate": {
             "type": "string",
             "description": "(Optional) Service date for the item.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "salesTaxCodeId": {
@@ -110094,7 +110092,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -110128,7 +110126,7 @@
           "dueDate": {
             "type": "string",
             "description": "(Optional) The due date.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "salesRepresentativeId": {
@@ -110142,7 +110140,7 @@
           "shipDate": {
             "type": "string",
             "description": "(Optional) The date of shipment.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "shipMethodId": {
@@ -110368,7 +110366,7 @@
           },
           "openBalanceDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "salesTaxCodeId": {
@@ -110411,17 +110409,17 @@
           },
           "jobStartDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "jobProjectedEndDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "jobEndDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "jobDesc": {
@@ -110575,7 +110573,7 @@
         "properties": {
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "depositToAccountId": {
@@ -110737,17 +110735,17 @@
           },
           "hiredDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "releasedDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "birthDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "accountNumber": {
@@ -110778,12 +110776,12 @@
           },
           "originalHireDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "adjustedServiceDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "usCitizen": {
@@ -110808,7 +110806,7 @@
           },
           "workAuthExpireDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "usVeteran": {
@@ -110996,7 +110994,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -111029,7 +111027,7 @@
           "dueDate": {
             "type": "string",
             "description": "(Optional) The due date calculated from the terms. (DATETYPE)",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "salesRepId": {
@@ -111185,7 +111183,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -111328,7 +111326,7 @@
           },
           "inventoryDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "isActive": {
@@ -111400,7 +111398,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "classId": {
@@ -111451,7 +111449,7 @@
           "dueDate": {
             "type": "string",
             "description": "Due date for the invoice.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "salesRepresentativeId": {
@@ -111464,7 +111462,7 @@
           },
           "shippingDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "shippingMethodId": {
@@ -111631,7 +111629,7 @@
           },
           "purchaseDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "purchaseCost": {
@@ -111681,7 +111679,7 @@
           },
           "warrantyExpirationDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "notes": {
@@ -111914,7 +111912,7 @@
           },
           "inventoryDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "lines": {
@@ -112214,7 +112212,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -112427,7 +112425,7 @@
         "properties": {
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -112835,7 +112833,7 @@
           "serviceDate": {
             "type": "string",
             "description": "(Optional) The date the service was performed (if this is a service item).",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "salesTaxCodeId": {
@@ -112894,7 +112892,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -112922,13 +112920,13 @@
           "dueDate": {
             "type": "string",
             "description": "(Optional) The date the payment is due based on terms.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "expectedDate": {
             "type": "string",
             "description": "(Optional) The date the vendor is expected to deliver the item.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "shipMethodId": {
@@ -113023,7 +113021,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -113193,7 +113191,7 @@
           "serviceDate": {
             "type": "string",
             "description": "(Optional) The date the service was performed.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "salesTaxCodeId": {
@@ -113238,7 +113236,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -113272,7 +113270,7 @@
           "dueDate": {
             "type": "string",
             "description": "(Optional) The date the payment is due (if applicable).",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "salesRepresentativeId": {
@@ -113601,7 +113599,7 @@
         "properties": {
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "entityId": {
@@ -113947,7 +113945,7 @@
           },
           "openingBalanceDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "billingRateId": {
@@ -114113,7 +114111,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -114243,7 +114241,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -114365,7 +114363,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -115003,7 +115001,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -115079,7 +115077,7 @@
           "dueDate": {
             "type": "string",
             "description": "(Optional) The due date.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "salesRepresentative": {
@@ -115094,7 +115092,7 @@
           "shipDate": {
             "type": "string",
             "description": "(Optional) The date of shipment.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "shipMethod": {
@@ -115319,7 +115317,7 @@
           "serviceDate": {
             "type": "string",
             "description": "(Optional) Service date for the item.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "salesTaxCode": {
@@ -115438,7 +115436,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -115586,7 +115584,7 @@
           },
           "asOfDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "isActive": {
@@ -115910,19 +115908,19 @@
           "jobStartDate": {
             "type": "string",
             "description": "Date the job started. Applies when this record is a job.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "jobProjectedEndDate": {
             "type": "string",
             "description": "Projected completion date for the job.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "jobEndDate": {
             "type": "string",
             "description": "Actual end date of the job.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "jobDescription": {
@@ -116225,7 +116223,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -116643,27 +116641,27 @@
           },
           "hiredDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "originalHireDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "adjustedServiceDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "releasedDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "birthDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "usCitizen": {
@@ -116688,7 +116686,7 @@
           },
           "workAuthExpireDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "usVeteran": {
@@ -116937,7 +116935,7 @@
           "transactionDate": {
             "type": "string",
             "description": "(Optional) The date of the transaction. Cannot be cleared. (DATETYPE)",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -117002,7 +117000,7 @@
           "dueDate": {
             "type": "string",
             "description": "(Optional) The due date calculated from the terms. (DATETYPE)",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "salesRepresentative": {
@@ -117350,7 +117348,7 @@
           "salesDate": {
             "type": "string",
             "description": "The date on which the asset was sold or disposed of.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true,
             "example": "2024-01-15T00:00:00"
           },
@@ -117399,7 +117397,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -117901,7 +117899,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -117945,7 +117943,7 @@
           "dueDate": {
             "type": "string",
             "description": "The date the invoice is due.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "billingAddress": {
@@ -117983,7 +117981,7 @@
           },
           "shippingDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "shippingMethod": {
@@ -118311,7 +118309,7 @@
           "purchaseDate": {
             "type": "string",
             "description": "The date on which the business purchased or acquired the asset.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true,
             "example": "2018-05-12T00:00:00"
           },
@@ -118368,7 +118366,7 @@
           "warrantyExpDate": {
             "type": "string",
             "description": "The date on which the manufacturer\u0027s or vendor\u0027s warranty for the asset expires.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true,
             "example": "2023-05-12T00:00:00"
           },
@@ -119142,7 +119140,7 @@
           },
           "purchaseDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "purchaseCost": {
@@ -119180,7 +119178,7 @@
           },
           "warrantyExpDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "notes": {
@@ -120349,7 +120347,7 @@
           },
           "serviceDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "customFields": {
@@ -120888,7 +120886,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -121451,7 +121449,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -121633,7 +121631,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time"
+            "format": "date"
           },
           "refNumber": {
             "type": "string",
@@ -122287,7 +122285,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -122360,13 +122358,13 @@
           "dueDate": {
             "type": "string",
             "description": "(Optional) The date the payment is due based on terms.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "expectedDate": {
             "type": "string",
             "description": "(Optional) The date the vendor is expected to deliver the item.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "shipmentMethod": {
@@ -122560,7 +122558,7 @@
           "serviceDate": {
             "type": "string",
             "description": "(Optional) The date the service was performed (if this is a service item).",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "salesTaxCode": {
@@ -122750,7 +122748,7 @@
           "effectiveDate": {
             "type": "string",
             "description": "(Required) The effective date of this rate.",
-            "format": "date-time"
+            "format": "date"
           }
         },
         "description": "Represents a rate entry for a Workers\u0027 Compensation Code.\r\nUsed in both Add and Mod requests.\r\n\r\nQBXML Schema Constraints:\r\n- Rate: Required, PRICETYPE\r\n- EffectiveDate: Required, DATETYPE"
@@ -122767,7 +122765,7 @@
           "effectiveDate": {
             "type": "string",
             "description": "The effective date of this rate.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           }
         },
@@ -122801,7 +122799,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -122947,7 +122945,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -123456,7 +123454,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -123529,7 +123527,7 @@
           "dueDate": {
             "type": "string",
             "description": "(Optional) The date the payment is due (if applicable).",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "salesRepresentative": {
@@ -123538,7 +123536,7 @@
           },
           "shipDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "shipMethod": {
@@ -123771,7 +123769,7 @@
           "serviceDate": {
             "type": "string",
             "description": "(Optional) The date the service was performed.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "salesTaxCode": {
@@ -123952,7 +123950,7 @@
           "transactionDate": {
             "type": "string",
             "description": "(Required) The date of the transaction.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -124506,13 +124504,13 @@
           },
           "yearBeginsDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "accrualStartDate": {
             "type": "string",
             "description": "The date the employee\u0027s sick hours began to accrue, in ISO 8601 format (YYYY-MM-DD).",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           }
         }
@@ -124737,7 +124735,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -124892,7 +124890,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "currency": {
@@ -125120,7 +125118,7 @@
           "openBalanceDate": {
             "type": "string",
             "description": "Opening balance date (optional, defaults to today)",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "taxLineId": {
@@ -125197,7 +125195,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -125294,12 +125292,12 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "dueDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -125406,7 +125404,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -125454,7 +125452,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -125527,13 +125525,13 @@
           "billedDate": {
             "type": "string",
             "description": "(Optional) The date the charge was billed.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "dueDate": {
             "type": "string",
             "description": "(Optional) The due date for the charge.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "overrideItemAccountId": {
@@ -125559,7 +125557,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "memo": {
@@ -125637,7 +125635,7 @@
           },
           "traansactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "accountId": {
@@ -125795,7 +125793,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "payeeId": {
@@ -125857,7 +125855,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -125945,7 +125943,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -126138,7 +126136,7 @@
           "serviceDate": {
             "type": "string",
             "description": "(Optional) Service date for the item.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "salesTaxCodeId": {
@@ -126192,7 +126190,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -126226,7 +126224,7 @@
           "dueDate": {
             "type": "string",
             "description": "(Optional) The due date.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "salesRepresentativeId": {
@@ -126240,7 +126238,7 @@
           "shipDate": {
             "type": "string",
             "description": "(Optional) The date of shipment.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "shipMethodId": {
@@ -126519,17 +126517,17 @@
           },
           "jobStartDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "jobProjectedEndDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "jobEndDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "jobDesc": {
@@ -126638,7 +126636,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "depositToAccountId": {
@@ -126794,17 +126792,17 @@
           },
           "hiredDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "releasedDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "birthDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "accountNumber": {
@@ -126847,12 +126845,12 @@
           },
           "originalHireDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "adjustedServiceDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "usCitizen": {
@@ -126877,7 +126875,7 @@
           },
           "workAuthExpireDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "usVeteran": {
@@ -127120,7 +127118,7 @@
           "dueDate": {
             "type": "string",
             "description": "(Optional) The due date calculated from the terms. Cannot be cleared. (DATETYPE)",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "salesRepId": {
@@ -127265,7 +127263,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -127497,7 +127495,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -127530,7 +127528,7 @@
           "dueDate": {
             "type": "string",
             "description": "Due date for the invoice.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "salesRepresentativeId": {
@@ -127543,7 +127541,7 @@
           },
           "shippingDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "shippingMethodId": {
@@ -127701,7 +127699,7 @@
           },
           "purchaseDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "purchaseCost": {
@@ -127752,7 +127750,7 @@
           },
           "warrantyExpirationDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "notes": {
@@ -128266,7 +128264,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -128471,7 +128469,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -128858,7 +128856,6 @@
           },
           "amount": {
             "type": "number",
-            "description": "(Optional) Total amount for the line. (Cannot be cleared if modifying existing value)",
             "format": "double",
             "nullable": true
           },
@@ -128877,7 +128874,7 @@
           "serviceDate": {
             "type": "string",
             "description": "(Optional) The new date the service was performed.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "salesTaxCodeId": {
@@ -128949,7 +128946,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -128977,13 +128974,13 @@
           "dueDate": {
             "type": "string",
             "description": "(Optional) The date the payment is due based on terms. (Cannot be cleared if modifying existing value)",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "expectedDate": {
             "type": "string",
             "description": "(Optional) The date the vendor is expected to deliver the item. (Cannot be cleared if modifying existing value)",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "shipMethodId": {
@@ -129087,7 +129084,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -129241,7 +129238,6 @@
           },
           "inventorySiteLocationId": {
             "type": "string",
-            "description": "(Optional) The ListID or FullName of the inventory site location.",
             "nullable": true
           },
           "serialNumber": {
@@ -129261,7 +129257,7 @@
           "serviceDate": {
             "type": "string",
             "description": "(Optional) The new date the service was performed.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "salesTaxCodeId": {
@@ -129306,7 +129302,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "refNumber": {
@@ -129335,7 +129331,7 @@
           "dueDate": {
             "type": "string",
             "description": "(Optional) The new date the payment is due (if applicable).",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "salesRepresentativeId": {
@@ -129631,7 +129627,7 @@
           },
           "transactionDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "entityId": {
@@ -130107,13 +130103,13 @@
           },
           "yearBeginsDate": {
             "type": "string",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "accrualStartDate": {
             "type": "string",
             "description": "The date the employee\u0027s vacation hours began to accrue, in ISO 8601 format (YYYY-MM-DD).",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           }
         }
@@ -130436,7 +130432,7 @@
           "transactionDate": {
             "type": "string",
             "description": "(Optional) The date of the transaction. Defaults to the current date.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true,
             "example": "2025-01-01"
           },
@@ -130693,7 +130689,7 @@
           "currentEffectiveDate": {
             "type": "string",
             "description": "The effective date of the current rate.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "nextRate": {
@@ -130705,7 +130701,7 @@
           "nextEffectiveDate": {
             "type": "string",
             "description": "The effective date of the next rate.",
-            "format": "date-time",
+            "format": "date",
             "nullable": true
           },
           "rateHistory": {
