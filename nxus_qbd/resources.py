@@ -605,7 +605,7 @@ _RESOURCE_DEFS: list[tuple[str, str, str, str, tuple[str, ...]]] = [
     ("vendor_types", "/api/v1/vendor-types", "/api/v1/vendor-type/{id}", "/api/v1/vendor-type", ("list", "retrieve", "create", "delete")),
     ("bill_to_pay", "/api/v1/bills-to-pay", "/api/v1/bill-to-pay/{id}", "/api/v1/bill-to-pay", ("list", "retrieve")),
     ("items", "/api/v1/items", "/api/v1/item/{id}", "/api/v1/item", ("list", "retrieve")),
-    ("inventory_items", "/api/v1/inventory-items", "/api/v1/inventory-item/{id}", "/api/v1/inventory-item", ("list", "retrieve", "create", "update", "delete")),
+    ("inventory_items", "/api/v1/items-inventory", "/api/v1/item-inventory/{id}", "/api/v1/item-inventory", ("list", "retrieve", "create", "update", "delete")),
     ("item_discounts", "/api/v1/items-discount", "/api/v1/item-discount/{id}", "/api/v1/item-discount", ("list", "retrieve", "create", "update", "delete")),
     ("item_fixed_assets", "/api/v1/items-fixed-asset", "/api/v1/item-fixed-asset/{id}", "/api/v1/item-fixed-asset", ("list", "retrieve", "create", "update", "delete")),
     ("item_groups", "/api/v1/items-group", "/api/v1/item-group/{id}", "/api/v1/item-group", ("list", "retrieve", "create", "update", "delete")),
@@ -684,7 +684,7 @@ def _load_models() -> Dict[str, type]:
     from nxus_qbd.models.qbd.unit_of_measure_set import UnitOfMeasureSet
     from nxus_qbd.models.qbd.vendor import Vendor
     from nxus_qbd.models.qbd.vendor_type import VendorType
-    from nxus_qbd.models.qbd.bill_to_pay import BillToPayRet
+    from nxus_qbd.models.qbd.bill_payment_or_credit import BillPaymentOrCredit
 
     # Items
     from nxus_qbd.models.qbd.item import Item
@@ -752,7 +752,7 @@ def _load_models() -> Dict[str, type]:
         "unit_of_measure_sets": UnitOfMeasureSet,
         "vendors": Vendor,
         "vendor_types": VendorType,
-        "bill_to_pay": BillToPayRet,
+        "bill_to_pay": BillPaymentOrCredit,
         # Items
         "items": Item,
         "inventory_items": InventoryItem,

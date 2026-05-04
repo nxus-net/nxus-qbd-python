@@ -187,6 +187,26 @@ def main() -> None:
         if len(dep_targets) == 1:
             assignments[class_name] = next(iter(dep_targets))
 
+    # Cycle prevention: _shared must never import from a subpackage. Any class
+    # currently in _shared whose dependency lives in qbd/ or core/ would force
+    # that import edge — promote the dependency up to _shared instead.
+    # Iterate to a fixed point (a promoted dep may itself depend on another
+    # subpackage class).
+    while True:
+        changed = False
+        for class_name, target in list(assignments.items()):
+            if target != ("", "_shared"):
+                continue
+            for dep in class_dependencies(classes[class_name], all_class_names):
+                dep_target = assignments.get(dep)
+                if dep_target is None:
+                    continue
+                if dep_target[0] in ("qbd", "core"):
+                    assignments[dep] = ("", "_shared")
+                    changed = True
+        if not changed:
+            break
+
     # Group classes by (package, module)
     module_classes: dict[tuple[str, str], list[str]] = defaultdict(list)
     for cname, target in assignments.items():

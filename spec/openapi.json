@@ -51183,7 +51183,7 @@
           "UnitOfMeasureSet"
         ],
         "summary": "List UnitOfMeasureSets",
-        "description": "Returns a paginated list of UnitOfMeasureSets where the default limit is 150.",
+        "description": "Returns a list of UnitOfMeasureSets where the default limit is 500. **Note: Cursor-based pagination is NOT supported for this resource, so all available records (up to the limit) will be returned in a single response.**",
         "operationId": "ListUnitOfMeasureSets",
         "parameters": [
           {
@@ -51198,7 +51198,7 @@
           {
             "name": "limit",
             "in": "query",
-            "description": "The maximum number of items to return per page.",
+            "description": "The maximum number of items to return for this request.",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -55153,14 +55153,14 @@
         }
       }
     },
-    "/api/v1/bills-to-pay": {
+    "/api/v1/bill-payment-or-credits": {
       "get": {
         "tags": [
-          "BillToPay"
+          "BillPaymentOrCredit"
         ],
-        "summary": "List BillToPayRets",
-        "description": "Returns a paginated list of BillToPayRets where the default limit is 150.",
-        "operationId": "ListBillToPayRets",
+        "summary": "List BillPaymentOrCredits",
+        "description": "Returns a paginated list of BillPaymentOrCredits where the default limit is 150.",
+        "operationId": "ListBillPaymentOrCredits",
         "parameters": [
           {
             "name": "cursor",
@@ -55395,15 +55395,17 @@
             "description": "(Optional) Filter by a specific Accounts Payable (A/P) Account ListID or FullName.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "80000001-1234567890"
           },
           {
             "name": "CurrencyId",
             "in": "query",
-            "description": "(Optional) Filter results by a specific Currency ListID or FullName.",
+            "description": "(Optional) Filter results by a specific Currency ListID or FullName.\r\nNote: QuickBoooks Desktop must have the \u0022Multi-Currency\u0022 feature enabled to use this filter or nXus will return an error.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "80000001-1234567890"
           },
           {
             "name": "DueDate",
@@ -55413,15 +55415,17 @@
               "type": "string",
               "format": "date",
               "nullable": true
-            }
+            },
+            "example": "2025-12-31"
           },
           {
-            "name": "PayeeEntityId",
+            "name": "id",
             "in": "query",
             "description": "(Required) The ListID or FullName of the Payee (Vendor, Employee, etc.) to find open bills/credits for.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "\u002280000001-1234567890\u0022"
           },
           {
             "name": "X-Connection-Id",
@@ -55458,7 +55462,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BasePageResponseBillToPayRet"
+                  "$ref": "#/components/schemas/BasePageResponseBillPaymentOrCredit"
                 }
               }
             }
@@ -55706,14 +55710,14 @@
         }
       }
     },
-    "/api/v1/bill-to-pay/{id}": {
+    "/api/v1/bill-payment-or-credit/{id}": {
       "get": {
         "tags": [
-          "BillToPay"
+          "BillPaymentOrCredit"
         ],
-        "summary": "Retrieve BillToPayRet",
-        "description": "Returns a specific BillToPayRet by its unique identifier.",
-        "operationId": "RetrieveBillToPayRet",
+        "summary": "Retrieve BillPaymentOrCredit",
+        "description": "Returns a specific BillPaymentOrCredit by its unique identifier.",
+        "operationId": "RetrieveBillPaymentOrCredit",
         "parameters": [
           {
             "name": "id",
@@ -55750,7 +55754,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BillToPayRet"
+                  "$ref": "#/components/schemas/BillPaymentOrCredit"
                 }
               }
             }
@@ -55850,6 +55854,920 @@
                     "code": "ACCOUNT_RESTRICTED",
                     "httpStatusCode": 403,
                     "requestId": "req_403_example"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error \u2014 an unexpected error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "An unexpected internal error occurred while processing the request.",
+                    "userFacingMessage": "An unexpected error occurred. If this persists, please contact support.",
+                    "type": "UNEXPECTED_ERROR_TYPE",
+                    "code": "UNEXPECTED_ERROR",
+                    "httpStatusCode": 500,
+                    "requestId": "req_500_example"
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment Required \u2014 an active subscription is required for this operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "Production mode requires an active subscription. Complete billing setup to continue.",
+                    "userFacingMessage": "A paid subscription is required for production connections. Please complete billing setup.",
+                    "type": "BILLING_ERROR_TYPE",
+                    "code": "SUBSCRIPTION_REQUIRED",
+                    "httpStatusCode": 402,
+                    "requestId": "req_402_example"
+                  }
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Request Timeout \u2014 the request took too long to process.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "The request timed out while waiting for QuickBooks Desktop to respond.",
+                    "userFacingMessage": "The request took too long. Please try again.",
+                    "type": "TIMEOUT_ERROR_TYPE",
+                    "code": "REQUEST_TIMEOUT",
+                    "httpStatusCode": 408,
+                    "requestId": "req_408_example"
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict \u2014 the operation conflicts with the current resource or connection state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "QBD XML Response Error (3200): The edit sequence in the request is stale. The object has been modified since it was last read.",
+                    "userFacingMessage": "This record or connection is not in a usable state for the requested operation. Refresh and try again.",
+                    "type": "INTEGRATION_RESPONSE_ERROR_TYPE",
+                    "code": "QBD_STALE_EDIT_SEQUENCE",
+                    "httpStatusCode": 409,
+                    "requestId": "req_409_example"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity \u2014 the request was valid but could not be processed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "QBD XML Response Error (3120): The referenced object does not exist.",
+                    "userFacingMessage": "QuickBooks could not process the request. Please verify the referenced objects exist.",
+                    "type": "INTEGRATION_RESPONSE_ERROR_TYPE",
+                    "code": "QBD_XML_RESPONSE_ERROR",
+                    "httpStatusCode": 422,
+                    "requestId": "req_422_example"
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests \u2014 rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "Rate limit exceeded. You have sent too many requests in a given amount of time.",
+                    "userFacingMessage": "You\u0027ve exceeded the rate limit. Please wait before making additional requests.",
+                    "type": "RATE_LIMIT_ERROR_TYPE",
+                    "code": "RATE_LIMIT_EXCEEDED",
+                    "httpStatusCode": 429,
+                    "requestId": "req_429_example"
+                  }
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Bad Gateway \u2014 QuickBooks Desktop connection or integration error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "QBD Connection Error (0x80040408): Could not start QuickBooks.",
+                    "userFacingMessage": "Unable to connect to QuickBooks Desktop. Please ensure QuickBooks is running and try again.",
+                    "type": "INTEGRATION_CONNECTION_ERROR_TYPE",
+                    "code": "QBD_CONNECTION_ERROR",
+                    "httpStatusCode": 502,
+                    "requestId": "req_502_example"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "BillPaymentOrCredit"
+        ],
+        "summary": "Update BillPaymentOrCredit",
+        "description": "Updates an existing BillPaymentOrCredit in QuickBooks.",
+        "operationId": "UpdateBillPaymentOrCredit",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Connection-Id",
+            "in": "header",
+            "description": "Identifies which QuickBooks Desktop company file to target.\n\nAccepts three formats:\n- **Prefixed ID**: \u0060conn_01965a3f2e7b7000b4c1d2e3f4a5b6c7\u0060\n- **Internal GUID**: \u00603fa85f64-5717-4562-b3fc-2c963f66afa6\u0060\n- **Your external ID**: \u0060acme-corp\u0060 (the \u0060externalId\u0060 you assigned when creating the connection)\n\nThe middleware resolves any of these formats to the correct connection. Required for all QuickBooks resource operations \u2014 without it, the API cannot determine which company file to query.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Nxus-Timeout-Seconds",
+            "in": "header",
+            "description": "Maximum time in seconds to wait for the queued job to be picked up and the response returned from QuickBooks Desktop.\n\nCreate / update / delete and single-entity retrieval operations accept **1\u2013120** seconds (default **120**). Raise this when the QuickBooks Web Connector is configured with longer polling intervals or the target company file is slow to respond.\n\nPassed as a request header \u2014 not a query-string value.",
+            "schema": {
+              "maximum": 120,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32",
+              "default": 120
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBillPaymentOrCreditRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBillPaymentOrCreditRequest"
+              }
+            },
+            "application/*\u002Bjson": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBillPaymentOrCreditRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillPaymentOrCredit"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request \u2014 validation error or malformed input.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "The \u0027name\u0027 field is required and must be between 1 and 100 characters.",
+                    "userFacingMessage": "Please provide a valid name.",
+                    "type": "VALIDATION_ERROR_TYPE",
+                    "code": "VALIDATION_ERROR",
+                    "httpStatusCode": 400,
+                    "requestId": "req_400_example"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found \u2014 the requested resource does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "No resource was found with the provided identifier.",
+                    "userFacingMessage": "The requested resource could not be found. Please verify the ID and try again.",
+                    "type": "NOT_FOUND_ERROR_TYPE",
+                    "code": "QBD_OBJECT_NOT_FOUND",
+                    "httpStatusCode": 404,
+                    "requestId": "req_404_example"
+                  }
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed \u2014 this operation is not supported for this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "The HTTP method is not allowed for this endpoint.",
+                    "userFacingMessage": "This operation is not supported. Please check the API documentation for allowed methods.",
+                    "type": "APPLICATION_ERROR_TYPE",
+                    "code": "METHOD_NOT_ALLOWED",
+                    "httpStatusCode": 405,
+                    "requestId": "req_405_example"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized \u2014 API key is missing, invalid, or expired.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "No API key was provided. Include a Bearer token in the Authorization header.",
+                    "userFacingMessage": "Please provide your API key to access this resource.",
+                    "type": "AUTHENTICATION_ERROR_TYPE",
+                    "code": "API_KEY_REQUIRED",
+                    "httpStatusCode": 401,
+                    "requestId": "req_401_example"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden \u2014 insufficient permissions or a policy restriction blocks this operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "This account is restricted and cannot use the requested resource.",
+                    "userFacingMessage": "This account is currently restricted. Contact support for help.",
+                    "type": "RESTRICTION_ERROR_TYPE",
+                    "code": "ACCOUNT_RESTRICTED",
+                    "httpStatusCode": 403,
+                    "requestId": "req_403_example"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error \u2014 an unexpected error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "An unexpected internal error occurred while processing the request.",
+                    "userFacingMessage": "An unexpected error occurred. If this persists, please contact support.",
+                    "type": "UNEXPECTED_ERROR_TYPE",
+                    "code": "UNEXPECTED_ERROR",
+                    "httpStatusCode": 500,
+                    "requestId": "req_500_example"
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment Required \u2014 an active subscription is required for this operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "Production mode requires an active subscription. Complete billing setup to continue.",
+                    "userFacingMessage": "A paid subscription is required for production connections. Please complete billing setup.",
+                    "type": "BILLING_ERROR_TYPE",
+                    "code": "SUBSCRIPTION_REQUIRED",
+                    "httpStatusCode": 402,
+                    "requestId": "req_402_example"
+                  }
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Request Timeout \u2014 the request took too long to process.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "The request timed out while waiting for QuickBooks Desktop to respond.",
+                    "userFacingMessage": "The request took too long. Please try again.",
+                    "type": "TIMEOUT_ERROR_TYPE",
+                    "code": "REQUEST_TIMEOUT",
+                    "httpStatusCode": 408,
+                    "requestId": "req_408_example"
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict \u2014 the operation conflicts with the current resource or connection state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "QBD XML Response Error (3200): The edit sequence in the request is stale. The object has been modified since it was last read.",
+                    "userFacingMessage": "This record or connection is not in a usable state for the requested operation. Refresh and try again.",
+                    "type": "INTEGRATION_RESPONSE_ERROR_TYPE",
+                    "code": "QBD_STALE_EDIT_SEQUENCE",
+                    "httpStatusCode": 409,
+                    "requestId": "req_409_example"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity \u2014 the request was valid but could not be processed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "QBD XML Response Error (3120): The referenced object does not exist.",
+                    "userFacingMessage": "QuickBooks could not process the request. Please verify the referenced objects exist.",
+                    "type": "INTEGRATION_RESPONSE_ERROR_TYPE",
+                    "code": "QBD_XML_RESPONSE_ERROR",
+                    "httpStatusCode": 422,
+                    "requestId": "req_422_example"
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests \u2014 rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "Rate limit exceeded. You have sent too many requests in a given amount of time.",
+                    "userFacingMessage": "You\u0027ve exceeded the rate limit. Please wait before making additional requests.",
+                    "type": "RATE_LIMIT_ERROR_TYPE",
+                    "code": "RATE_LIMIT_EXCEEDED",
+                    "httpStatusCode": 429,
+                    "requestId": "req_429_example"
+                  }
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Bad Gateway \u2014 QuickBooks Desktop connection or integration error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "QBD Connection Error (0x80040408): Could not start QuickBooks.",
+                    "userFacingMessage": "Unable to connect to QuickBooks Desktop. Please ensure QuickBooks is running and try again.",
+                    "type": "INTEGRATION_CONNECTION_ERROR_TYPE",
+                    "code": "QBD_CONNECTION_ERROR",
+                    "httpStatusCode": 502,
+                    "requestId": "req_502_example"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "BillPaymentOrCredit"
+        ],
+        "summary": "Delete BillPaymentOrCredit",
+        "description": "Deletes a specific BillPaymentOrCredit from QuickBooks.",
+        "operationId": "DeleteBillPaymentOrCredit",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Connection-Id",
+            "in": "header",
+            "description": "Identifies which QuickBooks Desktop company file to target.\n\nAccepts three formats:\n- **Prefixed ID**: \u0060conn_01965a3f2e7b7000b4c1d2e3f4a5b6c7\u0060\n- **Internal GUID**: \u00603fa85f64-5717-4562-b3fc-2c963f66afa6\u0060\n- **Your external ID**: \u0060acme-corp\u0060 (the \u0060externalId\u0060 you assigned when creating the connection)\n\nThe middleware resolves any of these formats to the correct connection. Required for all QuickBooks resource operations \u2014 without it, the API cannot determine which company file to query.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Nxus-Timeout-Seconds",
+            "in": "header",
+            "description": "Maximum time in seconds to wait for the queued job to be picked up and the response returned from QuickBooks Desktop.\n\nCreate / update / delete and single-entity retrieval operations accept **1\u2013120** seconds (default **120**). Raise this when the QuickBooks Web Connector is configured with longer polling intervals or the target company file is slow to respond.\n\nPassed as a request header \u2014 not a query-string value.",
+            "schema": {
+              "maximum": 120,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32",
+              "default": 120
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found \u2014 the requested resource does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "No resource was found with the provided identifier.",
+                    "userFacingMessage": "The requested resource could not be found. Please verify the ID and try again.",
+                    "type": "NOT_FOUND_ERROR_TYPE",
+                    "code": "QBD_OBJECT_NOT_FOUND",
+                    "httpStatusCode": 404,
+                    "requestId": "req_404_example"
+                  }
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed \u2014 this operation is not supported for this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "The HTTP method is not allowed for this endpoint.",
+                    "userFacingMessage": "This operation is not supported. Please check the API documentation for allowed methods.",
+                    "type": "APPLICATION_ERROR_TYPE",
+                    "code": "METHOD_NOT_ALLOWED",
+                    "httpStatusCode": 405,
+                    "requestId": "req_405_example"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request \u2014 validation error or malformed input.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "The \u0027name\u0027 field is required and must be between 1 and 100 characters.",
+                    "userFacingMessage": "Please provide a valid name.",
+                    "type": "VALIDATION_ERROR_TYPE",
+                    "code": "VALIDATION_ERROR",
+                    "httpStatusCode": 400,
+                    "requestId": "req_400_example"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized \u2014 API key is missing, invalid, or expired.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "No API key was provided. Include a Bearer token in the Authorization header.",
+                    "userFacingMessage": "Please provide your API key to access this resource.",
+                    "type": "AUTHENTICATION_ERROR_TYPE",
+                    "code": "API_KEY_REQUIRED",
+                    "httpStatusCode": 401,
+                    "requestId": "req_401_example"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden \u2014 insufficient permissions or a policy restriction blocks this operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "This account is restricted and cannot use the requested resource.",
+                    "userFacingMessage": "This account is currently restricted. Contact support for help.",
+                    "type": "RESTRICTION_ERROR_TYPE",
+                    "code": "ACCOUNT_RESTRICTED",
+                    "httpStatusCode": 403,
+                    "requestId": "req_403_example"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error \u2014 an unexpected error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "An unexpected internal error occurred while processing the request.",
+                    "userFacingMessage": "An unexpected error occurred. If this persists, please contact support.",
+                    "type": "UNEXPECTED_ERROR_TYPE",
+                    "code": "UNEXPECTED_ERROR",
+                    "httpStatusCode": 500,
+                    "requestId": "req_500_example"
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment Required \u2014 an active subscription is required for this operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "Production mode requires an active subscription. Complete billing setup to continue.",
+                    "userFacingMessage": "A paid subscription is required for production connections. Please complete billing setup.",
+                    "type": "BILLING_ERROR_TYPE",
+                    "code": "SUBSCRIPTION_REQUIRED",
+                    "httpStatusCode": 402,
+                    "requestId": "req_402_example"
+                  }
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Request Timeout \u2014 the request took too long to process.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "The request timed out while waiting for QuickBooks Desktop to respond.",
+                    "userFacingMessage": "The request took too long. Please try again.",
+                    "type": "TIMEOUT_ERROR_TYPE",
+                    "code": "REQUEST_TIMEOUT",
+                    "httpStatusCode": 408,
+                    "requestId": "req_408_example"
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict \u2014 the operation conflicts with the current resource or connection state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "QBD XML Response Error (3200): The edit sequence in the request is stale. The object has been modified since it was last read.",
+                    "userFacingMessage": "This record or connection is not in a usable state for the requested operation. Refresh and try again.",
+                    "type": "INTEGRATION_RESPONSE_ERROR_TYPE",
+                    "code": "QBD_STALE_EDIT_SEQUENCE",
+                    "httpStatusCode": 409,
+                    "requestId": "req_409_example"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity \u2014 the request was valid but could not be processed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "QBD XML Response Error (3120): The referenced object does not exist.",
+                    "userFacingMessage": "QuickBooks could not process the request. Please verify the referenced objects exist.",
+                    "type": "INTEGRATION_RESPONSE_ERROR_TYPE",
+                    "code": "QBD_XML_RESPONSE_ERROR",
+                    "httpStatusCode": 422,
+                    "requestId": "req_422_example"
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests \u2014 rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "Rate limit exceeded. You have sent too many requests in a given amount of time.",
+                    "userFacingMessage": "You\u0027ve exceeded the rate limit. Please wait before making additional requests.",
+                    "type": "RATE_LIMIT_ERROR_TYPE",
+                    "code": "RATE_LIMIT_EXCEEDED",
+                    "httpStatusCode": 429,
+                    "requestId": "req_429_example"
+                  }
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Bad Gateway \u2014 QuickBooks Desktop connection or integration error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "QBD Connection Error (0x80040408): Could not start QuickBooks.",
+                    "userFacingMessage": "Unable to connect to QuickBooks Desktop. Please ensure QuickBooks is running and try again.",
+                    "type": "INTEGRATION_CONNECTION_ERROR_TYPE",
+                    "code": "QBD_CONNECTION_ERROR",
+                    "httpStatusCode": 502,
+                    "requestId": "req_502_example"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/bill-payment-or-credit": {
+      "post": {
+        "tags": [
+          "BillPaymentOrCredit"
+        ],
+        "summary": "Create BillPaymentOrCredit",
+        "description": "Creates a new BillPaymentOrCredit in QuickBooks.",
+        "operationId": "CreateBillPaymentOrCredit",
+        "parameters": [
+          {
+            "name": "X-Connection-Id",
+            "in": "header",
+            "description": "Identifies which QuickBooks Desktop company file to target.\n\nAccepts three formats:\n- **Prefixed ID**: \u0060conn_01965a3f2e7b7000b4c1d2e3f4a5b6c7\u0060\n- **Internal GUID**: \u00603fa85f64-5717-4562-b3fc-2c963f66afa6\u0060\n- **Your external ID**: \u0060acme-corp\u0060 (the \u0060externalId\u0060 you assigned when creating the connection)\n\nThe middleware resolves any of these formats to the correct connection. Required for all QuickBooks resource operations \u2014 without it, the API cannot determine which company file to query.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Nxus-Timeout-Seconds",
+            "in": "header",
+            "description": "Maximum time in seconds to wait for the queued job to be picked up and the response returned from QuickBooks Desktop.\n\nCreate / update / delete and single-entity retrieval operations accept **1\u2013120** seconds (default **120**). Raise this when the QuickBooks Web Connector is configured with longer polling intervals or the target company file is slow to respond.\n\nPassed as a request header \u2014 not a query-string value.",
+            "schema": {
+              "maximum": 120,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32",
+              "default": 120
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBillPaymentOrCreditRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBillPaymentOrCreditRequest"
+              }
+            },
+            "application/*\u002Bjson": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBillPaymentOrCreditRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillPaymentOrCredit"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request \u2014 validation error or malformed input.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "The \u0027name\u0027 field is required and must be between 1 and 100 characters.",
+                    "userFacingMessage": "Please provide a valid name.",
+                    "type": "VALIDATION_ERROR_TYPE",
+                    "code": "VALIDATION_ERROR",
+                    "httpStatusCode": 400,
+                    "requestId": "req_400_example"
+                  }
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed \u2014 this operation is not supported for this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "The HTTP method is not allowed for this endpoint.",
+                    "userFacingMessage": "This operation is not supported. Please check the API documentation for allowed methods.",
+                    "type": "APPLICATION_ERROR_TYPE",
+                    "code": "METHOD_NOT_ALLOWED",
+                    "httpStatusCode": 405,
+                    "requestId": "req_405_example"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized \u2014 API key is missing, invalid, or expired.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "No API key was provided. Include a Bearer token in the Authorization header.",
+                    "userFacingMessage": "Please provide your API key to access this resource.",
+                    "type": "AUTHENTICATION_ERROR_TYPE",
+                    "code": "API_KEY_REQUIRED",
+                    "httpStatusCode": 401,
+                    "requestId": "req_401_example"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden \u2014 insufficient permissions or a policy restriction blocks this operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "This account is restricted and cannot use the requested resource.",
+                    "userFacingMessage": "This account is currently restricted. Contact support for help.",
+                    "type": "RESTRICTION_ERROR_TYPE",
+                    "code": "ACCOUNT_RESTRICTED",
+                    "httpStatusCode": 403,
+                    "requestId": "req_403_example"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found \u2014 the requested resource does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "No resource was found with the provided identifier.",
+                    "userFacingMessage": "The requested resource could not be found. Please verify the ID and try again.",
+                    "type": "NOT_FOUND_ERROR_TYPE",
+                    "code": "QBD_OBJECT_NOT_FOUND",
+                    "httpStatusCode": 404,
+                    "requestId": "req_404_example"
                   }
                 }
               }
@@ -99926,6 +100844,260 @@
         }
       }
     },
+    "/api/v1/cursors/{operationId}/close": {
+      "post": {
+        "tags": [
+          "Cursors"
+        ],
+        "summary": "Tells the backend that the client is done consuming the given paginated cursor.\r\nThe SOAP iterator-continuation hold (up to ~10s waiting for the next \u0022continue\u0022)\r\nunblocks immediately, the QWC lane frees, and the underlying job is marked\r\n\u0060Completed\u0060 by the SOAP side.\r\n\r\nIdempotent: calling on an unknown / already-closed cursor returns 204 with no\r\nobservable side effect. Safe for SDK \u0060finally\u0060 blocks and user-driven retry.\r\n\r\nTenant-scoped: only signals when the live session belongs to the caller\u0027s tenant.\r\nCross-tenant requests silently return 204 (do NOT leak whether the cursor existed).",
+        "operationId": "Close",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request \u2014 validation error or malformed input.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "The \u0027name\u0027 field is required and must be between 1 and 100 characters.",
+                    "userFacingMessage": "Please provide a valid name.",
+                    "type": "VALIDATION_ERROR_TYPE",
+                    "code": "VALIDATION_ERROR",
+                    "httpStatusCode": 400,
+                    "requestId": "req_400_example"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized \u2014 API key is missing, invalid, or expired.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "No API key was provided. Include a Bearer token in the Authorization header.",
+                    "userFacingMessage": "Please provide your API key to access this resource.",
+                    "type": "AUTHENTICATION_ERROR_TYPE",
+                    "code": "API_KEY_REQUIRED",
+                    "httpStatusCode": 401,
+                    "requestId": "req_401_example"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden \u2014 insufficient permissions or a policy restriction blocks this operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "This account is restricted and cannot use the requested resource.",
+                    "userFacingMessage": "This account is currently restricted. Contact support for help.",
+                    "type": "RESTRICTION_ERROR_TYPE",
+                    "code": "ACCOUNT_RESTRICTED",
+                    "httpStatusCode": 403,
+                    "requestId": "req_403_example"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found \u2014 the requested resource does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "No resource was found with the provided identifier.",
+                    "userFacingMessage": "The requested resource could not be found. Please verify the ID and try again.",
+                    "type": "NOT_FOUND_ERROR_TYPE",
+                    "code": "QBD_OBJECT_NOT_FOUND",
+                    "httpStatusCode": 404,
+                    "requestId": "req_404_example"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error \u2014 an unexpected error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "An unexpected internal error occurred while processing the request.",
+                    "userFacingMessage": "An unexpected error occurred. If this persists, please contact support.",
+                    "type": "UNEXPECTED_ERROR_TYPE",
+                    "code": "UNEXPECTED_ERROR",
+                    "httpStatusCode": 500,
+                    "requestId": "req_500_example"
+                  }
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment Required \u2014 an active subscription is required for this operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "Production mode requires an active subscription. Complete billing setup to continue.",
+                    "userFacingMessage": "A paid subscription is required for production connections. Please complete billing setup.",
+                    "type": "BILLING_ERROR_TYPE",
+                    "code": "SUBSCRIPTION_REQUIRED",
+                    "httpStatusCode": 402,
+                    "requestId": "req_402_example"
+                  }
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed \u2014 this operation is not supported for this resource.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "The HTTP method is not allowed for this endpoint.",
+                    "userFacingMessage": "This operation is not supported. Please check the API documentation for allowed methods.",
+                    "type": "APPLICATION_ERROR_TYPE",
+                    "code": "METHOD_NOT_ALLOWED",
+                    "httpStatusCode": 405,
+                    "requestId": "req_405_example"
+                  }
+                }
+              }
+            }
+          },
+          "408": {
+            "description": "Request Timeout \u2014 the request took too long to process.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "The request timed out while waiting for QuickBooks Desktop to respond.",
+                    "userFacingMessage": "The request took too long. Please try again.",
+                    "type": "TIMEOUT_ERROR_TYPE",
+                    "code": "REQUEST_TIMEOUT",
+                    "httpStatusCode": 408,
+                    "requestId": "req_408_example"
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict \u2014 the operation conflicts with the current resource or connection state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "QBD XML Response Error (3200): The edit sequence in the request is stale. The object has been modified since it was last read.",
+                    "userFacingMessage": "This record or connection is not in a usable state for the requested operation. Refresh and try again.",
+                    "type": "INTEGRATION_RESPONSE_ERROR_TYPE",
+                    "code": "QBD_STALE_EDIT_SEQUENCE",
+                    "httpStatusCode": 409,
+                    "requestId": "req_409_example"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity \u2014 the request was valid but could not be processed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "QBD XML Response Error (3120): The referenced object does not exist.",
+                    "userFacingMessage": "QuickBooks could not process the request. Please verify the referenced objects exist.",
+                    "type": "INTEGRATION_RESPONSE_ERROR_TYPE",
+                    "code": "QBD_XML_RESPONSE_ERROR",
+                    "httpStatusCode": 422,
+                    "requestId": "req_422_example"
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests \u2014 rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "Rate limit exceeded. You have sent too many requests in a given amount of time.",
+                    "userFacingMessage": "You\u0027ve exceeded the rate limit. Please wait before making additional requests.",
+                    "type": "RATE_LIMIT_ERROR_TYPE",
+                    "code": "RATE_LIMIT_EXCEEDED",
+                    "httpStatusCode": 429,
+                    "requestId": "req_429_example"
+                  }
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Bad Gateway \u2014 QuickBooks Desktop connection or integration error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                },
+                "example": {
+                  "error": {
+                    "message": "QBD Connection Error (0x80040408): Could not start QuickBooks.",
+                    "userFacingMessage": "Unable to connect to QuickBooks Desktop. Please ensure QuickBooks is running and try again.",
+                    "type": "INTEGRATION_CONNECTION_ERROR_TYPE",
+                    "code": "QBD_CONNECTION_ERROR",
+                    "httpStatusCode": 502,
+                    "requestId": "req_502_example"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/auth-sessions": {
       "post": {
         "tags": [
@@ -103594,21 +104766,147 @@
         },
         "description": "Response wrapper for API responses"
       },
-      "AppliedToTransactionAddRequest": {
+      "ApplicableCredit": {
         "required": [
-          "txnId"
+          "id",
+          "createdAt",
+          "updatedAt",
+          "revisionNumber"
         ],
         "type": "object",
         "properties": {
-          "txnId": {
+          "id": {
             "type": "string"
           },
-          "paymentAmount": {
+          "objectType": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "revisionNumber": {
+            "type": "string"
+          },
+          "transactionDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "currency": {
+            "nullable": true,
+            "$ref": "#/components/schemas/QbdRef"
+          },
+          "exchangeRate": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
+          "refNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "memo": {
+            "type": "string",
+            "nullable": true
+          },
+          "transactionType": {
+            "type": "string",
+            "nullable": true
+          },
+          "payablesAccount": {
+            "nullable": true,
+            "$ref": "#/components/schemas/QbdRef"
+          },
+          "creditRemaining": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "creditRemainingInHomeCurrency": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "entity": {
+            "nullable": true,
+            "$ref": "#/components/schemas/QbdRef"
+          },
+          "account": {
+            "nullable": true,
+            "$ref": "#/components/schemas/QbdRef"
+          },
+          "hasValidLineItems": {
+            "type": "boolean"
+          },
+          "externalId": {
+            "type": "string",
+            "nullable": true
+          },
+          "linkedTransactions": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
+          },
+          "expenseLines": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
+          },
+          "itemLines": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
+          },
+          "itemGroupLines": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemGroupLine"
+            }
+          },
+          "customFields": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
+          }
+        },
+        "description": "Represents a credit that can be applied to a bill."
+      },
+      "AppliedToTransactionRequest": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "paymentAmount": {
+            "type": "number",
+            "description": "Monetary amount of the payment in the transaction\u0027s currency.\n\nUses decimal for financial precision. Null indicates the amount is unspecified.",
+            "format": "double",
+            "nullable": true
+          },
           "setCredits": {
+            "description": "Collection of requests to set credits.\n\nMay be null. Initialized at object creation (init-only). Serialized as\n\u0022setCredits\u0022.",
             "nullable": true,
             "type": "array",
             "items": {
@@ -103617,50 +104915,22 @@
           },
           "discountAmount": {
             "type": "number",
+            "description": "Monetary amount of any discount applied to the item or transaction.\n\nNull when no discount is applied. Use the same currency and scale as other monetary values in\nthe model.",
             "format": "double",
             "nullable": true
           },
           "discountAccountId": {
             "type": "string",
+            "description": "Identifier of the account used for discounts.\n\nNullable; null indicates no discount account is assigned. When present, it should correspond\nto an account identifier in the accounting system.",
             "nullable": true
           },
           "discountClassId": {
             "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "AppliedToTransactionRequest": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "nullable": true
-          },
-          "amount": {
-            "type": "number",
-            "description": "Amount to apply to this transaction (optional - QB can auto-apply).",
-            "format": "double",
-            "nullable": true
-          },
-          "discountAmount": {
-            "type": "number",
-            "description": "Discount amount to apply.",
-            "format": "double",
-            "nullable": true
-          },
-          "discountAccountId": {
-            "type": "string",
-            "description": "Account to post the discount to.",
-            "nullable": true
-          },
-          "discountClassId": {
-            "type": "string",
-            "description": "Class for the discount (if using class tracking).",
+            "description": "Identifier of the discount class.\n\nCorresponds to the JSON property \u0022discountClassId\u0022. May be null when no discount class is\nassigned.",
             "nullable": true
           }
         },
-        "description": "Request model for AppliedToTxn line items.\r\nRepresents an invoice or transaction that this payment is being applied to."
+        "description": "Request model for AppliedToTxn line items.\nRepresents an invoice or transaction that this payment is being applied to."
       },
       "AppliedToTxn": {
         "required": [
@@ -103734,7 +105004,7 @@
         },
         "description": "Represents a transaction that a parent transaction (e.g., a Payment) has been applied to.\r\nThis element is typically found in response objects like ReceivePaymentRet or BillPaymentCheckRet."
       },
-      "ApplyCheckToTransactionAddRequest": {
+      "ApplyCheckToTransactionRequest": {
         "required": [
           "id"
         ],
@@ -103752,7 +105022,7 @@
         },
         "description": "Represents the ApplyCheckToTxnAdd aggregate in QBXML (SIMPLER structure for CheckAdd only).\r\nUsed for applying a check as a direct refund to customer transactions.\r\nThis is the simplified version with only TxnID and Amount."
       },
-      "ApplyToTransactionAddRequest": {
+      "ApplyToTransactionRequest": {
         "required": [
           "id"
         ],
@@ -103772,7 +105042,7 @@
             "nullable": true,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/SetCreditAddRequest"
+              "$ref": "#/components/schemas/CreateSetCreditRequest"
             }
           },
           "discountAmount": {
@@ -104389,7 +105659,7 @@
         },
         "description": "Simple paginated response designed for SDK consumption\r\nClean, predictable structure perfect for automated pagination handling"
       },
-      "BasePageResponseBillToPayRet": {
+      "BasePageResponseBillPaymentOrCredit": {
         "type": "object",
         "properties": {
           "requestId": {
@@ -104402,7 +105672,7 @@
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/BillToPayRet"
+              "$ref": "#/components/schemas/BillPaymentOrCredit"
             }
           },
           "nextCursor": {
@@ -106873,60 +108143,6 @@
         },
         "description": "Simple paginated response designed for SDK consumption\r\nClean, predictable structure perfect for automated pagination handling"
       },
-      "BasePageResponseSpecialItem": {
-        "type": "object",
-        "properties": {
-          "requestId": {
-            "type": "string",
-            "nullable": true
-          },
-          "success": {
-            "type": "boolean"
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SpecialItem"
-            }
-          },
-          "nextCursor": {
-            "type": "string"
-          },
-          "page": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "count": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "limit": {
-            "type": "integer",
-            "description": "The maximum number of items to return in a single response.",
-            "format": "int32"
-          },
-          "totalCount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "pageCount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "hasMore": {
-            "type": "boolean"
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "remainingCount": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "description": "Simple paginated response designed for SDK consumption\r\nClean, predictable structure perfect for automated pagination handling"
-      },
       "BasePageResponseTerm": {
         "type": "object",
         "properties": {
@@ -107429,7 +108645,7 @@
           "vendor": {
             "description": "The vendor who issued the bill. When linking to a Purchase Order, this vendor\nmust match the vendor on the Purchase Order.",
             "example": {
-              "listId": "80000001-1234567890",
+              "id": "80000001-1234567890",
               "fullName": "Daigle Lighting"
             },
             "nullable": true,
@@ -107438,8 +108654,8 @@
           "vendorAddress": {
             "description": "The billing address of the vendor.",
             "example": {
-              "addr1": "Daigle Lighting",
-              "addr2": "123 Industrial Way",
+              "line1": "Daigle Lighting",
+              "line2": "123 Industrial Way",
               "city": "Middlefield",
               "state": "CA",
               "postalCode": "94471"
@@ -107461,7 +108677,7 @@
             "description": "The date by which the bill must be paid.",
             "format": "date",
             "nullable": true,
-            "example": "\u00222024-11-28T00:00:00Z\u0022"
+            "example": "\u00222024-11-28\u0022"
           },
           "amountDue": {
             "type": "number",
@@ -107491,12 +108707,14 @@
           },
           "isPending": {
             "type": "boolean",
-            "nullable": true
+            "description": "Indicates whether the bill is currently marked as pending.",
+            "nullable": true,
+            "example": "false"
           },
           "terms": {
             "description": "The payment terms associated with the bill (e.g., Net 30), which calculate the DueDate.",
             "example": {
-              "listId": "80000002-1234567890",
+              "id": "80000002-1234567890",
               "fullName": "Net 30"
             },
             "nullable": true,
@@ -107505,7 +108723,7 @@
           "class": {
             "description": "The class associated with the bill, used for categorizing expenses and reporting\n(requires class tracking to be enabled in QuickBooks).",
             "example": {
-              "listId": "80000005-1234567890",
+              "id": "80000005-1234567890",
               "fullName": "Overhead"
             },
             "nullable": true,
@@ -107519,7 +108737,7 @@
           "salesTaxCode": {
             "description": "The sales tax code indicating the general taxability of the bill (e.g., Tax, Non).",
             "example": {
-              "listId": "80000008-1234567890",
+              "id": "80000008-1234567890",
               "fullName": "Non"
             },
             "nullable": true,
@@ -107738,135 +108956,7 @@
         },
         "description": "Represents a custom rate or percentage adjustment applied to a specific service item within a billing rate [2, 4]."
       },
-      "BillToPay": {
-        "required": [
-          "id",
-          "createdAt",
-          "updatedAt",
-          "revisionNumber"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "objectType": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "revisionNumber": {
-            "type": "string"
-          },
-          "transactionDate": {
-            "type": "string",
-            "format": "date",
-            "nullable": true
-          },
-          "currency": {
-            "nullable": true,
-            "$ref": "#/components/schemas/QbdRef"
-          },
-          "amountDue": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "exchangeRate": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "amountDueInHomeCurrency": {
-            "type": "string",
-            "description": "Amount due in home currency. This is a direct property for now.",
-            "nullable": true
-          },
-          "refNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "memo": {
-            "type": "string",
-            "nullable": true
-          },
-          "txnType": {
-            "type": "string",
-            "nullable": true
-          },
-          "payablesAccount": {
-            "nullable": true,
-            "$ref": "#/components/schemas/QbdRef"
-          },
-          "dueDate": {
-            "type": "string",
-            "format": "date",
-            "nullable": true
-          },
-          "entity": {
-            "nullable": true,
-            "$ref": "#/components/schemas/QbdRef"
-          },
-          "account": {
-            "nullable": true,
-            "$ref": "#/components/schemas/QbdRef"
-          },
-          "amountInHomeCurrency": {
-            "type": "string",
-            "nullable": true
-          },
-          "hasValidLineItems": {
-            "type": "boolean"
-          },
-          "externalId": {
-            "type": "string",
-            "nullable": true
-          },
-          "linkedTransactions": {
-            "nullable": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LinkedTransaction"
-            }
-          },
-          "expenseLines": {
-            "nullable": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ExpenseLine"
-            }
-          },
-          "itemLines": {
-            "nullable": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ItemLine"
-            }
-          },
-          "itemGroupLines": {
-            "nullable": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ItemGroupLine"
-            }
-          },
-          "customFields": {
-            "nullable": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/QbdDataExt"
-            }
-          }
-        },
-        "description": "BillToPay is a read-only query result in QuickBooks and cannot be created directly.\nThis class exists for architectural compatibility only."
-      },
-      "BillToPayRet": {
+      "BillPaymentOrCredit": {
         "required": [
           "createdAt",
           "updatedAt",
@@ -107888,13 +108978,13 @@
           "revisionNumber": {
             "type": "string"
           },
-          "billToPay": {
+          "bill": {
             "nullable": true,
-            "$ref": "#/components/schemas/BillToPay"
+            "$ref": "#/components/schemas/PayableBill"
           },
-          "creditToApply": {
+          "credit": {
             "nullable": true,
-            "$ref": "#/components/schemas/CreditToApply"
+            "$ref": "#/components/schemas/ApplicableCredit"
           },
           "customFields": {
             "nullable": true,
@@ -107904,7 +108994,7 @@
             }
           }
         },
-        "description": "The BillToPayQuery request returns information about open bills and credits. \r\nYou can use this information in subsequent BillPaymentCheck and BillPaymentCreditCard requests."
+        "description": "Represents an outstanding vendor balance. This will contain either a payable bill \r\nthat requires payment, or an available credit that can be applied to a payment."
       },
       "BuildAssembly": {
         "required": [
@@ -109013,17 +110103,6 @@
         },
         "description": "Request model for creating a new account."
       },
-      "CreateAccountTaxLineInfoRequest": {
-        "type": "object",
-        "properties": {
-          "externalGuid": {
-            "type": "string",
-            "description": "READ-ONLY: This property fulfills the ICreateRequest interface but is not used.",
-            "nullable": true
-          }
-        },
-        "description": "Request model for creating an AccountTaxLineInfo entry.\r\nNOTE: AccountTaxLineInfo is a READ-ONLY list in QuickBooks.\r\nThis request type exists for interface compliance but is NOT SUPPORTED."
-      },
       "CreateAdditionalNoteRequest": {
         "required": [
           "note"
@@ -109128,34 +110207,6 @@
         },
         "description": "Request body for creating an auth session"
       },
-      "CreateBarCodeRequest": {
-        "required": [
-          "listType",
-          "listId"
-        ],
-        "type": "object",
-        "properties": {
-          "listType": {
-            "type": "string",
-            "description": "(Required) The type of list object associated with the barcode."
-          },
-          "listId": {
-            "type": "string",
-            "description": "(Required) The unique identifier of the list object."
-          },
-          "fullName": {
-            "type": "string",
-            "description": "(Optional) The full name of the list object.",
-            "nullable": true
-          },
-          "externalGuid": {
-            "type": "string",
-            "description": "Fulfills the ICreateRequest interface.\nUsed for tracking the \u0022Add\u0022 job.",
-            "nullable": true
-          }
-        },
-        "description": "QuickBooks does not support creating BarCodes. This request type exists for interface compliance but is NOT SUPPORTED   .\r\nBarCodes are typically generated by QuickBooks, but this supports the add operation."
-      },
       "CreateBillingRateRequest": {
         "required": [
           "name"
@@ -109180,13 +110231,16 @@
               "$ref": "#/components/schemas/BillingRateItemRequest"
             }
           },
-          "externalGuid": {
+          "externalId": {
             "type": "string",
-            "description": "(Optional) A unique GUID used to prevent duplicate processing.",
             "nullable": true
           }
         },
         "description": "Adds a billing rate to the billing rate list in QuickBooks Desktop. \r\nOnce created, it can be assigned to an employee or vendor to override service item rates in time transactions.\r\nUse FixedBillingRate to override all items, or BillingRateItems to override specific ones.\r\nBased on BillingRateAddRq."
+      },
+      "CreateBillPaymentOrCreditRequest": {
+        "type": "object",
+        "description": "BillToPay is a read-only query result in QuickBooks and cannot be created directly."
       },
       "CreateBillRequest": {
         "required": [
@@ -109285,16 +110339,6 @@
           }
         },
         "description": "Request model for creating a new bill in QuickBooks.\r\nDTD Reference: qbxmlops170.xml - BillAdd (lines 13260-13543)"
-      },
-      "CreateBillToPayRequest": {
-        "type": "object",
-        "properties": {
-          "externalGuid": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "description": "BillToPay is a read-only query result in QuickBooks and cannot be created directly.\r\nThis class exists for architectural compatibility only."
       },
       "CreateBuildAssemblyRequest": {
         "required": [
@@ -109533,7 +110577,7 @@
             "nullable": true,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/AppliedToTransactionAddRequest"
+              "$ref": "#/components/schemas/AppliedToTransactionRequest"
             }
           }
         },
@@ -109628,7 +110672,7 @@
             "nullable": true,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ApplyCheckToTransactionAddRequest"
+              "$ref": "#/components/schemas/ApplyCheckToTransactionRequest"
             }
           }
         },
@@ -109746,7 +110790,7 @@
           "applyToTransactions": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ApplyToTransactionAddRequest"
+              "$ref": "#/components/schemas/ApplyToTransactionRequest"
             }
           },
           "isValidTotalAmount": {
@@ -109915,6 +110959,151 @@
         },
         "description": "Main request model to create a new Credit Card Charge.\r\nBased on the CreditCardChargeAddRq QBXML."
       },
+      "CreateCreditCardTransactionInfoRequest": {
+        "required": [
+          "inputInfo",
+          "resultInfo"
+        ],
+        "type": "object",
+        "properties": {
+          "inputInfo": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CreateCreditCardTransactionInputInfoRequest"
+              }
+            ],
+            "description": "(Required) Input details for the credit card transaction."
+          },
+          "resultInfo": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CreateCreditCardTransactionResultInfoRequest"
+              }
+            ],
+            "description": "(Required) Result details from the credit card processor."
+          }
+        },
+        "description": "Container for Credit Card Transaction Input and Result info.\r\nShared across transactions like SalesReceipt and ARRefundCreditCard."
+      },
+      "CreateCreditCardTransactionInputInfoRequest": {
+        "required": [
+          "creditCardNumber",
+          "expirationMonth",
+          "expirationYear",
+          "nameOnCard"
+        ],
+        "type": "object",
+        "properties": {
+          "creditCardNumber": {
+            "type": "string"
+          },
+          "expirationMonth": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "expirationYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nameOnCard": {
+            "type": "string"
+          },
+          "creditCardAddress": {
+            "maxLength": 41,
+            "type": "string",
+            "nullable": true
+          },
+          "creditCardPostalCode": {
+            "maxLength": 13,
+            "type": "string",
+            "nullable": true
+          },
+          "commercialCardCode": {
+            "maxLength": 4,
+            "type": "string",
+            "nullable": true
+          },
+          "transactionMode": {
+            "nullable": true,
+            "$ref": "#/components/schemas/NullableTransactionMode"
+          },
+          "creditCardTxnType": {
+            "nullable": true,
+            "$ref": "#/components/schemas/NullableCreditCardTransactionType"
+          }
+        },
+        "description": "Input card details for a Credit Card transaction."
+      },
+      "CreateCreditCardTransactionResultInfoRequest": {
+        "required": [
+          "resultCode",
+          "resultMessage",
+          "creditCardTransId",
+          "merchantAccountNumber",
+          "paymentStatus",
+          "txnAuthorizationTime"
+        ],
+        "type": "object",
+        "properties": {
+          "resultCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "resultMessage": {
+            "type": "string"
+          },
+          "creditCardTransId": {
+            "type": "string"
+          },
+          "merchantAccountNumber": {
+            "type": "string"
+          },
+          "paymentStatus": {
+            "$ref": "#/components/schemas/PaymentStatus"
+          },
+          "txnAuthorizationTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "authorizationCode": {
+            "maxLength": 25,
+            "type": "string",
+            "nullable": true
+          },
+          "avsStreet": {
+            "nullable": true,
+            "$ref": "#/components/schemas/NullableAvsStreet"
+          },
+          "avsZip": {
+            "nullable": true,
+            "$ref": "#/components/schemas/NullableAvsZip"
+          },
+          "cardSecurityCodeMatch": {
+            "nullable": true,
+            "$ref": "#/components/schemas/NullableCardSecurityCodeMatch"
+          },
+          "reconBatchId": {
+            "maxLength": 30,
+            "type": "string",
+            "nullable": true
+          },
+          "paymentGroupingCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "txnAuthorizationStamp": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "clientTransId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "description": "Results from the payment gateway for a Credit Card transaction."
+      },
       "CreateCreditMemoLineGroupRequest": {
         "required": [
           "itemGroupId"
@@ -110054,7 +111243,7 @@
           },
           "creditCardTransactionInfo": {
             "nullable": true,
-            "$ref": "#/components/schemas/CreditCardTransactionInfoAddRequest"
+            "$ref": "#/components/schemas/CreateCreditCardTransactionInfoRequest"
           },
           "customFields": {
             "nullable": true,
@@ -111167,7 +112356,39 @@
             }
           }
         },
-        "description": "A reusable request DTO for adding an Expense Line to a transaction.\r\nBased on the ExpenseLineAdd QBXML type."
+        "description": "Expense Line to a transaction.\r\nBased on the ExpenseLineAdd QBXML type."
+      },
+      "CreateInventoryAdjustmentLineRequest": {
+        "required": [
+          "itemId"
+        ],
+        "type": "object",
+        "properties": {
+          "itemId": {
+            "type": "string"
+          },
+          "memo": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantityAdjustment": {
+            "nullable": true,
+            "$ref": "#/components/schemas/QuantityAdjustmentRequest"
+          },
+          "valueAdjustment": {
+            "nullable": true,
+            "$ref": "#/components/schemas/ValueAdjustmentRequest"
+          },
+          "serialNumberAdjustment": {
+            "nullable": true,
+            "$ref": "#/components/schemas/SerialNumberAdjustmentRequest"
+          },
+          "lotNumberAdjustment": {
+            "nullable": true,
+            "$ref": "#/components/schemas/LotNumberAdjustmentRequest"
+          }
+        },
+        "description": "Represents a single line item for an Inventory Adjustment add operation.\r\nOnly ONE of the adjustment properties (Quantity, Value, SerialNumber, LotNumber) should be populated."
       },
       "CreateInventoryAdjustmentRequest": {
         "required": [
@@ -111219,7 +112440,7 @@
           "inventoryAdjustmentLines": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/InventoryAdjustmentLineAddRequest"
+              "$ref": "#/components/schemas/CreateInventoryAdjustmentLineRequest"
             }
           },
           "externalId": {
@@ -111523,7 +112744,7 @@
             "nullable": true,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/SetCreditAddRequest"
+              "$ref": "#/components/schemas/CreateSetCreditRequest"
             }
           },
           "lines": {
@@ -111594,7 +112815,7 @@
             "type": "string",
             "nullable": true
           },
-          "externalGuid": {
+          "externalId": {
             "type": "string",
             "nullable": true
           }
@@ -112622,45 +113843,6 @@
         },
         "description": "Represents a request to create a new Payment Method.\r\nBased on the PaymentMethodAdd QBXML type."
       },
-      "CreatePayrollItemNonWageRequest": {
-        "required": [
-          "name",
-          "nonWageType"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "maxLength": 31,
-            "type": "string",
-            "description": "(Required) The name of the non-wage payroll item."
-          },
-          "nonWageType": {
-            "type": "string",
-            "description": "(Required) The non-wage item type.\nPossible values: Addition, CompanyContribution, Deduction, DirectDeposit, Tax"
-          },
-          "isActive": {
-            "type": "boolean",
-            "description": "(Optional) Indicates whether the payroll item is active.",
-            "nullable": true
-          },
-          "expenseAccountId": {
-            "type": "string",
-            "description": "(Optional) The ListID of the Expense Account associated with the payroll item. (Flattened-ID Pattern)",
-            "nullable": true
-          },
-          "liabilityAccountId": {
-            "type": "string",
-            "description": "(Optional) The ListID of the Liability Account associated with the payroll item. (Flattened-ID Pattern)",
-            "nullable": true
-          },
-          "externalGuid": {
-            "type": "string",
-            "description": "(Optional) External GUID for tracking the request.",
-            "nullable": true
-          }
-        },
-        "description": "Request record for creating a new PayrollItemNonWage in QuickBooks (e.g., Deduction, Company Contribution).\r\nNOTE: Direct creation of this item via QBXML is generally unsupported/read-only by the QuickBooks SDK."
-      },
       "CreatePayrollItemWageRequest": {
         "required": [
           "name",
@@ -112687,7 +113869,7 @@
             "description": "(Optional) Indicates whether the payroll item is active.",
             "nullable": true
           },
-          "externalGuid": {
+          "externalId": {
             "type": "string",
             "nullable": true
           }
@@ -113079,6 +114261,68 @@
         },
         "description": "Request model for creating a new ReceivePayment transaction in QuickBooks."
       },
+      "CreateSalesAndPurchaseRequest": {
+        "type": "object",
+        "properties": {
+          "salesDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "salesPrice": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "incomeAccountId": {
+            "type": "string",
+            "nullable": true
+          },
+          "purchaseDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "purchaseCost": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "purchaseTaxCodeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "expenseAccountId": {
+            "type": "string",
+            "nullable": true
+          },
+          "prefVendorId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateSalesOrPurchaseRequest": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "pricePercent": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "accountId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "CreateSalesReceiptLineGroupRequest": {
         "required": [
           "id"
@@ -113209,7 +114453,7 @@
           },
           "creditCardTransaction": {
             "nullable": true,
-            "$ref": "#/components/schemas/CreditCardTransactionInfoAddRequest"
+            "$ref": "#/components/schemas/CreateCreditCardTransactionInfoRequest"
           }
         },
         "description": "A reusable request DTO for adding an Item Line to a Sales Receipt (SalesReceiptLineAdd structure)."
@@ -113325,7 +114569,7 @@
           },
           "creditCardTransaction": {
             "nullable": true,
-            "$ref": "#/components/schemas/CreditCardTransactionInfoAddRequest"
+            "$ref": "#/components/schemas/CreateCreditCardTransactionInfoRequest"
           },
           "exchangeRate": {
             "type": "number",
@@ -113486,7 +114730,7 @@
             "nullable": true,
             "$ref": "#/components/schemas/BarCodeRequest"
           },
-          "externalGuid": {
+          "externalId": {
             "type": "string",
             "nullable": true
           },
@@ -113527,13 +114771,36 @@
           },
           "salesOrPurchase": {
             "nullable": true,
-            "$ref": "#/components/schemas/SalesOrPurchaseRequest"
+            "$ref": "#/components/schemas/CreateSalesOrPurchaseRequest"
           },
           "salesAndPurchase": {
             "nullable": true,
-            "$ref": "#/components/schemas/SalesAndPurchaseRequest"
+            "$ref": "#/components/schemas/CreateSalesAndPurchaseRequest"
           }
         }
+      },
+      "CreateSetCreditRequest": {
+        "required": [
+          "creditTransactionId",
+          "appliedAmount"
+        ],
+        "type": "object",
+        "properties": {
+          "creditTransactionId": {
+            "type": "string"
+          },
+          "appliedAmount": {
+            "type": "number",
+            "description": "The amount of the credit to apply.\n(Required)",
+            "format": "double"
+          },
+          "override": {
+            "type": "boolean",
+            "description": "If true, overrides default logic for applying credits.\n(Optional)",
+            "nullable": true
+          }
+        },
+        "description": "Represents the SetCredit aggregate in QBXML.\r\nUsed within AppliedToTxnAdd to apply specific credit memos or other credits."
       },
       "CreateShipMethodRequest": {
         "required": [
@@ -114036,9 +115303,8 @@
             "description": "(Optional) The ListID or FullName of the parent vendor type. Used for hierarchical vendor types.\nFollows the Flattened-ID Pattern for ParentRef.",
             "nullable": true
           },
-          "externalGuid": {
+          "externalId": {
             "type": "string",
-            "description": "(Optional) A GUID specified by the client to track the request asynchronously.\nImplemented from ICreateRequest.",
             "nullable": true
           }
         },
@@ -114333,7 +115599,7 @@
             }
           }
         },
-        "description": "Represents a Credit Card Charge transaction.\r\nCorresponds to CreditCardChargeRet in QbdXml."
+        "description": "Represents a Credit Card Charge transaction."
       },
       "CreditCardCredit": {
         "required": [
@@ -114517,46 +115783,6 @@
         },
         "description": "credit card transaction details."
       },
-      "CreditCardTransactionInfoAddRequest": {
-        "required": [
-          "inputInfo",
-          "resultInfo"
-        ],
-        "type": "object",
-        "properties": {
-          "inputInfo": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CreditCardTransactionInputInfoAddRequest"
-              }
-            ],
-            "description": "(Required) Input details for the credit card transaction."
-          },
-          "resultInfo": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CreditCardTransactionResultInfoAddRequest"
-              }
-            ],
-            "description": "(Required) Result details from the credit card processor."
-          }
-        },
-        "description": "Container for Credit Card Transaction Input and Result info.\r\nShared across transactions like SalesReceipt and ARRefundCreditCard."
-      },
-      "CreditCardTransactionInfoModRequest": {
-        "type": "object",
-        "properties": {
-          "creditCardTxnInputInfoMod": {
-            "nullable": true,
-            "$ref": "#/components/schemas/CreditCardTransactionInputInfoModRequest"
-          },
-          "creditCardTxnResultInfoMod": {
-            "nullable": true,
-            "$ref": "#/components/schemas/CreditCardTransactionResultInfoModRequest"
-          }
-        },
-        "description": "Aggregate containing credit card input and result information for a payment (Mod)."
-      },
       "CreditCardTransactionInputInfo": {
         "required": [
           "number",
@@ -114571,11 +115797,13 @@
           },
           "expirationMonth": {
             "type": "integer",
+            "description": "(Optional) The credit card\u0027s new expiration month (1-12).",
             "format": "int32",
             "nullable": true
           },
           "expirationYear": {
             "type": "integer",
+            "description": "(Optional) The credit card\u0027s new expiration year (e.g., 2025).",
             "format": "int32",
             "nullable": true
           },
@@ -114592,9 +115820,11 @@
           },
           "commercialCardCode": {
             "type": "string",
+            "description": "(Optional) New commercial card code. (Max 4 characters)",
             "nullable": true
           },
           "transactionMode": {
+            "description": "(Optional) New transaction mode (0 for CardNotPresent [DEFAULT], 1 for CardPresent).",
             "nullable": true,
             "$ref": "#/components/schemas/NullableTransactionMode"
           },
@@ -114604,121 +115834,6 @@
           }
         },
         "description": "DTO for credit card input details."
-      },
-      "CreditCardTransactionInputInfoAddRequest": {
-        "required": [
-          "creditCardNumber",
-          "expirationMonth",
-          "expirationYear",
-          "nameOnCard"
-        ],
-        "type": "object",
-        "properties": {
-          "creditCardNumber": {
-            "type": "string"
-          },
-          "expirationMonth": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "expirationYear": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "nameOnCard": {
-            "type": "string"
-          },
-          "creditCardAddress": {
-            "maxLength": 41,
-            "type": "string",
-            "nullable": true
-          },
-          "creditCardPostalCode": {
-            "maxLength": 13,
-            "type": "string",
-            "nullable": true
-          },
-          "commercialCardCode": {
-            "maxLength": 4,
-            "type": "string",
-            "nullable": true
-          },
-          "transactionMode": {
-            "nullable": true,
-            "$ref": "#/components/schemas/NullableTransactionMode"
-          },
-          "creditCardTxnType": {
-            "nullable": true,
-            "$ref": "#/components/schemas/NullableCreditCardTransactionType"
-          }
-        },
-        "description": "Input card details for a Credit Card transaction."
-      },
-      "CreditCardTransactionInputInfoModRequest": {
-        "type": "object",
-        "properties": {
-          "creditCardNumber": {
-            "maxLength": 25,
-            "type": "string",
-            "description": "(Optional) The customer\u0027s new credit card number. (Max 25 characters)",
-            "nullable": true
-          },
-          "expirationMonth": {
-            "maximum": 12,
-            "minimum": 1,
-            "type": "integer",
-            "description": "(Optional) The credit card\u0027s new expiration month (1-12).",
-            "format": "int32",
-            "nullable": true
-          },
-          "expirationYear": {
-            "maximum": 2100,
-            "minimum": 2000,
-            "type": "integer",
-            "description": "(Optional) The credit card\u0027s new expiration year (e.g., 2025).",
-            "format": "int32",
-            "nullable": true
-          },
-          "nameOnCard": {
-            "maxLength": 50,
-            "type": "string",
-            "description": "(Optional) The new name as it appears on the credit card. (Max 50 characters)",
-            "nullable": true
-          },
-          "creditCardAddress": {
-            "maxLength": 41,
-            "type": "string",
-            "description": "(Optional) New street address for AVS validation. (Max 41 characters)",
-            "nullable": true
-          },
-          "creditCardPostalCode": {
-            "maxLength": 13,
-            "type": "string",
-            "description": "(Optional) New Postal/ZIP code for AVS validation. (Max 13 characters)",
-            "nullable": true
-          },
-          "commercialCardCode": {
-            "maxLength": 4,
-            "type": "string",
-            "description": "(Optional) New commercial card code. (Max 4 characters)",
-            "nullable": true
-          },
-          "transactionMode": {
-            "maximum": 1,
-            "minimum": 0,
-            "description": "(Optional) New transaction mode (0 for CardNotPresent [DEFAULT], 1 for CardPresent).",
-            "nullable": true,
-            "$ref": "#/components/schemas/NullableTransactionMode"
-          },
-          "creditCardTxnType": {
-            "maximum": 4,
-            "minimum": 0,
-            "description": "(Optional) New type of credit card transaction.\nUsed for actions like changing an Authorization to a Capture (1).",
-            "nullable": true,
-            "$ref": "#/components/schemas/NullableCreditCardTransactionType"
-          }
-        },
-        "description": "Contains modifiable data about the credit card itself for a payment request (Mod).\r\nNote: All properties are optional as this is a modification request."
       },
       "CreditCardTransactionResultInfo": {
         "required": [
@@ -114789,145 +115904,6 @@
           }
         },
         "description": "DTO for credit card result details."
-      },
-      "CreditCardTransactionResultInfoAddRequest": {
-        "required": [
-          "resultCode",
-          "resultMessage",
-          "creditCardTransId",
-          "merchantAccountNumber",
-          "paymentStatus",
-          "txnAuthorizationTime"
-        ],
-        "type": "object",
-        "properties": {
-          "resultCode": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "resultMessage": {
-            "type": "string"
-          },
-          "creditCardTransId": {
-            "type": "string"
-          },
-          "merchantAccountNumber": {
-            "type": "string"
-          },
-          "paymentStatus": {
-            "$ref": "#/components/schemas/PaymentStatus"
-          },
-          "txnAuthorizationTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "authorizationCode": {
-            "maxLength": 25,
-            "type": "string",
-            "nullable": true
-          },
-          "avsStreet": {
-            "nullable": true,
-            "$ref": "#/components/schemas/NullableAvsStreet"
-          },
-          "avsZip": {
-            "nullable": true,
-            "$ref": "#/components/schemas/NullableAvsZip"
-          },
-          "cardSecurityCodeMatch": {
-            "nullable": true,
-            "$ref": "#/components/schemas/NullableCardSecurityCodeMatch"
-          },
-          "reconBatchId": {
-            "maxLength": 30,
-            "type": "string",
-            "nullable": true
-          },
-          "paymentGroupingCode": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "txnAuthorizationStamp": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "clientTransId": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "description": "Results from the payment gateway for a Credit Card transaction."
-      },
-      "CreditCardTransactionResultInfoModRequest": {
-        "required": [
-          "resultCode",
-          "resultMessage",
-          "creditCardTransId",
-          "merchantAccountNumber",
-          "paymentStatus",
-          "txnAuthorizationTime"
-        ],
-        "type": "object",
-        "properties": {
-          "resultCode": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "resultMessage": {
-            "type": "string"
-          },
-          "creditCardTransId": {
-            "type": "string"
-          },
-          "merchantAccountNumber": {
-            "type": "string"
-          },
-          "paymentStatus": {
-            "$ref": "#/components/schemas/PaymentStatus"
-          },
-          "txnAuthorizationTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "authorizationCode": {
-            "maxLength": 25,
-            "type": "string",
-            "nullable": true
-          },
-          "avsStreet": {
-            "nullable": true,
-            "$ref": "#/components/schemas/NullableAvsStreet"
-          },
-          "avsZip": {
-            "nullable": true,
-            "$ref": "#/components/schemas/NullableAvsZip"
-          },
-          "cardSecurityCodeMatch": {
-            "nullable": true,
-            "$ref": "#/components/schemas/NullableCardSecurityCodeMatch"
-          },
-          "reconBatchId": {
-            "maxLength": 30,
-            "type": "string",
-            "nullable": true
-          },
-          "paymentGroupingCode": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "txnAuthorizationStamp": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "clientTransId": {
-            "type": "string",
-            "nullable": true
-          }
-        }
       },
       "CreditCardTxnInfoRequest": {
         "type": "object",
@@ -115407,130 +116383,6 @@
           }
         },
         "description": "Represents a group of items within a Credit Memo creation request.\nBased on CreditMemoLineGroupAdd."
-      },
-      "CreditToApply": {
-        "required": [
-          "id",
-          "createdAt",
-          "updatedAt",
-          "revisionNumber"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "objectType": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "revisionNumber": {
-            "type": "string"
-          },
-          "transactionDate": {
-            "type": "string",
-            "format": "date",
-            "nullable": true
-          },
-          "currency": {
-            "nullable": true,
-            "$ref": "#/components/schemas/QbdRef"
-          },
-          "exchangeRate": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "refNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "memo": {
-            "type": "string",
-            "nullable": true
-          },
-          "transactionType": {
-            "type": "string",
-            "nullable": true
-          },
-          "payablesAccount": {
-            "nullable": true,
-            "$ref": "#/components/schemas/QbdRef"
-          },
-          "creditRemaining": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "creditRemainingInHomeCurrency": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "amount": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "entity": {
-            "nullable": true,
-            "$ref": "#/components/schemas/QbdRef"
-          },
-          "account": {
-            "nullable": true,
-            "$ref": "#/components/schemas/QbdRef"
-          },
-          "hasValidLineItems": {
-            "type": "boolean"
-          },
-          "externalId": {
-            "type": "string",
-            "nullable": true
-          },
-          "linkedTransactions": {
-            "nullable": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LinkedTransaction"
-            }
-          },
-          "expenseLines": {
-            "nullable": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ExpenseLine"
-            }
-          },
-          "itemLines": {
-            "nullable": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ItemLine"
-            }
-          },
-          "itemGroupLines": {
-            "nullable": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ItemGroupLine"
-            }
-          },
-          "customFields": {
-            "nullable": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/QbdDataExt"
-            }
-          }
-        },
-        "description": "Represents a credit that can be applied to a bill."
       },
       "Currency": {
         "required": [
@@ -117555,86 +118407,8 @@
               "$ref": "#/components/schemas/QbdDataExt"
             }
           }
-        }
-      },
-      "InventoryAdjustmentLineAddRequest": {
-        "required": [
-          "itemId"
-        ],
-        "type": "object",
-        "properties": {
-          "itemId": {
-            "type": "string"
-          },
-          "memo": {
-            "type": "string",
-            "nullable": true
-          },
-          "quantityAdjustment": {
-            "nullable": true,
-            "$ref": "#/components/schemas/QuantityAdjustmentRequest"
-          },
-          "valueAdjustment": {
-            "nullable": true,
-            "$ref": "#/components/schemas/ValueAdjustmentRequest"
-          },
-          "serialNumberAdjustment": {
-            "nullable": true,
-            "$ref": "#/components/schemas/SerialNumberAdjustmentRequest"
-          },
-          "lotNumberAdjustment": {
-            "nullable": true,
-            "$ref": "#/components/schemas/LotNumberAdjustmentRequest"
-          }
         },
-        "description": "Represents a single line item for an Inventory Adjustment add operation.\r\nOnly ONE of the adjustment properties (Quantity, Value, SerialNumber, LotNumber) should be populated."
-      },
-      "InventoryAdjustmentLineModRequest": {
-        "required": [
-          "id"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "itemId": {
-            "type": "string",
-            "nullable": true
-          },
-          "quantityDifference": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "valueDifference": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "serialNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "lotNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "countAdjustment": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "expirationDateForSerialLotNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "inventorySiteLocationId": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "description": "Represents a single line item modification for an Inventory Adjustment."
+        "description": "Represents a single line item for an Inventory Adjustment add operation.\nOnly ONE of the adjustment properties (Quantity, Value, SerialNumber, LotNumber) should be populated."
       },
       "InventoryItem": {
         "required": [
@@ -121690,19 +122464,6 @@
         },
         "description": "Details for adjusting a lot-tracked item."
       },
-      "MessageResponse": {
-        "required": [
-          "message"
-        ],
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "description": "Human-readable message describing the result."
-          }
-        },
-        "description": "Simple message-only response payload."
-      },
       "NullableAccountType": {
         "enum": [
           "AccountsPayable",
@@ -121927,6 +122688,134 @@
           }
         },
         "description": "DTO for an OtherName list item."
+      },
+      "PayableBill": {
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "revisionNumber"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "objectType": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "revisionNumber": {
+            "type": "string"
+          },
+          "transactionDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "currency": {
+            "nullable": true,
+            "$ref": "#/components/schemas/QbdRef"
+          },
+          "amountDue": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "exchangeRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "amountDueInHomeCurrency": {
+            "type": "string",
+            "description": "Amount due in home currency. This is a direct property for now.",
+            "nullable": true
+          },
+          "refNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "memo": {
+            "type": "string",
+            "nullable": true
+          },
+          "transactionType": {
+            "type": "string",
+            "nullable": true
+          },
+          "payablesAccount": {
+            "nullable": true,
+            "$ref": "#/components/schemas/QbdRef"
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "entity": {
+            "nullable": true,
+            "$ref": "#/components/schemas/QbdRef"
+          },
+          "account": {
+            "nullable": true,
+            "$ref": "#/components/schemas/QbdRef"
+          },
+          "amountInHomeCurrency": {
+            "type": "string",
+            "nullable": true
+          },
+          "hasValidLineItems": {
+            "type": "boolean"
+          },
+          "externalId": {
+            "type": "string",
+            "nullable": true
+          },
+          "linkedTransactions": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
+          },
+          "expenseLines": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
+          },
+          "itemLines": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
+          },
+          "itemGroupLines": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemGroupLine"
+            }
+          },
+          "customFields": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
+          }
+        },
+        "description": "Represents an open bill that needs to be paid."
       },
       "PaymentMethod": {
         "required": [
@@ -122230,32 +123119,6 @@
           }
         },
         "description": "A request DTO for creating or modifying pricing rules for a single item within a Price Level.\r\nBased on the PriceLevelPerItem QBXML type."
-      },
-      "ProblemDetails": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "nullable": true
-          },
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "status": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "detail": {
-            "type": "string",
-            "nullable": true
-          },
-          "instance": {
-            "type": "string",
-            "nullable": true
-          }
-        }
       },
       "PurchaseOrder": {
         "required": [
@@ -123290,142 +124153,6 @@
         },
         "description": "Response after rotating the publishable key"
       },
-      "SalesAndPurchaseModRequest": {
-        "type": "object",
-        "properties": {
-          "salesDesc": {
-            "type": "string",
-            "nullable": true
-          },
-          "salesPrice": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "incomeAccountId": {
-            "type": "string",
-            "nullable": true
-          },
-          "applyIncomeAccountToExistingTransactions": {
-            "type": "boolean",
-            "nullable": true
-          },
-          "purchaseDesc": {
-            "type": "string",
-            "nullable": true
-          },
-          "purchaseCost": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "purchaseTaxCodeId": {
-            "type": "string",
-            "nullable": true
-          },
-          "expenseAccountId": {
-            "type": "string",
-            "nullable": true
-          },
-          "applyExpenseAccountToExistingTransactions": {
-            "type": "boolean",
-            "nullable": true
-          },
-          "prefVendorId": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "SalesAndPurchaseRequest": {
-        "type": "object",
-        "properties": {
-          "salesDesc": {
-            "type": "string",
-            "nullable": true
-          },
-          "salesPrice": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "incomeAccountId": {
-            "type": "string",
-            "nullable": true
-          },
-          "purchaseDesc": {
-            "type": "string",
-            "nullable": true
-          },
-          "purchaseCost": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "purchaseTaxCodeId": {
-            "type": "string",
-            "nullable": true
-          },
-          "expenseAccountId": {
-            "type": "string",
-            "nullable": true
-          },
-          "prefVendorId": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "SalesOrPurchaseModRequest": {
-        "type": "object",
-        "properties": {
-          "desc": {
-            "type": "string",
-            "nullable": true
-          },
-          "price": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "pricePercent": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "accountId": {
-            "type": "string",
-            "nullable": true
-          },
-          "applyAccountToExistingTransactions": {
-            "type": "boolean",
-            "nullable": true
-          }
-        }
-      },
-      "SalesOrPurchaseRequest": {
-        "type": "object",
-        "properties": {
-          "desc": {
-            "type": "string",
-            "nullable": true
-          },
-          "price": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "pricePercent": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "accountId": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
       "SalesReceipt": {
         "required": [
           "id",
@@ -124254,32 +124981,11 @@
           },
           "override": {
             "type": "boolean",
-            "nullable": true
-          }
-        }
-      },
-      "SetCreditAddRequest": {
-        "required": [
-          "creditTransactionId",
-          "appliedAmount"
-        ],
-        "type": "object",
-        "properties": {
-          "creditTransactionId": {
-            "type": "string"
-          },
-          "appliedAmount": {
-            "type": "number",
-            "description": "The amount of the credit to apply.\n(Required)",
-            "format": "double"
-          },
-          "override": {
-            "type": "boolean",
             "description": "If true, overrides default logic for applying credits.\n(Optional)",
             "nullable": true
           }
         },
-        "description": "Represents the SetCredit aggregate in QBXML.\r\nUsed within AppliedToTxnAdd to apply specific credit memos or other credits."
+        "description": "Represents the SetCredit aggregate in QBXML.\nUsed within AppliedToTxnAdd to apply specific credit memos or other credits."
       },
       "SetCreditRequest": {
         "required": [
@@ -124297,10 +125003,12 @@
           },
           "appliedAmount": {
             "type": "number",
+            "description": "Amount applied to an account, invoice, or payment (Optional).\n\nRepresents a monetary value; currency and precision are determined by the surrounding\ncontext.",
             "format": "double"
           },
           "override": {
             "type": "boolean",
+            "description": "Indicates whether to override the default credit application behavior.",
             "nullable": true
           }
         }
@@ -125058,8 +125766,7 @@
       },
       "UpdateAccountRequest": {
         "required": [
-          "revisionNumber",
-          "accountType"
+          "revisionNumber"
         ],
         "type": "object",
         "properties": {
@@ -125077,36 +125784,33 @@
             "nullable": true
           },
           "accountType": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/AccountType"
-              }
-            ],
-            "description": "Account type (required)\nNOTE: Cannot create non_posting accounts via API - QuickBooks creates these internally"
+            "description": "Account type (optional)\nNOTE: Cannot create non_posting accounts via API - QuickBooks creates these internally",
+            "nullable": true,
+            "$ref": "#/components/schemas/NullableAccountType"
           },
           "isTaxAccount": {
             "type": "boolean",
-            "description": "Whether the account is a tax account",
+            "description": "Whether the account is a tax account (optional)",
             "nullable": true
           },
           "accountNumber": {
             "type": "string",
-            "description": "Account number",
+            "description": "Account number (optional)",
             "nullable": true
           },
           "description": {
             "type": "string",
-            "description": "Account description",
+            "description": "Account description (optional)",
             "nullable": true
           },
           "parentId": {
             "type": "string",
-            "description": "Parent account reference (for sub-accounts)",
+            "description": "Parent account reference (optional, for sub-accounts)",
             "nullable": true
           },
           "salesTaxCodeId": {
             "type": "string",
-            "description": "The default sales-tax code for transactions with this account, determining whether\nthe transactions are taxable or non-taxable. This can be overridden at the transaction or transaction-line level.\nDefault codes include \u0022Non\u0022 (non-taxable) and \u0022Tax\u0022 (taxable), but custom codes can also be created in QuickBooks.\nIf QuickBooks is not set up to charge sales tax(via the \u0022Do You Charge Sales Tax?\u0022 preference), it will assign the\ndefault non-taxable code to all sales.",
+            "description": "The default sales-tax code for transactions with this account, determining whether\nthe transactions are taxable or non-taxable. This can be overridden at the transaction or transaction-line level.\nDefault codes include \u0022Non\u0022 (non-taxable) and \u0022Tax\u0022 (taxable), but custom codes can also be created in QuickBooks.\nIf QuickBooks is not set up to charge sales tax(via the \u0022Do You Charge Sales Tax?\u0022 preference), it will assign the\ndefault non-taxable code to all sales. (Optional)",
             "nullable": true
           },
           "openBalance": {
@@ -125128,28 +125832,16 @@
           },
           "currencyId": {
             "type": "string",
-            "description": "The account\u0027s currency. For built-in currencies, the name and code are standard international values. For user-defined\ncurrencies, all values are editable.",
+            "description": "The account\u0027s currency. For built-in currencies, the name and code are standard international values. For user-defined\ncurrencies, all values are editable. (Optional)",
             "nullable": true
           },
           "bankNumber": {
             "type": "string",
-            "description": "Bank account number (for bank accounts only)\n\n\n\u003Ci\u003E**NOTE:** QuickBooks Desktop does not support cursor-based pagination for this resource.\u003C/i\u003E",
+            "description": "Bank account number (Optional, for bank accounts only)\n\n\n\u003Ci\u003E**NOTE:** QuickBooks Desktop does not support cursor-based pagination for this resource.\u003C/i\u003E",
             "nullable": true
           }
         },
         "description": "Request model for updating an existing account"
-      },
-      "UpdateAccountTaxLineInfoRequest": {
-        "required": [
-          "revisionNumber"
-        ],
-        "type": "object",
-        "properties": {
-          "revisionNumber": {
-            "type": "string"
-          }
-        },
-        "description": "Request model for updating an AccountTaxLineInfo entry.\r\nNOTE: AccountTaxLineInfo is a READ-ONLY list in QuickBooks.\r\nThis request type exists for interface compliance but is NOT SUPPORTED."
       },
       "UpdateAdditionalNoteRequest": {
         "required": [
@@ -125238,34 +125930,9 @@
         },
         "description": "Request model for updating an existing AR Refund Credit Card transaction.\r\nAll fields are optional - only provided fields will be updated.\r\nBased on the ARRefundCreditCardMod QBXML type."
       },
-      "UpdateBarCodeRequest": {
-        "required": [
-          "listType",
-          "revisionNumber"
-        ],
+      "UpdateBillPaymentOrCreditRequest": {
         "type": "object",
-        "properties": {
-          "listType": {
-            "type": "string"
-          },
-          "fullName": {
-            "type": "string",
-            "nullable": true
-          },
-          "revisionNumber": {
-            "type": "string"
-          }
-        },
-        "description": "QuickBooks does not support updates to BarCodes, but this request can be used to change the bar code value or \r\nsettings by deleting the existing BarCode and creating a new one with the updated information."
-      },
-      "UpdateBillingRateRequest": {
-        "type": "object",
-        "properties": {
-          "editSequence": {
-            "type": "string"
-          }
-        },
-        "description": "BillingRate Mod Request - Not supported, but required for abstract classes\r\nBillingRate Mod Request - Not supported, but required for abstract classes"
+        "description": "BillToPay is a read-only query result in QuickBooks and cannot be modified directly."
       },
       "UpdateBillRequest": {
         "required": [
@@ -125359,15 +126026,6 @@
           }
         },
         "description": "Defines the request model for updating an existing Bill.\r\nDTD Reference: qbxmlops170.xml - BillMod\r\nQbd requires Id and EditSequence to identify the record to update."
-      },
-      "UpdateBillToPayRequest": {
-        "type": "object",
-        "properties": {
-          "editSequence": {
-            "type": "string"
-          }
-        },
-        "description": "BillToPay is a read-only query result in QuickBooks and cannot be modified directly.\r\nThis class exists for architectural compatibility only."
       },
       "UpdateBuildAssemblyRequest": {
         "required": [
@@ -125612,11 +126270,11 @@
             "nullable": true,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/AppliedToTransactionAddRequest"
+              "$ref": "#/components/schemas/AppliedToTransactionRequest"
             }
           }
         },
-        "description": "A reusable request DTO for modifying an existing Check transaction.\r\nBased on the CheckMod QBXML type.\r\n\r\nQBXML Schema Constraints (from qbxmlops170.xml):\r\n- TxnID: Required\r\n- EditSequence: Required, max length = 16\r\n- PayeeEntityRef: Optional, FullName max length = 209\r\n- AccountRef: Optional, FullName max length = 159\r\n- TxnDate: Optional\r\n- RefNumber: Optional, max length = 11 (OR IsToBePrinted)\r\n- APAccountRef: Optional, FullName max length = 159\r\n- Amount: Optional\r\n- CurrencyRef: Optional, FullName max length = 64\r\n- ExchangeRate: Optional\r\n- AmountInHomeCurrency: Optional\r\n- Memo: Optional, max length = 4095\r\n- IsToBePrinted: Optional (OR RefNumber)"
+        "description": "Request model for updating an existing Check transaction used to pay bills."
       },
       "UpdateCheckRequest": {
         "required": [
@@ -125684,7 +126342,7 @@
             "nullable": true,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ApplyCheckToTransactionAddRequest"
+              "$ref": "#/components/schemas/ApplyCheckToTransactionRequest"
             }
           },
           "clearExpenseLines": {
@@ -125828,7 +126486,7 @@
             "nullable": true,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ApplyToTransactionAddRequest"
+              "$ref": "#/components/schemas/ApplyToTransactionRequest"
             }
           }
         },
@@ -125978,7 +126636,7 @@
             "nullable": true
           },
           "expenseLines": {
-            "description": "(Optional) A list of expense lines to modify.",
+            "description": "(Optional) A list of expense lines to modify.\nNote: To add new lines, use a line id of \u0022-1\u0022. To modify existing lines, provide the current line id from QuickBooks.",
             "nullable": true,
             "type": "array",
             "items": {
@@ -125991,7 +126649,7 @@
             "nullable": true
           },
           "itemLines": {
-            "description": "(Optional) A list of item lines to modify.",
+            "description": "(Optional) A list of item lines to modify.\nNote: To add new lines, use a line id of \u0022-1\u0022. To modify existing lines, provide the current line id from QuickBooks.",
             "nullable": true,
             "type": "array",
             "items": {
@@ -125999,7 +126657,7 @@
             }
           },
           "itemGroupLines": {
-            "description": "(Optional) A list of item group lines to modify.",
+            "description": "(Optional) A list of item group lines to modify.\nNote: To add new lines, use a line id of \u0022-1\u0022. To modify existing lines, provide the current line id from QuickBooks.",
             "nullable": true,
             "type": "array",
             "items": {
@@ -126008,6 +126666,155 @@
           }
         },
         "description": "Main request model to update an existing Credit Card Charge.\r\nBased on the CreditCardChargeModRq QBXML."
+      },
+      "UpdateCreditCardTransactionInfoRequest": {
+        "type": "object",
+        "properties": {
+          "creditCardTxnInputInfoMod": {
+            "nullable": true,
+            "$ref": "#/components/schemas/UpdateCreditCardTransactionInputInfoRequest"
+          },
+          "creditCardTxnResultInfoMod": {
+            "nullable": true,
+            "$ref": "#/components/schemas/UpdateCreditCardTransactionResultInfoRequest"
+          }
+        },
+        "description": "Aggregate containing credit card input and result information for a payment (Mod)."
+      },
+      "UpdateCreditCardTransactionInputInfoRequest": {
+        "type": "object",
+        "properties": {
+          "creditCardNumber": {
+            "maxLength": 25,
+            "type": "string",
+            "description": "(Optional) The customer\u0027s new credit card number. (Max 25 characters)",
+            "nullable": true
+          },
+          "expirationMonth": {
+            "maximum": 12,
+            "minimum": 1,
+            "type": "integer",
+            "description": "(Optional) The credit card\u0027s new expiration month (1-12).",
+            "format": "int32",
+            "nullable": true
+          },
+          "expirationYear": {
+            "maximum": 2100,
+            "minimum": 2000,
+            "type": "integer",
+            "description": "(Optional) The credit card\u0027s new expiration year (e.g., 2025).",
+            "format": "int32",
+            "nullable": true
+          },
+          "nameOnCard": {
+            "maxLength": 50,
+            "type": "string",
+            "description": "(Optional) The new name as it appears on the credit card. (Max 50 characters)",
+            "nullable": true
+          },
+          "creditCardAddress": {
+            "maxLength": 41,
+            "type": "string",
+            "description": "(Optional) New street address for AVS validation. (Max 41 characters)",
+            "nullable": true
+          },
+          "creditCardPostalCode": {
+            "maxLength": 13,
+            "type": "string",
+            "description": "(Optional) New Postal/ZIP code for AVS validation. (Max 13 characters)",
+            "nullable": true
+          },
+          "commercialCardCode": {
+            "maxLength": 4,
+            "type": "string",
+            "description": "(Optional) New commercial card code. (Max 4 characters)",
+            "nullable": true
+          },
+          "transactionMode": {
+            "maximum": 1,
+            "minimum": 0,
+            "description": "(Optional) New transaction mode (0 for CardNotPresent [DEFAULT], 1 for CardPresent).",
+            "nullable": true,
+            "$ref": "#/components/schemas/NullableTransactionMode"
+          },
+          "creditCardTxnType": {
+            "maximum": 4,
+            "minimum": 0,
+            "description": "(Optional) New type of credit card transaction.\nUsed for actions like changing an Authorization to a Capture (1).",
+            "nullable": true,
+            "$ref": "#/components/schemas/NullableCreditCardTransactionType"
+          }
+        },
+        "description": "Contains modifiable data about the credit card itself for a payment request (Mod).\r\nNote: All properties are optional as this is a modification request."
+      },
+      "UpdateCreditCardTransactionResultInfoRequest": {
+        "required": [
+          "resultCode",
+          "resultMessage",
+          "creditCardTransId",
+          "merchantAccountNumber",
+          "paymentStatus",
+          "txnAuthorizationTime"
+        ],
+        "type": "object",
+        "properties": {
+          "resultCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "resultMessage": {
+            "type": "string"
+          },
+          "creditCardTransId": {
+            "type": "string"
+          },
+          "merchantAccountNumber": {
+            "type": "string"
+          },
+          "paymentStatus": {
+            "$ref": "#/components/schemas/PaymentStatus"
+          },
+          "txnAuthorizationTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "authorizationCode": {
+            "maxLength": 25,
+            "type": "string",
+            "nullable": true
+          },
+          "avsStreet": {
+            "nullable": true,
+            "$ref": "#/components/schemas/NullableAvsStreet"
+          },
+          "avsZip": {
+            "nullable": true,
+            "$ref": "#/components/schemas/NullableAvsZip"
+          },
+          "cardSecurityCodeMatch": {
+            "nullable": true,
+            "$ref": "#/components/schemas/NullableCardSecurityCodeMatch"
+          },
+          "reconBatchId": {
+            "maxLength": 30,
+            "type": "string",
+            "nullable": true
+          },
+          "paymentGroupingCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "txnAuthorizationStamp": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "clientTransId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
       },
       "UpdateCreditMemoLineGroupRequest": {
         "required": [
@@ -127246,6 +128053,53 @@
         },
         "description": "A reusable request DTO for modifying an existing Expense Line on a transaction.\r\nBased on the ExpenseLineMod QBXML type."
       },
+      "UpdateInventoryAdjustmentLineRequest": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "itemId": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantityDifference": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "valueDifference": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "serialNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "lotNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "countAdjustment": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "expirationDateForSerialLotNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "inventorySiteLocationId": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "description": "Represents a single line item modification for an Inventory Adjustment."
+      },
       "UpdateInventoryAdjustmentRequest": {
         "required": [
           "revisionNumber"
@@ -127300,7 +128154,7 @@
             "nullable": true,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/InventoryAdjustmentLineModRequest"
+              "$ref": "#/components/schemas/UpdateInventoryAdjustmentLineRequest"
             }
           },
           "externalId": {
@@ -127590,7 +128444,7 @@
             "nullable": true,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/SetCreditAddRequest"
+              "$ref": "#/components/schemas/CreateSetCreditRequest"
             }
           },
           "lines": {
@@ -128412,7 +129266,7 @@
             "nullable": true
           }
         },
-        "description": "Request class for modifying an existing ItemSalesTax (Sales Tax Item) in QuickBooks.\r\nRequires ListId and EditSequence for optimistic concurrency."
+        "description": "Request class for modifying an existing ItemSalesTax (Sales Tax Item) in QuickBooks.\r\nRequires id and revisionNumber."
       },
       "UpdateItemSubtotalRequest": {
         "required": [
@@ -128664,67 +129518,6 @@
         },
         "description": "Request for updating an existing payment method.\r\nImplements IUpdateRequest for the abstraction pattern."
       },
-      "UpdatePayrollItemNonWageRequest": {
-        "required": [
-          "revisionNumber"
-        ],
-        "type": "object",
-        "properties": {
-          "revisionNumber": {
-            "type": "string"
-          },
-          "name": {
-            "maxLength": 31,
-            "type": "string",
-            "description": "(Optional) The new name for the non-wage payroll item.",
-            "nullable": true
-          },
-          "isActive": {
-            "type": "boolean",
-            "description": "(Optional) Indicates whether the payroll item is active.",
-            "nullable": true
-          },
-          "expenseAccountId": {
-            "type": "string",
-            "description": "(Optional) The ListID of the Expense Account associated with the payroll item. (Flattened-ID Pattern)",
-            "nullable": true
-          },
-          "liabilityAccountId": {
-            "type": "string",
-            "description": "(Optional) The ListID of the Liability Account associated with the payroll item. (Flattened-ID Pattern)",
-            "nullable": true
-          }
-        },
-        "description": "Request class for modifying an existing PayrollItemNonWage in QuickBooks.\r\nRequires ListId and EditSequence.\r\nNOTE: Direct modification of this item via QBXML is generally unsupported/read-only by the QuickBooks SDK."
-      },
-      "UpdatePayrollItemWageRequest": {
-        "required": [
-          "revisionNumber"
-        ],
-        "type": "object",
-        "properties": {
-          "revisionNumber": {
-            "type": "string"
-          },
-          "name": {
-            "maxLength": 31,
-            "type": "string",
-            "description": "(Optional) The new name for the wage payroll item.",
-            "nullable": true
-          },
-          "isActive": {
-            "type": "boolean",
-            "description": "(Optional) Indicates whether the payroll item is active.",
-            "nullable": true
-          },
-          "expenseAccountId": {
-            "type": "string",
-            "description": "(Optional) The ListID of the Expense Account associated with the payroll item. (Flattened-ID Pattern)",
-            "nullable": true
-          }
-        },
-        "description": "Request class for modifying an existing PayrollItemWage in QuickBooks.\r\nRequires ListId and EditSequence. Note: Some fields like WageType are typically not modifiable."
-      },
       "UpdatePriceLevelRequest": {
         "required": [
           "revisionNumber"
@@ -128856,6 +129649,7 @@
           },
           "amount": {
             "type": "number",
+            "description": "(Optional) Total amount for the line. (Cannot be cleared if modifying existing value)",
             "format": "double",
             "nullable": true
           },
@@ -129134,6 +129928,80 @@
         },
         "description": "Defines the request model for updating an existing ReceivePayment.\r\nQB requires EditSequence to identify the record to update."
       },
+      "UpdateSalesAndPurchaseRequest": {
+        "type": "object",
+        "properties": {
+          "salesDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "salesPrice": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "incomeAccountId": {
+            "type": "string",
+            "nullable": true
+          },
+          "applyIncomeAccountToExistingTransactions": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "purchaseDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "purchaseCost": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "purchaseTaxCodeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "expenseAccountId": {
+            "type": "string",
+            "nullable": true
+          },
+          "applyExpenseAccountToExistingTransactions": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "prefVendorId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateSalesOrPurchaseRequest": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "pricePercent": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "accountId": {
+            "type": "string",
+            "nullable": true
+          },
+          "applyAccountToExistingTransactions": {
+            "type": "boolean",
+            "nullable": true
+          }
+        }
+      },
       "UpdateSalesReceiptLineGroupRequest": {
         "required": [
           "id"
@@ -129238,6 +130106,7 @@
           },
           "inventorySiteLocationId": {
             "type": "string",
+            "description": "(Optional) The ListID or FullName of the inventory site location.",
             "nullable": true
           },
           "serialNumber": {
@@ -129395,7 +130264,7 @@
           },
           "creditCardTransaction": {
             "nullable": true,
-            "$ref": "#/components/schemas/CreditCardTransactionInfoModRequest"
+            "$ref": "#/components/schemas/UpdateCreditCardTransactionInfoRequest"
           },
           "lines": {
             "nullable": true,
@@ -129499,11 +130368,11 @@
       },
       "UpdateServiceItemRequest": {
         "required": [
-          "editSequence"
+          "revisionNumber"
         ],
         "type": "object",
         "properties": {
-          "editSequence": {
+          "revisionNumber": {
             "type": "string"
           },
           "name": {
@@ -129552,11 +130421,11 @@
           },
           "salesOrPurchaseMod": {
             "nullable": true,
-            "$ref": "#/components/schemas/SalesOrPurchaseModRequest"
+            "$ref": "#/components/schemas/UpdateSalesOrPurchaseRequest"
           },
           "salesAndPurchaseMod": {
             "nullable": true,
-            "$ref": "#/components/schemas/SalesAndPurchaseModRequest"
+            "$ref": "#/components/schemas/UpdateSalesAndPurchaseRequest"
           },
           "includeRetElement": {
             "type": "array",
@@ -129590,18 +130459,6 @@
         },
         "description": "A request model for updating an existing Shipping Method.\r\nCorresponds to the ShipMethodMod QBXML message."
       },
-      "UpdateSpecialItemRequest": {
-        "required": [
-          "revisionNumber"
-        ],
-        "type": "object",
-        "properties": {
-          "revisionNumber": {
-            "type": "string"
-          }
-        },
-        "description": "Placeholder request model for updating SpecialItem.\r\nNOTE: SpecialItem is CREATE-ONLY in QuickBooks - Update operations are NOT supported.\r\nThis model exists only for interface compatibility. The validator will reject all requests."
-      },
       "UpdateTermRequest": {
         "required": [
           "revisionNumber"
@@ -129632,7 +130489,7 @@
           },
           "entityId": {
             "type": "string",
-            "description": "(Required) The ListID or FullName of the Entity (Employee, Vendor, or OtherName) that performed the work."
+            "description": "(Required) The ListID or FullName of the Entity (Employee, Vendor, or OtherName) that performed the work.\nNote: This field is required even if you don\u0027t need to modify it, due to a quirk in the QBD SDK.\nYou must include the existing EntityId value if you don\u0027t want to change it."
           },
           "customerId": {
             "type": "string",
@@ -129675,18 +130532,6 @@
           }
         },
         "description": "A request model for modifying an existing Time Tracking transaction.\r\nCorresponds to the TimeTrackingMod QBXML message."
-      },
-      "UpdateUnitOfMeasureSetRequest": {
-        "required": [
-          "revisionNumber"
-        ],
-        "type": "object",
-        "properties": {
-          "revisionNumber": {
-            "type": "string"
-          }
-        },
-        "description": "Placeholder request model for updating a UnitOfMeasureSet.\r\nNOTE: UnitOfMeasureSet is CREATE \u002B QUERY ONLY in QuickBooks - Update operations are NOT supported.\r\nThis model exists only for interface compatibility. The validator will reject all requests."
       },
       "UpdateVendorCreditRequest": {
         "required": [
@@ -130005,35 +130850,6 @@
           }
         },
         "description": "Request for updating (PUT) an existing vendor.\r\nImplements IUpdateRequest for the new abstraction."
-      },
-      "UpdateVendorTypeRequest": {
-        "required": [
-          "revisionNumber"
-        ],
-        "type": "object",
-        "properties": {
-          "revisionNumber": {
-            "type": "string"
-          },
-          "name": {
-            "maxLength": 31,
-            "type": "string",
-            "description": "(Optional) The new name of the vendor type. (Max 31 characters)",
-            "nullable": true
-          },
-          "isActive": {
-            "type": "boolean",
-            "description": "(Optional) If false, this Vendor Type is inactive.",
-            "nullable": true
-          },
-          "parentId": {
-            "maxLength": 50,
-            "type": "string",
-            "description": "(Optional) The ListID or FullName of the parent vendor type.\nFollows the Flattened-ID Pattern for ParentRef.",
-            "nullable": true
-          }
-        },
-        "description": "A request model for updating an existing Vendor Type.\r\nCorresponds to the VendorTypeMod QBXML message.\r\nAll fields are optional - only provided fields will be updated."
       },
       "UpdateWorkersCompCodeRequest": {
         "required": [
@@ -130851,7 +131667,7 @@
       "name": "VendorType"
     },
     {
-      "name": "BillToPay"
+      "name": "BillPaymentOrCredit"
     },
     {
       "name": "BuildAssembly"
@@ -130927,6 +131743,9 @@
     },
     {
       "name": "ItemSubtotal"
+    },
+    {
+      "name": "Cursors"
     },
     {
       "name": "AuthSession"
