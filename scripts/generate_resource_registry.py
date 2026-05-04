@@ -31,7 +31,6 @@ from nxus_qbd.resources import _MODELS, _RESOURCE_DEFS  # noqa: E402
 
 TAG_OVERRIDES: dict[str, str] = {
     "time_trackings": "TimeTrackingActivity",
-    "bill_to_pay": "BillToPay",
     "qbd_classes": "Class",
 }
 
