@@ -14,7 +14,12 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
-from nxus_qbd._transport import AsyncTransport, SyncTransport, DEFAULT_TIMEOUT_SECONDS
+from nxus_qbd._transport import (
+    DEFAULT_MAX_RETRIES,
+    DEFAULT_TIMEOUT_SECONDS,
+    AsyncTransport,
+    SyncTransport,
+)
 from nxus_qbd.config import (
     NxusEnvironment,
     resolve_base_url,
@@ -53,6 +58,23 @@ class NxusClient:
         ceilings and may clamp this value based on its deployment config.
         Current defaults are typically 120 seconds for CRUD and 90 seconds for
         list/report operations. Omit to let the server apply its own default.
+    max_retries:
+        Maximum number of automatic retry attempts on transient REST failures.
+        Defaults to ``2`` (3 total attempts). Set to ``0`` to disable retries.
+
+        The ``x-should-retry`` response header is the primary signal:
+        ``true`` opts the response into retry even for unusual statuses;
+        ``false`` vetoes retry even for normally-retryable statuses.
+
+        When the header is absent, the SDK falls back to retrying network
+        errors, HTTP 408 / 429, and HTTP 5xx. ``409`` is *not* in the fallback
+        set: the API overloads it for both retryable lock contention and
+        terminal business-rule violations, and without ``x-should-retry`` to
+        disambiguate the safe default is to surface to the caller.
+
+        For backoff delays the SDK reads the standard ``Retry-After`` header,
+        falling back to ``error.retryAfter`` (seconds) in the JSON body. Local
+        timeouts are not retried.
     """
 
     def __init__(
@@ -65,6 +87,7 @@ class NxusClient:
         timeout: float = DEFAULT_TIMEOUT_SECONDS,
         verify: Optional[bool] = None,
         server_timeout_seconds: Optional[int] = None,
+        max_retries: int = DEFAULT_MAX_RETRIES,
     ) -> None:
         resolved_base_url = resolve_base_url(base_url=base_url, environment=environment)
         resolved_verify = resolve_verify(
@@ -79,6 +102,7 @@ class NxusClient:
             timeout=timeout,
             verify=resolved_verify,
             server_timeout_seconds=server_timeout_seconds,
+            max_retries=max_retries,
         )
 
         # Eagerly build every resource namespace so attribute access is O(1)
@@ -461,6 +485,23 @@ class AsyncNxusClient:
         ceilings and may clamp this value based on its deployment config.
         Current defaults are typically 120 seconds for CRUD and 90 seconds for
         list/report operations. Omit to let the server apply its own default.
+    max_retries:
+        Maximum number of automatic retry attempts on transient REST failures.
+        Defaults to ``2`` (3 total attempts). Set to ``0`` to disable retries.
+
+        The ``x-should-retry`` response header is the primary signal:
+        ``true`` opts the response into retry even for unusual statuses;
+        ``false`` vetoes retry even for normally-retryable statuses.
+
+        When the header is absent, the SDK falls back to retrying network
+        errors, HTTP 408 / 429, and HTTP 5xx. ``409`` is *not* in the fallback
+        set: the API overloads it for both retryable lock contention and
+        terminal business-rule violations, and without ``x-should-retry`` to
+        disambiguate the safe default is to surface to the caller.
+
+        For backoff delays the SDK reads the standard ``Retry-After`` header,
+        falling back to ``error.retryAfter`` (seconds) in the JSON body. Local
+        timeouts are not retried.
     """
 
     def __init__(
@@ -473,6 +514,7 @@ class AsyncNxusClient:
         timeout: float = DEFAULT_TIMEOUT_SECONDS,
         verify: Optional[bool] = None,
         server_timeout_seconds: Optional[int] = None,
+        max_retries: int = DEFAULT_MAX_RETRIES,
     ) -> None:
         resolved_base_url = resolve_base_url(base_url=base_url, environment=environment)
         resolved_verify = resolve_verify(
@@ -487,6 +529,7 @@ class AsyncNxusClient:
             timeout=timeout,
             verify=resolved_verify,
             server_timeout_seconds=server_timeout_seconds,
+            max_retries=max_retries,
         )
 
         self._resources: Dict[str, Any] = {}

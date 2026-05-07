@@ -603,7 +603,7 @@ _RESOURCE_DEFS: list[tuple[str, str, str, str, tuple[str, ...]]] = [
     ("unit_of_measure_sets", "/api/v1/unit-of-measure-sets", "/api/v1/unit-of-measure-set/{id}", "/api/v1/unit-of-measure-set", ("list", "retrieve", "create")),
     ("vendors", "/api/v1/vendors", "/api/v1/vendor/{id}", "/api/v1/vendor", ("list", "retrieve", "create", "update", "delete")),
     ("vendor_types", "/api/v1/vendor-types", "/api/v1/vendor-type/{id}", "/api/v1/vendor-type", ("list", "retrieve", "create", "delete")),
-    ("bill_to_pay", "/api/v1/bills-to-pay", "/api/v1/bill-to-pay/{id}", "/api/v1/bill-to-pay", ("list", "retrieve")),
+    ("bill_to_pay", "/api/v1/bill-payment-or-credits", "/api/v1/bill-payment-or-credit/{id}", "/api/v1/bill-payment-or-credit", ("list", "retrieve", "create", "update", "delete")),
     ("items", "/api/v1/items", "/api/v1/item/{id}", "/api/v1/item", ("list", "retrieve")),
     ("inventory_items", "/api/v1/items-inventory", "/api/v1/item-inventory/{id}", "/api/v1/item-inventory", ("list", "retrieve", "create", "update", "delete")),
     ("item_discounts", "/api/v1/items-discount", "/api/v1/item-discount/{id}", "/api/v1/item-discount", ("list", "retrieve", "create", "update", "delete")),
