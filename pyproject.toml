@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "nxus-qbd"
-version = "0.3.1"
+version = "0.3.3"
 description = "Official Python SDK for the Nxus QuickBooks Desktop API"
 readme = "README.md"
 license = "MIT"
@@ -41,3 +41,17 @@ allow-population-by-field-name = true
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
+
+[tool.hatch.build.targets.wheel]
+packages = ["nxus_qbd"]
+artifacts = ["nxus_qbd/models/**/*.py"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/LICENSE",
+    "/README.md",
+    "/nxus_qbd",
+    "/pyproject.toml",
+    "/scripts",
+]
+artifacts = ["nxus_qbd/models/**/*.py"]

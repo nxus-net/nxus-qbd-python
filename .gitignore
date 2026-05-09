@@ -60,3 +60,11 @@ nxus_qbd/models/
 *.log
 tmp/
 temp/
+
+
+.claude/
+AGENTS.md
+CLAUDE.md
+spec/openapi_old.json
+
+tests/unit/test_vendor_pydantic_wiring.py

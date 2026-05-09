@@ -146,6 +146,22 @@ def test_vendor_model_accepts_snake_case_fields():
     assert vendor.revision_number == "1"
 
 
+def test_vendor_model_accepts_live_array_fields():
+    vendor = Vendor.model_validate(
+        _wire_vendor(
+            defaultExpenseAccounts=[],
+            customContactFields=[],
+            additionalContacts=[],
+            additionalNotes=[],
+        )
+    )
+
+    assert vendor.default_expense_accounts == []
+    assert vendor.custom_contact_fields == []
+    assert vendor.additional_contacts == []
+    assert vendor.additional_notes == []
+
+
 def test_list_returns_typed_items(vendors):
     resource, transport = vendors
     transport.queue(

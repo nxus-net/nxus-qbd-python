@@ -412,6 +412,47 @@ def main() -> None:
         )
         shared_file.write_text(shared_text, encoding="utf-8")
 
+    # datamodel-code-generator currently collapses nullable allOf array
+    # schemas into empty wrapper models for these Vendor fields. The live API
+    # returns arrays, so patch the generated Vendor models to the array shapes
+    # already emitted correctly by the TypeScript generator.
+    vendor_file = QBD_DIR / "vendor.py"
+    if vendor_file.exists():
+        vendor_text = vendor_file.read_text(encoding="utf-8")
+        vendor_text = vendor_text.replace(
+            "from .._shared import AdditionalContacts, AdditionalNotes, Address, AddressRequest, CustomContactFields, CustomFields, DefaultExpenseAccounts, QbdRef",
+            "from .._shared import AdditionalNote, Address, AddressRequest, Contact, CustomContactField, CustomFields, QbdRef",
+        )
+        vendor_text = vendor_text.replace(
+            "default_expense_accounts: Annotated[DefaultExpenseAccounts | None, Field(alias='defaultExpenseAccounts')] = None",
+            "default_expense_accounts: Annotated[list[QbdRef] | None, Field(alias='defaultExpenseAccounts')] = None",
+        )
+        vendor_text = vendor_text.replace(
+            "custom_contact_fields: Annotated[CustomContactFields | None, Field(alias='customContactFields', description='Custom contact fields (name/value pairs) defined for this vendor.')] = None",
+            "custom_contact_fields: Annotated[list[CustomContactField] | None, Field(alias='customContactFields', description='Custom contact fields (name/value pairs) defined for this vendor.')] = None",
+        )
+        vendor_text = vendor_text.replace(
+            "additional_contacts: Annotated[AdditionalContacts | None, Field(alias='additionalContacts', description='Additional contacts associated with this vendor.')] = None",
+            "additional_contacts: Annotated[list[Contact] | None, Field(alias='additionalContacts', description='Additional contacts associated with this vendor.')] = None",
+        )
+        vendor_text = vendor_text.replace(
+            "additional_notes: Annotated[AdditionalNotes | None, Field(alias='additionalNotes', description='Additional notes attached to this vendor record.')] = None",
+            "additional_notes: Annotated[list[AdditionalNote] | None, Field(alias='additionalNotes', description='Additional notes attached to this vendor record.')] = None",
+        )
+        vendor_text = vendor_text.replace(
+            "custom_contact_fields: Annotated[CustomContactFields | None, Field(alias='customContactFields')] = None",
+            "custom_contact_fields: Annotated[list[CustomContactField] | None, Field(alias='customContactFields')] = None",
+        )
+        vendor_text = vendor_text.replace(
+            "additional_contacts: Annotated[AdditionalContacts | None, Field(alias='additionalContacts')] = None",
+            "additional_contacts: Annotated[list[Contact] | None, Field(alias='additionalContacts')] = None",
+        )
+        vendor_text = vendor_text.replace(
+            "additional_notes: Annotated[AdditionalNotes | None, Field(alias='additionalNotes')] = None",
+            "additional_notes: Annotated[list[AdditionalNote] | None, Field(alias='additionalNotes')] = None",
+        )
+        vendor_file.write_text(vendor_text, encoding="utf-8")
+
     # Build top-level models/__init__.py that re-exports everything flat
     init_lines = ['"""Auto-generated. Do not edit by hand."""', ""]
     # _shared first (no dependencies on subpackages)
