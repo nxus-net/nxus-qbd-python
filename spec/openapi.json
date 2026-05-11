@@ -150716,15 +150716,10 @@
             "description": "Whether the account is active (default: true)"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "A QuickBooks Desktop Account object is a type of List object that represents a financial account within a company\u0027s chart of accounts, such as a Bank, Accounts Payable, Accounts Receivable, or Credit Card account Because it is a list object, it is tracked and identified by a unique, QuickBooks-assigned ListID as well as a FullName."
@@ -150763,15 +150758,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "DTO representing Account Tax Line Information.\nUsed to map accounts to federal tax lines."
@@ -151117,59 +151107,34 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ExpenseLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
           },
           "itemLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
           },
           "itemGroupLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemGroupLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemGroupLine"
+            }
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents a credit that can be applied to a bill."
@@ -151522,59 +151487,34 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ExpenseLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
           },
           "itemLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
           },
           "itemGroupLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemGroupLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemGroupLine"
+            }
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Adds a credit card refund transaction that is linked to one or more QuickBooks credit memo transactions.\nYou can link the credit card refund to one or more of those credit transactions. Notice that this provides \nfunctionality over and above what the UI provides, which currently allows a user to link only one credit \ncard refund to one credit transaction."
@@ -151668,15 +151608,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents a Barcode identifier associated with a QuickBooks List Object (e.g., Item, Customer, Vendor)."
@@ -155172,19 +155107,12 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "description": "Expense line items for the bill.\nAt least one expense line or item line is required.",
-            "nullable": true,
             "allOf": [
               {
                 "type": "array",
@@ -155192,11 +155120,10 @@
                   "$ref": "#/components/schemas/ExpenseLine"
                 }
               }
-            ]
+            ],
+            "description": "Expense line items for the bill.\nAt least one expense line or item line is required."
           },
           "itemLines": {
-            "description": "Item line items for the bill (for inventory items).",
-            "nullable": true,
             "allOf": [
               {
                 "type": "array",
@@ -155204,18 +155131,14 @@
                   "$ref": "#/components/schemas/ItemLine"
                 }
               }
-            ]
+            ],
+            "description": "Item line items for the bill (for inventory items)."
           },
           "itemGroupLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemGroupLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemGroupLine"
+            }
           },
           "openAmount": {
             "type": "number",
@@ -155223,15 +155146,10 @@
             "nullable": true
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "An Accounts Payable (A/P) transaction representing a bill received from a vendor. \nBills increase the amount owed to a vendor and impact the specified A/P account. \nWhen creating a new bill, it can be linked to existing Purchase Orders to automatically \npull in line item data and update the Purchase Order\u0027s status to received.\nNote: In some QuickBooks editions (such as Enterprise), preference settings may require \nthe use of transaction dates, meaning TxnDate must be supplied even if marked optional."
@@ -155275,15 +155193,10 @@
             ]
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents an outstanding vendor balance. This will contain either a payable bill \nthat requires payment, or an available credit that can be applied to a payment."
@@ -155358,15 +155271,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "A list object representing a billing rate, which is a custom price that overrides the standard price set for a service item, based on the entity (employee or vendor) that does the work [1, 2]. \nThis allows you to charge different rates based on who does the work or the difficulty of the task [1]."
@@ -155610,59 +155518,34 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ExpenseLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
           },
           "itemLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
           },
           "itemGroupLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemGroupLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemGroupLine"
+            }
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Data Transfer Object for BuildAssemblyRet."
@@ -155918,59 +155801,34 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ExpenseLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
           },
           "itemLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
           },
           "itemGroupLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemGroupLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemGroupLine"
+            }
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents a Charge transaction.\nA ChargeQuery request returns information about statement charges."
@@ -156100,19 +155958,12 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "description": "Expense lines for the check (at least one line item required)",
-            "nullable": true,
             "allOf": [
               {
                 "type": "array",
@@ -156120,11 +155971,10 @@
                   "$ref": "#/components/schemas/ExpenseLine"
                 }
               }
-            ]
+            ],
+            "description": "Expense lines for the check (at least one line item required)"
           },
           "itemLines": {
-            "description": "Item lines for the check",
-            "nullable": true,
             "allOf": [
               {
                 "type": "array",
@@ -156132,11 +155982,10 @@
                   "$ref": "#/components/schemas/ItemLine"
                 }
               }
-            ]
+            ],
+            "description": "Item lines for the check"
           },
           "itemGroupLines": {
-            "description": "Item group lines for the check",
-            "nullable": true,
             "allOf": [
               {
                 "type": "array",
@@ -156144,18 +155993,14 @@
                   "$ref": "#/components/schemas/ItemGroupLine"
                 }
               }
-            ]
+            ],
+            "description": "Item group lines for the check"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Data transfer object for check payment information\nInherits transaction fields from BaseTransactionDto"
@@ -156297,59 +156142,34 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ExpenseLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
           },
           "itemLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
           },
           "itemGroupLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemGroupLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemGroupLine"
+            }
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Request model for creating a new Check transaction to pay bills.\nBased on the CheckAddRq QBXML type.\n\nQBXML Schema Constraints (from qbxmlops170.xml):\n- PayeeEntityRef: Optional, FullName max length = 209\n- AccountRef: Required (BankAccount), FullName max length = 159\n- TxnDate: Optional\n- RefNumber: Optional, max length = 11 (OR IsToBePrinted)\n- APAccountRef: Optional, FullName max length = 159\n- Amount: Optional\n- CurrencyRef: Optional, FullName max length = 64\n- ExchangeRate: Optional\n- AmountInHomeCurrency: Optional\n- Memo: Optional, max length = 4095\n- IsToBePrinted: Optional (OR RefNumber)\n- ExternalGUID: Optional"
@@ -156412,15 +156232,10 @@
             "description": "(Optional) Whether the class is active. Defaults to true."
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Classes can be used to separate transactions into meaningful categories.\nFor example, transactions could be classified according to department, business location, or type of work."
@@ -156685,15 +156500,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "DTO for Contact information from ContactsRet list."
@@ -162622,59 +162432,34 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ExpenseLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
           },
           "itemLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
           },
           "itemGroupLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemGroupLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemGroupLine"
+            }
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents a transaction where a credit card is used to settle one or more outstanding vendor bills.\nIn accounting terms, this shifts a liability from the Accounts Payable (A/P) account to the credit card\u0027s balance.\nA key feature is the explicit link created between this payment and the specific bills it covers,\nwhich is essential for accurate payment tracking and maintaining correct vendor balances within QuickBooks."
@@ -162780,59 +162565,34 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ExpenseLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
           },
           "itemLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
           },
           "itemGroupLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemGroupLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemGroupLine"
+            }
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents a Credit Card Charge transaction."
@@ -162944,19 +162704,12 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "description": "Expense line items for the credit card credit.\nAt least one expense line or item line is required.",
-            "nullable": true,
             "allOf": [
               {
                 "type": "array",
@@ -162964,11 +162717,10 @@
                   "$ref": "#/components/schemas/ExpenseLine"
                 }
               }
-            ]
+            ],
+            "description": "Expense line items for the credit card credit.\nAt least one expense line or item line is required."
           },
           "itemLines": {
-            "description": "Item line items for the credit card credit (for inventory items).\nAt least one expense line or item line is required.",
-            "nullable": true,
             "allOf": [
               {
                 "type": "array",
@@ -162976,11 +162728,10 @@
                   "$ref": "#/components/schemas/ItemLine"
                 }
               }
-            ]
+            ],
+            "description": "Item line items for the credit card credit (for inventory items).\nAt least one expense line or item line is required."
           },
           "itemGroupLines": {
-            "description": "Item group line items for the credit card credit.",
-            "nullable": true,
             "allOf": [
               {
                 "type": "array",
@@ -162988,18 +162739,14 @@
                   "$ref": "#/components/schemas/ItemGroupLine"
                 }
               }
-            ]
+            ],
+            "description": "Item group line items for the credit card credit."
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "DTO for a QuickBooks Credit Card Credit (Refund).\nInherits common transaction properties from BaseTransactionDto."
@@ -163541,59 +163288,34 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ExpenseLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
           },
           "itemLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
           },
           "itemGroupLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemGroupLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemGroupLine"
+            }
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Data Transfer Object for CreditMemoRet."
@@ -163884,15 +163606,10 @@
             "description": "(Optional) If false, this Currency is inactive. Default is true."
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents a Currency DTO (CurrencyRet).\nUsed for multi-currency support in QuickBooks."
@@ -164328,15 +164045,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Customers:\nA customer record in QuickBooks represents either a business or individual who purchases goods or services, or a specific job/project being performed for that customer. \nJobs are treated as sub-customers; they inherit billing information from their parent customer while allowing for job-specific details to be tracked."
@@ -164395,15 +164107,10 @@
             "description": "(Optional) If false, this Customer Type is inactive. Default is true."
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents a Vendor Type DTO (VendorTypeRet).\nUsed to classify vendors (e.g., \u0022Materials\u0022, \u0022Subcontractor\u0022)."
@@ -164483,15 +164190,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Unified DTO for both StandardTerms and DateDrivenTerms.\nInherits id, name, isActive from BaseListDto.\n\nNote: Terms is a READ-ONLY resource in QuickBooks (query only)."
@@ -164710,59 +164412,34 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ExpenseLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
           },
           "itemLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
           },
           "itemGroupLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemGroupLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemGroupLine"
+            }
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents a Deposit transaction (DepositRet).\nUsed to record funds deposited into a bank account."
@@ -165202,15 +164879,10 @@
             "description": "The employee\u0027s name (required). This is the display name in QuickBooks."
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Data transfer object for an employee.\nAn employee represents a person employed by the company in QuickBooks."
@@ -165665,26 +165337,16 @@
             "nullable": true
           },
           "expenseLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ExpenseLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Request model for creating a new Estimate in QuickBooks.\nBased on the EstimateAdd QBXML type."
@@ -166144,59 +165806,34 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ExpenseLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
           },
           "itemLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
           },
           "itemGroupLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemGroupLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemGroupLine"
+            }
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents an Inventory Adjustment transaction (InventoryAdjustmentRet).\nUsed to adjust quantity or value of inventory items."
@@ -166449,15 +166086,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Inventory are things the QuickBooks company sells, as well as things it buys. QuickBooks Desktop can manage product inventory. Line items entered on sales, \npurchase, and refund transactions flow into inventory items to automatically adjust quantity on hand. Additionally, cost and price of individual inventory \nitems are stored so inventory value can be tracked. After enabling inventory management, add individual inventory items as Item objects. \nQuickBooks Supports: \nFIFO inventory accounting, Tracking quantity on hand, Categories to four levels, Taxable status of the item, Price and cost"
@@ -166544,15 +166176,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents an Inventory Site DTO (InventorySiteRet).\nUsed for tracking inventory in multiple locations (Advanced Inventory)."
@@ -166811,30 +166438,18 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ExpenseLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
           },
           "itemLines": {
-            "description": "Item line items for the invoice.",
-            "nullable": true,
             "allOf": [
               {
                 "type": "array",
@@ -166842,11 +166457,10 @@
                   "$ref": "#/components/schemas/ItemLine"
                 }
               }
-            ]
+            ],
+            "description": "Item line items for the invoice."
           },
           "itemGroupLines": {
-            "description": "Item group line items for the invoice.",
-            "nullable": true,
             "allOf": [
               {
                 "type": "array",
@@ -166854,18 +166468,14 @@
                   "$ref": "#/components/schemas/ItemGroupLine"
                 }
               }
-            ]
+            ],
+            "description": "Item group line items for the invoice."
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Data transfer object for a customer invoice.\nAn invoice is a transaction representing a request for payment for goods or services.\nIt inherits core transaction fields (like TxnID, TxnDate, Amount, and Line Items) \nfrom BaseTransactionDto."
@@ -167041,15 +166651,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "An amount or percentage to be subtracted from the total of a transaction."
@@ -167258,15 +166863,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "A list object representing a **fixed asset item** in QuickBooks. \nUsed to track long-term business assets, their purchase details, depreciation, and eventual sale."
@@ -167377,15 +166977,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Allows fast entry of a group of individual items that you often sell or purchase."
@@ -167701,15 +167296,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Inventory items you assemble from other inventory, non-inventory, inventory assembly, other charge, and service items and then sell.\nAssemble finished goods from components."
@@ -167917,15 +167507,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Inventory are things the QuickBooks company sells, as well as things it buys. QuickBooks Desktop can manage product inventory. Line items entered on sales, \npurchase, and refund transactions flow into inventory items to automatically adjust quantity on hand. Additionally, cost and price of individual inventory \nitems are stored so inventory value can be tracked. After enabling inventory management, add individual inventory items as Item objects. \nQuickBooks Supports: \nFIFO inventory accounting, Tracking quantity on hand, Categories to four levels, Taxable status of the item, Price and cost"
@@ -168048,15 +167633,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "An amount or percentage to be subtracted from the total of a transaction."
@@ -168239,15 +167819,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "A list object representing a **fixed asset item** in QuickBooks. \nUsed to track long-term business assets, their purchase details, depreciation, and eventual sale."
@@ -168367,15 +167942,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Allows fast entry of a group of individual items that you often sell or purchase."
@@ -168588,15 +168158,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Inventory items you assemble from other inventory, non-inventory, inventory assembly, other charge, and service items and then sell.\nAssemble finished goods from components."
@@ -168777,15 +168342,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Materials or parts for which you do not track quantities. Materials or parts you buy but do not sell, or materials or parts you sell but do not buy, are non-inventory items. For example, if you sell a service that requires a part, but you do not want to track the part as an inventory item, you can set up the part as a non-inventory item. You can also use non-inventory items for one-time purchases or sales of items that you do not want to track at all. Non-inventory items are used on sales forms and purchase forms, and they affect your financial statements."
@@ -168966,15 +168526,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Miscellaneous charges. \nShow freight, handling, or delivery charges on sales forms and purchase forms."
@@ -169095,15 +168650,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Used to split multiple payment types on a sales receipt."
@@ -169229,15 +168779,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Used to calculate a single sales tax."
@@ -169346,15 +168891,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Sales-tax group item, is an item used for calculating two or more sales taxes grouped \ntogether and applied to the same sale. \n\nFor example, local and state taxes could be tracked \nseparately but applied to a sale as one tax. (Compare with the ItemSalesTaxAdd message.) Taxes \ncan be reflected in transaction line items The following information refers to invoices \nspecifically, but it also applies to sales receipts. Generally its best to assign a tax item \nor tax group item to an invoice and allow QuickBooks to apply the same tax to all taxable \nitems on the invoice. However in some situations multiple tax combinations are required, so \nthis method doesn\u2019t work. In this case one must use techniques to apply the taxes in the \ninvoice itself as line items."
@@ -169470,15 +169010,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Used to calculate and display subtotals on sales forms. Show subtotal on invoice or PO."
@@ -169814,15 +169349,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Materials or parts for which you do not track quantities. Materials or parts you buy but do not sell, or materials or parts you sell but do not buy, are non-inventory items. For example, if you sell a service that requires a part, but you do not want to track the part as an inventory item, you can set up the part as a non-inventory item. You can also use non-inventory items for one-time purchases or sales of items that you do not want to track at all. Non-inventory items are used on sales forms and purchase forms, and they affect your financial statements."
@@ -170057,15 +169587,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Miscellaneous charges. \nShow freight, handling, or delivery charges on sales forms and purchase forms."
@@ -170239,15 +169764,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Used to split multiple payment types on a sales receipt."
@@ -170375,19 +169895,12 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "description": "Expense line items for the item receipt.",
-            "nullable": true,
             "allOf": [
               {
                 "type": "array",
@@ -170395,11 +169908,10 @@
                   "$ref": "#/components/schemas/ExpenseLine"
                 }
               }
-            ]
+            ],
+            "description": "Expense line items for the item receipt."
           },
           "itemLines": {
-            "description": "Item line items for the item receipt.",
-            "nullable": true,
             "allOf": [
               {
                 "type": "array",
@@ -170407,11 +169919,10 @@
                   "$ref": "#/components/schemas/ItemLine"
                 }
               }
-            ]
+            ],
+            "description": "Item line items for the item receipt."
           },
           "itemGroupLines": {
-            "description": "Item group line items for the item receipt.",
-            "nullable": true,
             "allOf": [
               {
                 "type": "array",
@@ -170419,18 +169930,14 @@
                   "$ref": "#/components/schemas/ItemGroupLine"
                 }
               }
-            ]
+            ],
+            "description": "Item group line items for the item receipt."
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents an Item Receipt transaction DTO.\nThis inherits TxnID, RefNumber, TxnDate, Amount (from TotalAmount), \nEntity (from VendorRef), Memo, ExchangeRate, AmountInHomeCurrency,\nExternalGuid, and all line item lists from BaseTransactionDto.\nAn item receipt records the physical receipt of inventory items from a vendor. It can be linked \nto a purchase order to automatically update inventory quantities and close out the purchase order. \nWhen linked, line items are automatically pulled from the purchase order, eliminating the need to \nrecreate them manually. This linking can only be done during item receipt creation, \nnot during modification."
@@ -170552,15 +170059,10 @@
             "description": "(Optional) Indicates whether the sales tax item is active."
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Used to calculate a single sales tax."
@@ -170667,15 +170169,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Sales-tax group item, is an item used for calculating two or more sales taxes grouped \ntogether and applied to the same sale. \n\nFor example, local and state taxes could be tracked \nseparately but applied to a sale as one tax. (Compare with the ItemSalesTaxAdd message.) Taxes \ncan be reflected in transaction line items The following information refers to invoices \nspecifically, but it also applies to sales receipts. Generally its best to assign a tax item \nor tax group item to an invoice and allow QuickBooks to apply the same tax to all taxable \nitems on the invoice. However in some situations multiple tax combinations are required, so \nthis method doesn\u2019t work. In this case one must use techniques to apply the taxes in the \ninvoice itself as line items."
@@ -170841,15 +170338,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Services provided to or from others"
@@ -170958,15 +170450,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Used to calculate and display subtotals on sales forms. Show subtotal on invoice or PO."
@@ -171099,59 +170586,34 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ExpenseLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
           },
           "itemLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
           },
           "itemGroupLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemGroupLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemGroupLine"
+            }
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents a JournalEntry transaction."
@@ -171520,15 +170982,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "DTO for an OtherName list item."
@@ -171640,59 +171097,34 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ExpenseLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
           },
           "itemLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
           },
           "itemGroupLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemGroupLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemGroupLine"
+            }
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents an open bill that needs to be paid."
@@ -171738,15 +171170,10 @@
             "description": "(Optional) Whether the payment method is active.\nDefaults to true if not specified."
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "DTO for the PaymentMethod list item."
@@ -171816,15 +171243,10 @@
             "description": "(Optional) Indicates whether the payroll item is active."
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Request record for creating a new PayrollItemNonWage in QuickBooks (e.g., Deduction, Company Contribution).\nNOTE: Direct creation of this item via QBXML is generally unsupported/read-only by the QuickBooks SDK."
@@ -171879,15 +171301,10 @@
             "description": "(Optional) Indicates whether the payroll item is active."
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Request record for creating a new PayrollItemWage in QuickBooks."
@@ -171960,15 +171377,10 @@
             "description": "(Optional) Whether the price level is active. Defaults to true."
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Response DTO for PriceLevel entity.\nInherits id, name, isActive from BaseListDto."
@@ -172304,59 +171716,34 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ExpenseLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
           },
           "itemLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
           },
           "itemGroupLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemGroupLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemGroupLine"
+            }
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents a Purchase Order transaction (PurchaseOrderRet).\nUsed to request items or services from a vendor."
@@ -172837,59 +172224,34 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ExpenseLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
           },
           "itemLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
           },
           "itemGroupLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemGroupLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemGroupLine"
+            }
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents a Receive Payment transaction (ReceivePaymentRet)."
@@ -173086,15 +172448,10 @@
             ]
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Generic QuickBooks Report object (e.g., Aging, Custom).\nA report is a method for obtaining a comprehensive view of data across multiple objects and over a specified time period, as opposed to a query, which typically just provides a simple snapshot of specific objects.\n Reports are capable of spanning multiple data types and can be customized in a wide variety of ways.\n When QuickBooks returns a report response, it generally contains two main types of information:\n Report Meta-data: This information describes the report as a whole.\n It includes the report\u0027s title and subtitle, the report basis (such as Cash, Accrual, or None), the total number of rows and columns, the number of rows used for column titles, and a column descriptor for each column that outlines its ID, title, column type, and data type.\n Report Data: This is the actual content, presented as sequential rows of data expressed in name/value pairs.\n These rows are further categorized into four types: text rows (mainly used for headings), data rows(the core report data), subtotal rows(calculated subtotals), and a single total row(the calculated total for the entire report)."
@@ -173599,59 +172956,34 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ExpenseLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
           },
           "itemLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
           },
           "itemGroupLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemGroupLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemGroupLine"
+            }
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents a Sales Receipt transaction (SalesReceiptRet).\nUsed for immediate payment sales."
@@ -173939,15 +173271,10 @@
             "description": "(Optional) If false, this Sales Tax Code is inactive. Default is true."
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents a Sales Tax Code DTO (SalesTaxCodeRet).\nUsed to categorize items as taxable or non-taxable."
@@ -174077,59 +173404,34 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ExpenseLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
           },
           "itemLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
           },
           "itemGroupLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemGroupLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemGroupLine"
+            }
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents a SalesTaxPaymentCheck transaction.\nQueries for payments that have been made for sales tax owed (for example, to a state sales tax authority)."
@@ -174344,15 +173646,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Services provided to or from others"
@@ -174441,15 +173738,10 @@
             "description": "(Optional) If false, this Shipping Method is inactive. Default is true."
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "A request model for creating a new Shipping Method.\nCorresponds to the ShipMethodAdd QBXML message."
@@ -174658,15 +173950,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Response DTO for SpecialItem entity.\nInherits id, name, isActive from BaseListDto.\n\nNote: SpecialItem is a CREATE-ONLY resource (no query/update in QBXML schema)."
@@ -174806,15 +174093,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Unified DTO for both StandardTerms and DateDrivenTerms.\nInherits id, name, isActive from BaseListDto.\n\nNote: Terms is a READ-ONLY resource in QuickBooks (query only)."
@@ -174965,59 +174247,34 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ExpenseLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
           },
           "itemLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
           },
           "itemGroupLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemGroupLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemGroupLine"
+            }
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents a Time Tracking transaction (TimeTrackingRet).\nUsed to record time worked by an entity."
@@ -175120,59 +174377,34 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ExpenseLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseLine"
+            }
           },
           "itemLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
           },
           "itemGroupLines": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ItemGroupLine"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemGroupLine"
+            }
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents a generic transaction returned from a TransactionQuery.\nThis is often used when the specific type (Check, Invoice, etc.) is not known."
@@ -175251,15 +174483,10 @@
             "description": "(Optional) Whether the UOM set is active. Defaults to true."
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Response DTO for UnitOfMeasureSet entity.\nInherits id, name, isActive from BaseListDto."
@@ -181218,15 +180445,10 @@
             "type": "boolean"
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "The QuickBooks company includes a list of vendors, who are providers of services or products that the company uses. Your need to provide options to track \nthe company\u2019s vendors as appropriate to your app. Use the Vendor object to access the vendor list."
@@ -181374,26 +180596,12 @@
             "nullable": true
           },
           "linkedTransactions": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/LinkedTransaction"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkedTransaction"
+            }
           },
           "expenseLines": {
-            "description": "(Optional) A list of expense lines to add to the vendor credit.",
-            "example": [
-              {
-                "accountId": "10000001-1039043346",
-                "amount": 100.00,
-                "memo": "Expense line memo"
-              }
-            ],
-            "nullable": true,
             "allOf": [
               {
                 "type": "array",
@@ -181401,19 +180609,10 @@
                   "$ref": "#/components/schemas/ExpenseLine"
                 }
               }
-            ]
+            ],
+            "description": "(Optional) A list of expense lines to add to the vendor credit."
           },
           "itemLines": {
-            "description": "(Optional) A list of item lines to add to the vendor credit.\nNote: You can have either ItemLines or ItemGroupLines, but not both.",
-            "example": [
-              {
-                "itemId": "10000001-1039043346",
-                "quantity": 2,
-                "rate": 50.00,
-                "memo": "Item line memo"
-              }
-            ],
-            "nullable": true,
             "allOf": [
               {
                 "type": "array",
@@ -181421,19 +180620,10 @@
                   "$ref": "#/components/schemas/ItemLine"
                 }
               }
-            ]
+            ],
+            "description": "(Optional) A list of item lines to add to the vendor credit.\nNote: You can have either ItemLines or ItemGroupLines, but not both."
           },
           "itemGroupLines": {
-            "description": "(Optional) A list of item group lines to add to the vendor credit.\nNote: You can have either ItemLines or ItemGroupLines, but not both.",
-            "example": [
-              {
-                "itemGroupId": "10000001-1039043346",
-                "quantity": 1,
-                "rate": 200.00,
-                "memo": "Item group line memo"
-              }
-            ],
-            "nullable": true,
             "allOf": [
               {
                 "type": "array",
@@ -181441,18 +180631,14 @@
                   "$ref": "#/components/schemas/ItemGroupLine"
                 }
               }
-            ]
+            ],
+            "description": "(Optional) A list of item group lines to add to the vendor credit.\nNote: You can have either ItemLines or ItemGroupLines, but not both."
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents a VendorCredit transaction."
@@ -181511,15 +180697,10 @@
             "description": "(Optional) If false, this Vendor Type is inactive. Default is true."
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Represents a Vendor Type DTO (VendorTypeRet).\nUsed to classify vendors (e.g., \u0022Materials\u0022, \u0022Subcontractor\u0022)."
@@ -181601,15 +180782,10 @@
             "description": "(Optional) Indicates if the code is active. Defaults to true."
           },
           "customFields": {
-            "nullable": true,
-            "allOf": [
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/QbdDataExt"
-                }
-              }
-            ]
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QbdDataExt"
+            }
           }
         },
         "description": "Response DTO for WorkersCompCode entity.\nInherits id, name, isActive from BaseListDto."
