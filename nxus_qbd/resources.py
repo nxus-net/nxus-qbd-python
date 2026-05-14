@@ -352,6 +352,30 @@ class _SyncDelete:
         return self._t.request("DELETE", self._singular_path.format(id=id), **kw)  # type: ignore[attr-defined]
 
 
+class _SyncVoid:
+    def void(self, id: str, **kwargs: Any) -> Any:
+        """Void a transaction by ID.
+
+        The record is retained in QuickBooks but marked as voided with a zero
+        amount. Available on transaction resources only (e.g. ``invoices``,
+        ``bills``, ``checks``).
+
+        Args:
+            id: The QuickBooks-assigned TxnID of the transaction to void.
+            connection_id: QBD connection GUID or external ID.
+
+        Returns:
+            A ``VoidResponse`` describing the voided record.
+        """
+        from nxus_qbd.models import VoidResponse
+
+        connection_id, headers, timeout = _extract_options(kwargs)
+        kw = _build_request_kwargs(connection_id, headers, timeout)
+        path = self._singular_path.format(id=id) + "/void"  # type: ignore[attr-defined]
+        body = self._t.request("POST", path, **kw)  # type: ignore[attr-defined]
+        return _parse_one(body, VoidResponse)
+
+
 # Async equivalents
 
 class _AsyncList:
@@ -491,6 +515,30 @@ class _AsyncDelete:
         return await self._t.request("DELETE", self._singular_path.format(id=id), **kw)  # type: ignore[attr-defined]
 
 
+class _AsyncVoid:
+    async def void(self, id: str, **kwargs: Any) -> Any:
+        """Void a transaction by ID.
+
+        The record is retained in QuickBooks but marked as voided with a zero
+        amount. Available on transaction resources only (e.g. ``invoices``,
+        ``bills``, ``checks``).
+
+        Args:
+            id: The QuickBooks-assigned TxnID of the transaction to void.
+            connection_id: QBD connection GUID or external ID.
+
+        Returns:
+            A ``VoidResponse`` describing the voided record.
+        """
+        from nxus_qbd.models import VoidResponse
+
+        connection_id, headers, timeout = _extract_options(kwargs)
+        kw = _build_request_kwargs(connection_id, headers, timeout)
+        path = self._singular_path.format(id=id) + "/void"  # type: ignore[attr-defined]
+        body = await self._t.request("POST", path, **kw)  # type: ignore[attr-defined]
+        return _parse_one(body, VoidResponse)
+
+
 # ---------------------------------------------------------------------------
 # Concrete sync resource classes
 # ---------------------------------------------------------------------------
@@ -515,6 +563,8 @@ def _sync_resource(
         bases.append(_SyncUpdate)
     if "delete" in methods:
         bases.append(_SyncDelete)
+    if "void" in methods:
+        bases.append(_SyncVoid)
 
     attrs = {
         "_list_path": list_path,
@@ -545,6 +595,8 @@ def _async_resource(
         bases.append(_AsyncUpdate)
     if "delete" in methods:
         bases.append(_AsyncDelete)
+    if "void" in methods:
+        bases.append(_AsyncVoid)
 
     attrs = {
         "_list_path": list_path,
@@ -560,28 +612,28 @@ def _async_resource(
 # ---------------------------------------------------------------------------
 # BEGIN AUTO-GENERATED RESOURCE DEFS
 _RESOURCE_DEFS: list[tuple[str, str, str, str, tuple[str, ...]]] = [
-    ("ar_refund_credit_cards", "/api/v1/ar-refund-credit-cards", "/api/v1/ar-refund-credit-card/{id}", "/api/v1/ar-refund-credit-card", ("list", "retrieve", "create", "update", "delete")),
-    ("bills", "/api/v1/bills", "/api/v1/bill/{id}", "/api/v1/bill", ("list", "retrieve", "create", "update", "delete")),
-    ("check_bills", "/api/v1/check-bills", "/api/v1/check-bill/{id}", "/api/v1/check-bill", ("list", "retrieve", "create", "update", "delete")),
-    ("checks", "/api/v1/checks", "/api/v1/check/{id}", "/api/v1/check", ("list", "retrieve", "create", "update", "delete")),
-    ("credit_card_bills", "/api/v1/credit-card-bills", "/api/v1/credit-card-bill/{id}", "/api/v1/credit-card-bill", ("list", "retrieve", "create", "update", "delete")),
-    ("credit_card_credits", "/api/v1/credit-card-credits", "/api/v1/credit-card-credit/{id}", "/api/v1/credit-card-credit", ("list", "retrieve", "create", "update", "delete")),
-    ("deposits", "/api/v1/deposits", "/api/v1/deposit/{id}", "/api/v1/deposit", ("list", "retrieve", "create", "update", "delete")),
+    ("ar_refund_credit_cards", "/api/v1/ar-refund-credit-cards", "/api/v1/ar-refund-credit-card/{id}", "/api/v1/ar-refund-credit-card", ("list", "retrieve", "create", "update", "delete", "void")),
+    ("bills", "/api/v1/bills", "/api/v1/bill/{id}", "/api/v1/bill", ("list", "retrieve", "create", "update", "delete", "void")),
+    ("check_bills", "/api/v1/check-bills", "/api/v1/check-bill/{id}", "/api/v1/check-bill", ("list", "retrieve", "create", "update", "delete", "void")),
+    ("checks", "/api/v1/checks", "/api/v1/check/{id}", "/api/v1/check", ("list", "retrieve", "create", "update", "delete", "void")),
+    ("credit_card_bills", "/api/v1/credit-card-bills", "/api/v1/credit-card-bill/{id}", "/api/v1/credit-card-bill", ("list", "retrieve", "create", "update", "delete", "void")),
+    ("credit_card_credits", "/api/v1/credit-card-credits", "/api/v1/credit-card-credit/{id}", "/api/v1/credit-card-credit", ("list", "retrieve", "create", "update", "delete", "void")),
+    ("deposits", "/api/v1/deposits", "/api/v1/deposit/{id}", "/api/v1/deposit", ("list", "retrieve", "create", "update", "delete", "void")),
     ("estimates", "/api/v1/estimates", "/api/v1/estimate/{id}", "/api/v1/estimate", ("list", "retrieve", "create", "update", "delete")),
-    ("item_receipts", "/api/v1/item-receipts", "/api/v1/item-receipt/{id}", "/api/v1/item-receipt", ("list", "retrieve", "create", "update", "delete")),
-    ("journal_entries", "/api/v1/journal-entries", "/api/v1/journal-entry/{id}", "/api/v1/journal-entry", ("list", "retrieve", "create", "update", "delete")),
+    ("item_receipts", "/api/v1/item-receipts", "/api/v1/item-receipt/{id}", "/api/v1/item-receipt", ("list", "retrieve", "create", "update", "delete", "void")),
+    ("journal_entries", "/api/v1/journal-entries", "/api/v1/journal-entry/{id}", "/api/v1/journal-entry", ("list", "retrieve", "create", "update", "delete", "void")),
     ("purchase_orders", "/api/v1/purchase-orders", "/api/v1/purchase-order/{id}", "/api/v1/purchase-order", ("list", "retrieve", "create", "update", "delete")),
-    ("sales_receipts", "/api/v1/sales-receipts", "/api/v1/sales-receipt/{id}", "/api/v1/sales-receipt", ("list", "retrieve", "create", "update", "delete")),
+    ("sales_receipts", "/api/v1/sales-receipts", "/api/v1/sales-receipt/{id}", "/api/v1/sales-receipt", ("list", "retrieve", "create", "update", "delete", "void")),
     ("sales_tax_payment_checks", "/api/v1/sales-tax-payment-checks", "/api/v1/sales-tax-payment-check/{id}", "/api/v1/sales-tax-payment-check", ("list", "retrieve", "create", "update", "delete")),
     ("time_trackings", "/api/v1/time-tracking-activities", "/api/v1/time-tracking-activity/{id}", "/api/v1/time-tracking-activity", ("list", "retrieve", "create", "update", "delete")),
     ("transactions", "/api/v1/transactions", "/api/v1/transaction/{id}", "/api/v1/transaction", ("list", "retrieve", "delete")),
-    ("vendor_credits", "/api/v1/vendor-credits", "/api/v1/vendor-credit/{id}", "/api/v1/vendor-credit", ("list", "retrieve", "create", "update", "delete")),
+    ("vendor_credits", "/api/v1/vendor-credits", "/api/v1/vendor-credit/{id}", "/api/v1/vendor-credit", ("list", "retrieve", "create", "update", "delete", "void")),
     ("build_assemblies", "/api/v1/build-assemblies", "/api/v1/build-assembly/{id}", "/api/v1/build-assembly", ("list", "retrieve", "create", "update", "delete")),
-    ("charges", "/api/v1/charges", "/api/v1/charge/{id}", "/api/v1/charge", ("list", "retrieve", "create", "update", "delete")),
-    ("credit_card_charges", "/api/v1/credit-card-charges", "/api/v1/credit-card-charge/{id}", "/api/v1/credit-card-charge", ("list", "retrieve", "create", "update", "delete")),
-    ("credit_memos", "/api/v1/credit-memos", "/api/v1/credit-memo/{id}", "/api/v1/credit-memo", ("list", "retrieve", "create", "update", "delete")),
-    ("inventory_adjustments", "/api/v1/inventory-adjustments", "/api/v1/inventory-adjustment/{id}", "/api/v1/inventory-adjustment", ("list", "retrieve", "create", "update", "delete")),
-    ("invoices", "/api/v1/invoices", "/api/v1/invoice/{id}", "/api/v1/invoice", ("list", "retrieve", "create", "update", "delete")),
+    ("charges", "/api/v1/charges", "/api/v1/charge/{id}", "/api/v1/charge", ("list", "retrieve", "create", "update", "delete", "void")),
+    ("credit_card_charges", "/api/v1/credit-card-charges", "/api/v1/credit-card-charge/{id}", "/api/v1/credit-card-charge", ("list", "retrieve", "create", "update", "delete", "void")),
+    ("credit_memos", "/api/v1/credit-memos", "/api/v1/credit-memo/{id}", "/api/v1/credit-memo", ("list", "retrieve", "create", "update", "delete", "void")),
+    ("inventory_adjustments", "/api/v1/inventory-adjustments", "/api/v1/inventory-adjustment/{id}", "/api/v1/inventory-adjustment", ("list", "retrieve", "create", "update", "delete", "void")),
+    ("invoices", "/api/v1/invoices", "/api/v1/invoice/{id}", "/api/v1/invoice", ("list", "retrieve", "create", "update", "delete", "void")),
     ("receive_payments", "/api/v1/receive-payments", "/api/v1/receive-payment/{id}", "/api/v1/receive-payment", ("list", "retrieve", "create", "update", "delete")),
     ("accounts", "/api/v1/accounts", "/api/v1/account/{id}", "/api/v1/account", ("list", "retrieve", "create", "update", "delete")),
     ("account_tax_line_infos", "/api/v1/accounts-tax-line-info", "/api/v1/account-tax-line-info/{id}", "/api/v1/account-tax-line-info", ("list", "retrieve")),

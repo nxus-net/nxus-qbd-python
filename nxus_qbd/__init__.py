@@ -1,5 +1,6 @@
 """Nxus QuickBooks Desktop Python SDK."""
 
+from ._transport import NxusLogger
 from .client import AsyncNxusClient, NxusClient
 from .config import (
     DEFAULT_BASE_URL,
@@ -15,6 +16,7 @@ __all__ = [
     "NxusClient",
     "AsyncNxusClient",
     "NxusEnvironment",
+    "NxusLogger",
     "NxusApiError",
     "NxusApiErrorCode",
     "throw_if_error",

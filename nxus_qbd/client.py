@@ -18,6 +18,7 @@ from nxus_qbd._transport import (
     DEFAULT_MAX_RETRIES,
     DEFAULT_TIMEOUT_SECONDS,
     AsyncTransport,
+    NxusLogger,
     SyncTransport,
 )
 from nxus_qbd.config import (
@@ -88,6 +89,10 @@ class NxusClient:
         verify: Optional[bool] = None,
         server_timeout_seconds: Optional[int] = None,
         max_retries: int = DEFAULT_MAX_RETRIES,
+        verbose: bool = False,
+        logger: Optional["NxusLogger"] = None,
+        proxy: Optional[str] = None,
+        http_client_options: Optional[Dict[str, Any]] = None,
     ) -> None:
         resolved_base_url = resolve_base_url(base_url=base_url, environment=environment)
         resolved_verify = resolve_verify(
@@ -103,6 +108,10 @@ class NxusClient:
             verify=resolved_verify,
             server_timeout_seconds=server_timeout_seconds,
             max_retries=max_retries,
+            verbose=verbose,
+            logger=logger,
+            proxy=proxy,
+            http_client_options=http_client_options,
         )
 
         # Eagerly build every resource namespace so attribute access is O(1)
@@ -515,6 +524,10 @@ class AsyncNxusClient:
         verify: Optional[bool] = None,
         server_timeout_seconds: Optional[int] = None,
         max_retries: int = DEFAULT_MAX_RETRIES,
+        verbose: bool = False,
+        logger: Optional["NxusLogger"] = None,
+        proxy: Optional[str] = None,
+        http_client_options: Optional[Dict[str, Any]] = None,
     ) -> None:
         resolved_base_url = resolve_base_url(base_url=base_url, environment=environment)
         resolved_verify = resolve_verify(
@@ -530,6 +543,10 @@ class AsyncNxusClient:
             verify=resolved_verify,
             server_timeout_seconds=server_timeout_seconds,
             max_retries=max_retries,
+            verbose=verbose,
+            logger=logger,
+            proxy=proxy,
+            http_client_options=http_client_options,
         )
 
         self._resources: Dict[str, Any] = {}

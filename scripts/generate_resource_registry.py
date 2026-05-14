@@ -34,7 +34,30 @@ TAG_OVERRIDES: dict[str, str] = {
     "qbd_classes": "Class",
 }
 
-METHOD_ORDER = ("list", "retrieve", "create", "update", "delete")
+METHOD_ORDER = ("list", "retrieve", "create", "update", "delete", "void")
+
+# Namespaces that expose a /void endpoint in the SDK. The backend exposes void
+# on a broader set of resources, but the SDK only wires the 16 transaction-style
+# resources below to keep the API surface intentional. Extend this set when new
+# void-capable transactions are added to the SDK.
+VOID_NAMESPACES: set[str] = {
+    "ar_refund_credit_cards",
+    "bills",
+    "check_bills",
+    "credit_card_bills",
+    "charges",
+    "checks",
+    "credit_card_charges",
+    "credit_card_credits",
+    "credit_memos",
+    "deposits",
+    "inventory_adjustments",
+    "invoices",
+    "item_receipts",
+    "journal_entries",
+    "sales_receipts",
+    "vendor_credits",
+}
 
 
 def resolve_tag(namespace: str) -> str:
@@ -86,11 +109,14 @@ def build_registry(spec: dict[str, Any]) -> list[tuple[str, str, str, str, tuple
             op_id = str(operation.get("operationId", ""))
             entry = tag_index.setdefault(tag, {})
             is_detail = "{id}" in path
+            is_void = path.endswith("/{id}/void")
 
             if http_method.lower() == "get" and not is_detail and op_id.startswith("List"):
                 entry["list"] = path
             elif http_method.lower() == "get" and is_detail and op_id.startswith("Retrieve"):
                 entry["retrieve"] = path
+            elif http_method.lower() == "post" and is_void and op_id.startswith("Void"):
+                entry["void"] = path
             elif http_method.lower() == "post" and not is_detail and op_id.startswith("Create"):
                 entry["create"] = path
             elif http_method.lower() == "post" and is_detail and op_id.startswith("Update"):
@@ -105,6 +131,11 @@ def build_registry(spec: dict[str, Any]) -> list[tuple[str, str, str, str, tuple
         if not discovered:
             generated.append((namespace, current_list, current_singular, current_create, current_methods))
             continue
+
+        # The SDK only surfaces void on a curated allowlist even when the backend
+        # exposes it more broadly — drop it from non-allowlisted namespaces.
+        if "void" in discovered and namespace not in VOID_NAMESPACES:
+            discovered = {k: v for k, v in discovered.items() if k != "void"}
 
         list_path = discovered.get("list", current_list)
         singular_path = discovered.get("retrieve", current_singular)
