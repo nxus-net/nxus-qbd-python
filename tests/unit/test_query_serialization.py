@@ -5,7 +5,33 @@ from typing import Any
 
 import pytest
 
-from nxus_qbd.resources import ASYNC_RESOURCES, SYNC_RESOURCES
+from nxus_qbd.resources import ASYNC_RESOURCES, SYNC_RESOURCES, _RESOURCE_DEFS
+
+
+EXPECTED_VOID_RESOURCES = [
+    "ar_refund_credit_cards",
+    "bills",
+    "check_bills",
+    "checks",
+    "credit_card_bills",
+    "credit_card_credits",
+    "deposits",
+    "item_receipts",
+    "journal_entries",
+    "sales_receipts",
+    "vendor_credits",
+    "charges",
+    "credit_card_charges",
+    "credit_memos",
+    "inventory_adjustments",
+    "invoices",
+]
+
+VOID_RESOURCE_PATHS = [
+    (namespace, singular_path.format(id="txn_123") + "/void")
+    for namespace, _list_path, singular_path, _create_path, methods in _RESOURCE_DEFS
+    if "void" in methods
+]
 
 
 class FakeSyncTransport:
@@ -49,6 +75,66 @@ def _wire_vendor(vendor_id: str, company_name: str = "Acme") -> dict[str, Any]:
         "companyName": company_name,
         "phone": "555-0100",
     }
+
+
+def _wire_void_response(object_type: str = "Invoice") -> dict[str, Any]:
+    return {
+        "id": "txn_123",
+        "objectType": object_type,
+        "status": "voided",
+        "voided": True,
+        "refNumber": "REF-123",
+    }
+
+
+def test_void_resource_registry_matches_supported_qbd_transaction_endpoints():
+    assert [namespace for namespace, _path in VOID_RESOURCE_PATHS] == EXPECTED_VOID_RESOURCES
+
+
+def test_sync_void_resources_post_to_singular_void_endpoints():
+    for namespace, expected_path in VOID_RESOURCE_PATHS:
+        transport = FakeSyncTransport(_wire_void_response(namespace))
+        resource = SYNC_RESOURCES[namespace](transport)
+
+        result = resource.void(
+            "txn_123",
+            connection_id="conn-1",
+            headers={"X-Custom-Header": "custom"},
+            server_timeout_seconds=75,
+        )
+
+        assert result.id == "txn_123"
+        assert result.object_type == namespace
+        assert result.status == "voided"
+        assert result.voided is True
+
+        call = transport.calls[0]
+        assert call["method"] == "POST"
+        assert call["path"] == expected_path
+        assert call["headers"]["X-Connection-Id"] == "conn-1"
+        assert call["headers"]["X-Custom-Header"] == "custom"
+        assert call["headers"]["X-Nxus-Timeout-Seconds"] == "75"
+        assert "params" not in call
+        assert "json" not in call
+
+
+@pytest.mark.asyncio
+async def test_async_void_posts_to_singular_void_endpoint():
+    transport = QueuedAsyncTransport(_wire_void_response())
+    resource = ASYNC_RESOURCES["invoices"](transport)
+
+    result = await resource.void("txn_123", connection_id="conn-1")
+
+    assert result.id == "txn_123"
+    assert result.object_type == "Invoice"
+    assert result.voided is True
+    assert transport.calls == [
+        {
+            "method": "POST",
+            "path": "/api/v1/invoice/txn_123/void",
+            "headers": {"X-Connection-Id": "conn-1"},
+        }
+    ]
 
 
 def test_list_serializes_snake_case_query_params():
