@@ -68,3 +68,5 @@ CLAUDE.md
 spec/openapi_old.json
 
 tests/unit/test_vendor_pydantic_wiring.py
+tests/unit/test_generate_schema_normalization.py
+tests/unit/test_query_serialization.py

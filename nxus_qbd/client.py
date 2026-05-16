@@ -156,9 +156,9 @@ class NxusClient:
         return self._resources["bills"]
 
     @property
-    def check_bills(self) -> Any:
-        """Check Bills — full CRUD."""
-        return self._resources["check_bills"]
+    def check_bill_payments(self) -> Any:
+        """Check Bill Payments — full CRUD."""
+        return self._resources["check_bill_payments"]
 
     @property
     def checks(self) -> Any:
@@ -166,9 +166,9 @@ class NxusClient:
         return self._resources["checks"]
 
     @property
-    def credit_card_bills(self) -> Any:
-        """Credit Card Bills — full CRUD."""
-        return self._resources["credit_card_bills"]
+    def credit_card_bill_payments(self) -> Any:
+        """Credit Card Bill Payments — full CRUD."""
+        return self._resources["credit_card_bill_payments"]
 
     @property
     def credit_card_credits(self) -> Any:
@@ -587,9 +587,9 @@ class AsyncNxusClient:
         return self._resources["bills"]
 
     @property
-    def check_bills(self) -> Any:
-        """Check Bills — full CRUD."""
-        return self._resources["check_bills"]
+    def check_bill_payments(self) -> Any:
+        """Check Bill Payments — full CRUD."""
+        return self._resources["check_bill_payments"]
 
     @property
     def checks(self) -> Any:
@@ -597,9 +597,9 @@ class AsyncNxusClient:
         return self._resources["checks"]
 
     @property
-    def credit_card_bills(self) -> Any:
-        """Credit Card Bills — full CRUD."""
-        return self._resources["credit_card_bills"]
+    def credit_card_bill_payments(self) -> Any:
+        """Credit Card Bill Payments — full CRUD."""
+        return self._resources["credit_card_bill_payments"]
 
     @property
     def credit_card_credits(self) -> Any:

@@ -19,6 +19,7 @@ Usage:
 """
 
 import argparse
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -28,6 +29,7 @@ MODELS_DIR = REPO_ROOT / "nxus_qbd" / "models"
 PREVIEW_FILE = MODELS_DIR / "_preview"
 SPLIT_SCRIPT = REPO_ROOT / "scripts" / "split_models.py"
 RESOURCE_REGISTRY_SCRIPT = REPO_ROOT / "scripts" / "generate_resource_registry.py"
+CODEGEN_SPEC_FILE = MODELS_DIR / "_codegen_openapi.json"
 DEFAULT_URL = "https://api.nx-us.net/openapi/v1.json"
 LOCAL_FALLBACK_URL = "https://localhost:7242/openapi/v1.json"
 
@@ -73,6 +75,45 @@ def download_spec(url: str, *, allow_default_fallback: bool = False) -> Path:
     return spec_file
 
 
+def _normalize_nullable_allof_arrays(node):
+    """Inline nullable allOf array schemas before Python model generation.
+
+    The backend OpenAPI emitter can represent nullable arrays as
+    `nullable: true` plus `allOf: [{type: array, ...}]`. datamodel-code-generator
+    treats that shape as an empty wrapper model, so live array responses fail
+    Pydantic validation. Keeping it as a direct nullable array produces the
+    expected `list[T] | None` annotations.
+    """
+    if isinstance(node, dict):
+        all_of = node.get("allOf")
+        if (
+            node.get("nullable") is True
+            and isinstance(all_of, list)
+            and len(all_of) == 1
+            and isinstance(all_of[0], dict)
+            and all_of[0].get("type") == "array"
+        ):
+            array_schema = all_of[0]
+            node.pop("allOf")
+            for key, value in array_schema.items():
+                node.setdefault(key, value)
+
+        for value in node.values():
+            _normalize_nullable_allof_arrays(value)
+    elif isinstance(node, list):
+        for value in node:
+            _normalize_nullable_allof_arrays(value)
+
+
+def prepare_codegen_spec(spec_file: Path) -> Path:
+    """Write a normalized OpenAPI copy for datamodel-code-generator."""
+    spec = json.loads(spec_file.read_text(encoding="utf-8"))
+    _normalize_nullable_allof_arrays(spec)
+    MODELS_DIR.mkdir(parents=True, exist_ok=True)
+    CODEGEN_SPEC_FILE.write_text(json.dumps(spec, separators=(",", ":")), encoding="utf-8")
+    return CODEGEN_SPEC_FILE
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate SDK models from OpenAPI spec")
     source = parser.add_mutually_exclusive_group()
@@ -97,14 +138,17 @@ def main() -> None:
             allow_default_fallback=args.url == DEFAULT_URL,
         )
 
-    # Clean previous preview artifact
+    # Clean previous preview artifacts
     if PREVIEW_FILE.exists():
         PREVIEW_FILE.unlink()
+    if CODEGEN_SPEC_FILE.exists():
+        CODEGEN_SPEC_FILE.unlink()
     MODELS_DIR.mkdir(parents=True, exist_ok=True)
+    codegen_spec_file = prepare_codegen_spec(spec_file)
 
     cmd = [
         sys.executable, "-m", "datamodel_code_generator",
-        "--input", str(spec_file),
+        "--input", str(codegen_spec_file),
         "--input-file-type", "openapi",
         "--output", str(PREVIEW_FILE),
         "--output-model-type", "pydantic_v2.BaseModel",
@@ -122,6 +166,7 @@ def main() -> None:
 
     print(f"Generating Pydantic v2 models → {PREVIEW_FILE}")
     print(f"Source: {spec_file}")
+    print(f"Codegen source: {codegen_spec_file}")
     print(f"Command: {' '.join(cmd)}\n")
 
     result = subprocess.run(cmd, capture_output=True, text=True)
@@ -174,6 +219,7 @@ def main() -> None:
 
     # Clean up preview artifact
     PREVIEW_FILE.unlink(missing_ok=True)
+    CODEGEN_SPEC_FILE.unlink(missing_ok=True)
     print("\n[ok] Done.")
 
 

@@ -614,9 +614,9 @@ def _async_resource(
 _RESOURCE_DEFS: list[tuple[str, str, str, str, tuple[str, ...]]] = [
     ("ar_refund_credit_cards", "/api/v1/ar-refund-credit-cards", "/api/v1/ar-refund-credit-card/{id}", "/api/v1/ar-refund-credit-card", ("list", "retrieve", "create", "update", "delete", "void")),
     ("bills", "/api/v1/bills", "/api/v1/bill/{id}", "/api/v1/bill", ("list", "retrieve", "create", "update", "delete", "void")),
-    ("check_bills", "/api/v1/check-bills", "/api/v1/check-bill/{id}", "/api/v1/check-bill", ("list", "retrieve", "create", "update", "delete", "void")),
+    ("check_bill_payments", "/api/v1/check-bill-payments", "/api/v1/check-bill-payment/{id}", "/api/v1/check-bill-payment", ("list", "retrieve", "create", "update", "delete", "void")),
     ("checks", "/api/v1/checks", "/api/v1/check/{id}", "/api/v1/check", ("list", "retrieve", "create", "update", "delete", "void")),
-    ("credit_card_bills", "/api/v1/credit-card-bills", "/api/v1/credit-card-bill/{id}", "/api/v1/credit-card-bill", ("list", "retrieve", "create", "update", "delete", "void")),
+    ("credit_card_bill_payments", "/api/v1/credit-card-bill-payments", "/api/v1/credit-card-bill-payment/{id}", "/api/v1/credit-card-bill-payment", ("list", "retrieve", "create", "update", "delete", "void")),
     ("credit_card_credits", "/api/v1/credit-card-credits", "/api/v1/credit-card-credit/{id}", "/api/v1/credit-card-credit", ("list", "retrieve", "create", "update", "delete", "void")),
     ("deposits", "/api/v1/deposits", "/api/v1/deposit/{id}", "/api/v1/deposit", ("list", "retrieve", "create", "update", "delete", "void")),
     ("estimates", "/api/v1/estimates", "/api/v1/estimate/{id}", "/api/v1/estimate", ("list", "retrieve", "create", "update", "delete")),
@@ -693,9 +693,9 @@ def _load_models() -> Dict[str, type]:
     # Transactions
     from nxus_qbd.models.qbd.ar_refund_credit_card import ArRefundCreditCard
     from nxus_qbd.models.qbd.bill import Bill
-    from nxus_qbd.models.qbd.check_bill import CheckBill
+    from nxus_qbd.models.qbd.check_bill_payment import CheckBillPayment
     from nxus_qbd.models.qbd.check import Check
-    from nxus_qbd.models.qbd.credit_card_bill import CreditCardBill
+    from nxus_qbd.models.qbd.credit_card_bill_payment import CreditCardBillPayment
     from nxus_qbd.models.qbd.credit_card_credit import CreditCardCredit
     from nxus_qbd.models.qbd.deposit import Deposit
     from nxus_qbd.models.qbd.estimate import Estimate
@@ -762,9 +762,9 @@ def _load_models() -> Dict[str, type]:
         # Transactions
         "ar_refund_credit_cards": ArRefundCreditCard,
         "bills": Bill,
-        "check_bills": CheckBill,
+        "check_bill_payments": CheckBillPayment,
         "checks": Check,
-        "credit_card_bills": CreditCardBill,
+        "credit_card_bill_payments": CreditCardBillPayment,
         "credit_card_credits": CreditCardCredit,
         "deposits": Deposit,
         "estimates": Estimate,

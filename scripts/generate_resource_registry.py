@@ -43,8 +43,8 @@ METHOD_ORDER = ("list", "retrieve", "create", "update", "delete", "void")
 VOID_NAMESPACES: set[str] = {
     "ar_refund_credit_cards",
     "bills",
-    "check_bills",
-    "credit_card_bills",
+    "check_bill_payments",
+    "credit_card_bill_payments",
     "charges",
     "checks",
     "credit_card_charges",
