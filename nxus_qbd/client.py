@@ -201,6 +201,11 @@ class NxusClient:
         return self._resources["purchase_orders"]
 
     @property
+    def sales_orders(self) -> Any:
+        """Sales Orders — full CRUD."""
+        return self._resources["sales_orders"]
+
+    @property
     def sales_receipts(self) -> Any:
         """Sales Receipts — full CRUD."""
         return self._resources["sales_receipts"]
@@ -630,6 +635,11 @@ class AsyncNxusClient:
     def purchase_orders(self) -> Any:
         """Purchase Orders — full CRUD."""
         return self._resources["purchase_orders"]
+
+    @property
+    def sales_orders(self) -> Any:
+        """Sales Orders — full CRUD."""
+        return self._resources["sales_orders"]
 
     @property
     def sales_receipts(self) -> Any:

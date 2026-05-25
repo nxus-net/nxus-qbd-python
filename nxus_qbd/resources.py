@@ -623,6 +623,7 @@ _RESOURCE_DEFS: list[tuple[str, str, str, str, tuple[str, ...]]] = [
     ("item_receipts", "/api/v1/item-receipts", "/api/v1/item-receipt/{id}", "/api/v1/item-receipt", ("list", "retrieve", "create", "update", "delete", "void")),
     ("journal_entries", "/api/v1/journal-entries", "/api/v1/journal-entry/{id}", "/api/v1/journal-entry", ("list", "retrieve", "create", "update", "delete", "void")),
     ("purchase_orders", "/api/v1/purchase-orders", "/api/v1/purchase-order/{id}", "/api/v1/purchase-order", ("list", "retrieve", "create", "update", "delete")),
+    ("sales_orders", "/api/v1/sales-orders", "/api/v1/sales-order/{id}", "/api/v1/sales-order", ("list", "retrieve", "create", "update", "delete")),
     ("sales_receipts", "/api/v1/sales-receipts", "/api/v1/sales-receipt/{id}", "/api/v1/sales-receipt", ("list", "retrieve", "create", "update", "delete", "void")),
     ("sales_tax_payment_checks", "/api/v1/sales-tax-payment-checks", "/api/v1/sales-tax-payment-check/{id}", "/api/v1/sales-tax-payment-check", ("list", "retrieve", "create", "update", "delete")),
     ("time_trackings", "/api/v1/time-tracking-activities", "/api/v1/time-tracking-activity/{id}", "/api/v1/time-tracking-activity", ("list", "retrieve", "create", "update", "delete")),
@@ -702,6 +703,7 @@ def _load_models() -> Dict[str, type]:
     from nxus_qbd.models.qbd.item_receipt import ItemReceipt
     from nxus_qbd.models.qbd.journal_entry import JournalEntry
     from nxus_qbd.models.qbd.purchase_order import PurchaseOrder
+    from nxus_qbd.models.qbd.sales_order import SalesOrder
     from nxus_qbd.models.qbd.sales_receipt import SalesReceipt
     from nxus_qbd.models.qbd.sales_tax_payment_check import SalesTaxPaymentCheck
     from nxus_qbd.models.qbd.time_tracking_activity import TimeTracking
@@ -771,6 +773,7 @@ def _load_models() -> Dict[str, type]:
         "item_receipts": ItemReceipt,
         "journal_entries": JournalEntry,
         "purchase_orders": PurchaseOrder,
+        "sales_orders": SalesOrder,
         "sales_receipts": SalesReceipt,
         "sales_tax_payment_checks": SalesTaxPaymentCheck,
         "time_trackings": TimeTracking,

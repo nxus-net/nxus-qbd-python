@@ -76,19 +76,18 @@ def download_spec(url: str, *, allow_default_fallback: bool = False) -> Path:
 
 
 def _normalize_nullable_allof_arrays(node):
-    """Inline nullable allOf array schemas before Python model generation.
+    """Inline `allOf: [{type: array, ...}]` schemas before Python model generation.
 
-    The backend OpenAPI emitter can represent nullable arrays as
-    `nullable: true` plus `allOf: [{type: array, ...}]`. datamodel-code-generator
-    treats that shape as an empty wrapper model, so live array responses fail
-    Pydantic validation. Keeping it as a direct nullable array produces the
-    expected `list[T] | None` annotations.
+    The backend OpenAPI emitter sometimes wraps array properties as
+    `allOf: [{type: array, ...}]` (with or without `nullable: true`).
+    datamodel-code-generator treats that shape as an empty wrapper model,
+    so live array responses fail Pydantic validation. Inlining the array
+    schema produces the expected `list[T]` / `list[T] | None` annotations.
     """
     if isinstance(node, dict):
         all_of = node.get("allOf")
         if (
-            node.get("nullable") is True
-            and isinstance(all_of, list)
+            isinstance(all_of, list)
             and len(all_of) == 1
             and isinstance(all_of[0], dict)
             and all_of[0].get("type") == "array"

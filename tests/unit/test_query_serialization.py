@@ -11,9 +11,9 @@ from nxus_qbd.resources import ASYNC_RESOURCES, SYNC_RESOURCES, _RESOURCE_DEFS
 EXPECTED_VOID_RESOURCES = [
     "ar_refund_credit_cards",
     "bills",
-    "check_bills",
+    "check_bill_payments",
     "checks",
-    "credit_card_bills",
+    "credit_card_bill_payments",
     "credit_card_credits",
     "deposits",
     "item_receipts",
