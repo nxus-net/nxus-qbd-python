@@ -11,7 +11,7 @@ from .config import (
 from .errors import NxusApiError, NxusApiErrorCode, throw_if_error
 from .pagination import CursorPage, PaginationError
 
-__version__ = "0.1.0"
+__version__ = "0.6.2"
 __all__ = [
     "NxusClient",
     "AsyncNxusClient",

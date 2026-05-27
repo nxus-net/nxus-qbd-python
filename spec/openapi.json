@@ -56793,7 +56793,7 @@
             "in": "query",
             "description": "Optional: Filter by job status (customer-specific filter)",
             "schema": {
-              "$ref": "#/components/schemas/NullableJobStatus"
+              "$ref": "#/components/schemas/JobStatus"
             }
           },
           {
@@ -165895,7 +165895,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableSpecialAccountType"
+                "$ref": "#/components/schemas/SpecialAccountType"
               }
             ]
           },
@@ -165960,7 +165960,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableCashFlowClassification"
+                "$ref": "#/components/schemas/CashFlowClassification"
               }
             ]
           },
@@ -166247,42 +166247,6 @@
           "line4",
           "line5"
         ]
-      },
-      "AddressBlockRequest": {
-        "type": "object",
-        "properties": {
-          "line1": {
-            "type": "string",
-            "description": "The Addr1 associated with this object.",
-            "example": "\u0022Sample text value\u0022",
-            "nullable": true
-          },
-          "line2": {
-            "type": "string",
-            "description": "The Addr2 associated with this object.",
-            "example": "\u0022Sample text value\u0022",
-            "nullable": true
-          },
-          "line3": {
-            "type": "string",
-            "description": "The Addr3 associated with this object.",
-            "example": "\u0022Sample text value\u0022",
-            "nullable": true
-          },
-          "line4": {
-            "type": "string",
-            "description": "The Addr4 associated with this object.",
-            "example": "\u0022Sample text value\u0022",
-            "nullable": true
-          },
-          "line5": {
-            "type": "string",
-            "description": "The Addr5 associated with this object.",
-            "example": "\u0022Sample text value\u0022",
-            "nullable": true
-          }
-        },
-        "description": "Request for a block of addresses."
       },
       "AddressRequest": {
         "type": "object",
@@ -173659,7 +173623,8 @@
           },
           "externalId": {
             "type": "string",
-            "description": "An external identifier used for tracking purposes.",
+            "description": "An external GUID identifier.",
+            "example": "\u002212345678-1234-1234-1234-123456789012\u0022",
             "nullable": true
           }
         },
@@ -174750,7 +174715,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableTransactionMode"
+                "$ref": "#/components/schemas/TransactionMode"
               }
             ]
           },
@@ -174758,7 +174723,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableCreditCardTransactionType"
+                "$ref": "#/components/schemas/CreditCardTransactionType"
               }
             ]
           }
@@ -174805,7 +174770,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableAvsStreet"
+                "$ref": "#/components/schemas/AvsStreet"
               }
             ]
           },
@@ -174813,7 +174778,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableAvsZip"
+                "$ref": "#/components/schemas/AvsZip"
               }
             ]
           },
@@ -174821,7 +174786,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableCardSecurityCodeMatch"
+                "$ref": "#/components/schemas/CardSecurityCodeMatch"
               }
             ]
           },
@@ -175505,7 +175470,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableJobStatus"
+                "$ref": "#/components/schemas/JobStatus"
               }
             ]
           },
@@ -175959,7 +175924,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableEmployeeType"
+                "$ref": "#/components/schemas/EmployeeType"
               }
             ]
           },
@@ -175969,7 +175934,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableEmploymentStatus"
+                "$ref": "#/components/schemas/EmploymentStatus"
               }
             ]
           },
@@ -175979,7 +175944,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableGender"
+                "$ref": "#/components/schemas/Gender"
               }
             ]
           },
@@ -176035,7 +176000,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableOvertimeExemptStatus"
+                "$ref": "#/components/schemas/OvertimeExemptStatus"
               }
             ]
           },
@@ -176045,7 +176010,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableKeyEmployeeStatus"
+                "$ref": "#/components/schemas/KeyEmployeeStatus"
               }
             ]
           },
@@ -176069,7 +176034,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableCitizenshipStatus"
+                "$ref": "#/components/schemas/CitizenshipStatus"
               }
             ]
           },
@@ -176079,7 +176044,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableEthnicity"
+                "$ref": "#/components/schemas/Ethnicity"
               }
             ]
           },
@@ -176089,7 +176054,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableDisabilityStatus"
+                "$ref": "#/components/schemas/DisabilityStatus"
               }
             ]
           },
@@ -176105,7 +176070,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableI9FileStatus"
+                "$ref": "#/components/schemas/I9FileStatus"
               }
             ]
           },
@@ -176122,7 +176087,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableUsVeteranStatus"
+                "$ref": "#/components/schemas/UsVeteranStatus"
               }
             ]
           },
@@ -176132,7 +176097,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableMilitaryStatus"
+                "$ref": "#/components/schemas/MilitaryStatus"
               }
             ]
           },
@@ -178451,14 +178416,6 @@
               }
             ]
           },
-          "addressBlock": {
-            "nullable": true,
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/AddressBlock"
-              }
-            ]
-          },
           "phone": {
             "maxLength": 21,
             "type": "string",
@@ -178466,9 +178423,11 @@
             "example": "\u0022\u002B1-555-123-4567\u0022",
             "nullable": true
           },
-          "alternatPhone": {
+          "alternatePhone": {
             "maxLength": 21,
             "type": "string",
+            "description": "The other-name\u0027s alternate telephone number.",
+            "example": "\u0022\u002B1-555-123-4567\u0022",
             "nullable": true
           },
           "fax": {
@@ -178495,6 +178454,8 @@
           "alternateContact": {
             "maxLength": 41,
             "type": "string",
+            "description": "The name of the alternate contact for this other-name.",
+            "example": "\u0022Jane Smith\u0022",
             "nullable": true
           },
           "accountNumber": {
@@ -178507,9 +178468,12 @@
           "notes": {
             "maxLength": 4095,
             "type": "string",
+            "description": "Additional notes for the other name.",
+            "example": "\u0022This is a test note\u0022",
             "nullable": true
           },
           "customFields": {
+            "description": "The other-name\u0027s custom fields.\n\nA list of each of which represents a custom field that has been added to\nQuickBooks as a custom field (data extension).",
             "nullable": true,
             "allOf": [
               {
@@ -178522,7 +178486,8 @@
           },
           "externalId": {
             "type": "string",
-            "description": "Fulfills the ICreateRequest interface.\nUsed for tracking the \u0022Add\u0022 job.",
+            "description": "An external GUID identifier.",
+            "example": "\u002212345678-1234-1234-1234-123456789012\u0022",
             "nullable": true
           }
         },
@@ -181430,7 +181395,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableTransactionMode"
+                "$ref": "#/components/schemas/TransactionMode"
               }
             ]
           },
@@ -181440,7 +181405,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableCreditCardTransactionType"
+                "$ref": "#/components/schemas/CreditCardTransactionType"
               }
             ]
           }
@@ -181496,7 +181461,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableAvsStreet"
+                "$ref": "#/components/schemas/AvsStreet"
               }
             ]
           },
@@ -181505,7 +181470,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableAvsZip"
+                "$ref": "#/components/schemas/AvsZip"
               }
             ]
           },
@@ -181514,7 +181479,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableCardSecurityCodeMatch"
+                "$ref": "#/components/schemas/CardSecurityCodeMatch"
               }
             ]
           },
@@ -184072,7 +184037,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableEmployeeType"
+                "$ref": "#/components/schemas/EmployeeType"
               }
             ]
           },
@@ -184082,7 +184047,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableEmploymentStatus"
+                "$ref": "#/components/schemas/EmploymentStatus"
               }
             ]
           },
@@ -184092,7 +184057,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableOvertimeExemptStatus"
+                "$ref": "#/components/schemas/OvertimeExemptStatus"
               }
             ]
           },
@@ -184102,7 +184067,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableKeyEmployeeStatus"
+                "$ref": "#/components/schemas/KeyEmployeeStatus"
               }
             ]
           },
@@ -184112,7 +184077,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableGender"
+                "$ref": "#/components/schemas/Gender"
               }
             ]
           },
@@ -184157,7 +184122,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableCitizenshipStatus"
+                "$ref": "#/components/schemas/CitizenshipStatus"
               }
             ]
           },
@@ -184167,7 +184132,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableEthnicity"
+                "$ref": "#/components/schemas/Ethnicity"
               }
             ]
           },
@@ -184177,7 +184142,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableDisabilityStatus"
+                "$ref": "#/components/schemas/DisabilityStatus"
               }
             ]
           },
@@ -184193,7 +184158,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableI9FileStatus"
+                "$ref": "#/components/schemas/I9FileStatus"
               }
             ]
           },
@@ -184210,7 +184175,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableUsVeteranStatus"
+                "$ref": "#/components/schemas/UsVeteranStatus"
               }
             ]
           },
@@ -184220,7 +184185,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableMilitaryStatus"
+                "$ref": "#/components/schemas/MilitaryStatus"
               }
             ]
           },
@@ -184287,7 +184252,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullablePayPeriod"
+                "$ref": "#/components/schemas/PayPeriod"
               }
             ]
           },
@@ -184324,7 +184289,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableUseTimedataToCreatePaychecks"
+                "$ref": "#/components/schemas/UseTimedataToCreatePaychecks"
               }
             ]
           },
@@ -184368,7 +184333,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullablePayPeriod"
+                "$ref": "#/components/schemas/PayPeriod"
               }
             ]
           },
@@ -184401,7 +184366,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableUseTimedataToCreatePaychecks"
+                "$ref": "#/components/schemas/UseTimedataToCreatePaychecks"
               }
             ]
           },
@@ -185293,7 +185258,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableBillableStatus"
+                "$ref": "#/components/schemas/BillableStatus"
               }
             ]
           },
@@ -190231,7 +190196,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableSpecialItemType"
+                "$ref": "#/components/schemas/SpecialItemType"
               }
             ]
           },
@@ -190454,7 +190419,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableBillableStatus"
+                "$ref": "#/components/schemas/BillableStatus"
               }
             ]
           },
@@ -192262,7 +192227,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableSpecialItemType"
+                "$ref": "#/components/schemas/SpecialItemType"
               }
             ]
           },
@@ -192798,226 +192763,8 @@
           null
         ]
       },
-      "NullableAccrualPeriod": {
-        "enum": [
-          "accrues_annually",
-          "accrues_hourly",
-          "accrues_per_paycheck",
-          null
-        ]
-      },
-      "NullableAvsStreet": {
-        "enum": [
-          "Pass",
-          "Fail",
-          "NotAvailable",
-          null
-        ]
-      },
-      "NullableAvsZip": {
-        "enum": [
-          "Pass",
-          "Fail",
-          "NotAvailable",
-          null
-        ]
-      },
-      "NullableBillableStatus": {
-        "enum": [
-          "NotBillable",
-          "Billable",
-          "HasBeenBilled",
-          null
-        ]
-      },
-      "NullableCardSecurityCodeMatch": {
-        "enum": [
-          "Pass",
-          "Fail",
-          "NotAvailable",
-          null
-        ]
-      },
-      "NullableCashFlowClassification": {
-        "enum": [
-          "None",
-          "Operating",
-          "Investing",
-          "Financing",
-          "NotApplicable",
-          null
-        ]
-      },
-      "NullableCitizenshipStatus": {
-        "enum": [
-          "citizen",
-          "non_citizen",
-          null
-        ]
-      },
-      "NullableCreditCardTransactionType": {
-        "enum": [
-          "Authorization",
-          "Capture",
-          "Charge",
-          "Refund",
-          "VoiceAuthorization",
-          null
-        ]
-      },
-      "NullableDisabilityStatus": {
-        "enum": [
-          "none",
-          "disabled",
-          "not_disabled",
-          null
-        ]
-      },
-      "NullableEmployeeType": {
-        "enum": [
-          "officer",
-          "owner",
-          "regular",
-          "statutory",
-          null
-        ]
-      },
-      "NullableEmploymentStatus": {
-        "enum": [
-          "full_time",
-          "part_time",
-          null
-        ]
-      },
-      "NullableEthnicity": {
-        "enum": [
-          "american_indian",
-          "asian",
-          "black",
-          "hawaiian",
-          "hispanic",
-          "white",
-          "two_or_more_races",
-          null
-        ]
-      },
-      "NullableGender": {
-        "enum": [
-          "male",
-          "female",
-          null
-        ]
-      },
-      "NullableI9FileStatus": {
-        "enum": [
-          "on_file",
-          "not_on_file",
-          null
-        ]
-      },
-      "NullableJobStatus": {
-        "enum": [
-          "None",
-          "Pending",
-          "Awarded",
-          "InProgress",
-          "Closed",
-          "NotAwarded",
-          null
-        ]
-      },
-      "NullableKeyEmployeeStatus": {
-        "enum": [
-          "none",
-          "key_employee",
-          "not_key_employee",
-          null
-        ]
-      },
-      "NullableMilitaryStatus": {
-        "enum": [
-          "active",
-          "reserve",
-          null
-        ]
-      },
-      "NullableOvertimeExemptStatus": {
-        "enum": [
-          "exempt",
-          "non_exempt",
-          null
-        ]
-      },
       "NullablePaidStatus": {
         "type": "integer"
-      },
-      "NullablePayPeriod": {
-        "enum": [
-          "biweekly",
-          "daily",
-          "monthly",
-          "quarterly",
-          "semimonthly",
-          "weekly",
-          "yearly",
-          null
-        ]
-      },
-      "NullableSpecialAccountType": {
-        "enum": [
-          "AccountsPayable",
-          "AccountsReceivable",
-          "CondenseItemAdjustmentExpenses",
-          "CostOfGoodsSold",
-          "DirectDepositLiabilities",
-          "Estimates",
-          "ExchangeGainLoss",
-          "InventoryAssets",
-          "ItemReceiptAccount",
-          "OpeningBalanceEquity",
-          "PayrollExpenses",
-          "PayrollLiabilities",
-          "PettyCash",
-          "PurchaseOrders",
-          "ReconciliationDifferences",
-          "RetainedEarnings",
-          "SalesOrders",
-          "SalesTaxPayable",
-          "UncategorizedExpenses",
-          "UncategorizedIncome",
-          "UndepositedFunds",
-          null
-        ]
-      },
-      "NullableSpecialItemType": {
-        "enum": [
-          "FinanceCharge",
-          "ReimbursableExpenseGroup",
-          "ReimbursableExpenseSubtotal",
-          null
-        ]
-      },
-      "NullableTransactionMode": {
-        "enum": [
-          "CardNotPresent",
-          "CardPresent",
-          null
-        ]
-      },
-      "NullableUseTimedataToCreatePaychecks": {
-        "enum": [
-          "does_not_use_time_date",
-          "not_set",
-          "uses_time_data",
-          null
-        ]
-      },
-      "NullableUsVeteranStatus": {
-        "enum": [
-          "veteran",
-          "non_veteran",
-          null
-        ]
       },
       "OtherName": {
         "required": [
@@ -193115,6 +192862,7 @@
             ]
           },
           "addressBlock": {
+            "description": "The other-name\u0027s address block.\n\nThe address expressed as an address block of Addr1 through Addr5,\ndepending on the number of lines in the original request that created the address.",
             "nullable": true,
             "allOf": [
               {
@@ -193162,6 +192910,8 @@
           },
           "notes": {
             "type": "string",
+            "description": "Additional notes for the other name.",
+            "example": "\u0022Landlord for the 5th Street warehouse facility. Rent is due on the 1st of each month.\u0022",
             "nullable": true
           },
           "isActive": {
@@ -195921,7 +195671,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableBillableStatus"
+                "$ref": "#/components/schemas/BillableStatus"
               }
             ]
           },
@@ -197744,7 +197494,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableAccrualPeriod"
+                "$ref": "#/components/schemas/AccrualPeriod"
               }
             ]
           },
@@ -197812,7 +197562,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableAccrualPeriod"
+                "$ref": "#/components/schemas/AccrualPeriod"
               }
             ]
           },
@@ -197898,7 +197648,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableSpecialItemType"
+                "$ref": "#/components/schemas/SpecialItemType"
               }
             ]
           },
@@ -199865,7 +199615,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableTransactionMode"
+                "$ref": "#/components/schemas/TransactionMode"
               }
             ]
           },
@@ -199876,7 +199626,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableCreditCardTransactionType"
+                "$ref": "#/components/schemas/CreditCardTransactionType"
               }
             ]
           }
@@ -199923,7 +199673,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableAvsStreet"
+                "$ref": "#/components/schemas/AvsStreet"
               }
             ]
           },
@@ -199931,7 +199681,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableAvsZip"
+                "$ref": "#/components/schemas/AvsZip"
               }
             ]
           },
@@ -199939,7 +199689,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableCardSecurityCodeMatch"
+                "$ref": "#/components/schemas/CardSecurityCodeMatch"
               }
             ]
           },
@@ -200625,7 +200375,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableJobStatus"
+                "$ref": "#/components/schemas/JobStatus"
               }
             ]
           },
@@ -201019,7 +200769,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableEmployeeType"
+                "$ref": "#/components/schemas/EmployeeType"
               }
             ]
           },
@@ -201029,7 +200779,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableEmploymentStatus"
+                "$ref": "#/components/schemas/EmploymentStatus"
               }
             ]
           },
@@ -201039,7 +200789,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableGender"
+                "$ref": "#/components/schemas/Gender"
               }
             ]
           },
@@ -201108,7 +200858,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableOvertimeExemptStatus"
+                "$ref": "#/components/schemas/OvertimeExemptStatus"
               }
             ]
           },
@@ -201118,7 +200868,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableKeyEmployeeStatus"
+                "$ref": "#/components/schemas/KeyEmployeeStatus"
               }
             ]
           },
@@ -201142,7 +200892,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableCitizenshipStatus"
+                "$ref": "#/components/schemas/CitizenshipStatus"
               }
             ]
           },
@@ -201152,7 +200902,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableEthnicity"
+                "$ref": "#/components/schemas/Ethnicity"
               }
             ]
           },
@@ -201162,7 +200912,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableDisabilityStatus"
+                "$ref": "#/components/schemas/DisabilityStatus"
               }
             ]
           },
@@ -201179,7 +200929,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableI9FileStatus"
+                "$ref": "#/components/schemas/I9FileStatus"
               }
             ]
           },
@@ -201196,7 +200946,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableUsVeteranStatus"
+                "$ref": "#/components/schemas/UsVeteranStatus"
               }
             ]
           },
@@ -201206,7 +200956,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableMilitaryStatus"
+                "$ref": "#/components/schemas/MilitaryStatus"
               }
             ]
           },
@@ -203507,15 +203257,6 @@
               }
             ]
           },
-          "addressBlock": {
-            "description": "Represents the other-name\u0027s address as a block of text, which may include multiple lines and is not structured into separate fields like street, city, state, etc. This field is used when the full address block needs to be stored as-is.",
-            "nullable": true,
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/AddressBlockRequest"
-              }
-            ]
-          },
           "phone": {
             "maxLength": 21,
             "type": "string",
@@ -203526,6 +203267,8 @@
           "alternatePhone": {
             "maxLength": 21,
             "type": "string",
+            "description": "The other-name\u0027s alternate telephone number.",
+            "example": "\u0022\u002B1-555-555-1212\u0022",
             "nullable": true
           },
           "fax": {
@@ -203552,6 +203295,8 @@
           "alternateContact": {
             "maxLength": 41,
             "type": "string",
+            "description": "The name of the alternate contact for this other-name.",
+            "example": "\u0022Jane Smith\u0022",
             "nullable": true
           },
           "accountNumber": {
@@ -203564,9 +203309,12 @@
           "notes": {
             "maxLength": 4095,
             "type": "string",
+            "description": "Additional notes for the other name.",
+            "example": "\u0022This is a test note\u0022",
             "nullable": true
           },
           "customFields": {
+            "description": "The other-name\u0027s custom fields.\n\nCustom fields are used to store additional data about the other-name that is not included in the standard fields.",
             "nullable": true,
             "allOf": [
               {
@@ -203578,7 +203326,9 @@
             ]
           },
           "revisionNumber": {
-            "type": "string"
+            "maxLength": 16,
+            "type": "string",
+            "description": "The other-name\u0027s revision number, which is used to track changes to the other-name."
           }
         },
         "description": "Request for updating an existing OtherName.\r\nImplements IUpdateRequest for the abstraction pattern."
@@ -205558,7 +205308,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableAccrualPeriod"
+                "$ref": "#/components/schemas/AccrualPeriod"
               }
             ]
           },
@@ -205626,7 +205376,7 @@
             "nullable": true,
             "allOf": [
               {
-                "$ref": "#/components/schemas/NullableAccrualPeriod"
+                "$ref": "#/components/schemas/AccrualPeriod"
               }
             ]
           },
@@ -206598,6 +206348,224 @@
           }
         },
         "description": "Response DTO for WorkersCompCode entity.\r\nInherits id, name, isActive from BaseListDto."
+      },
+      "AccrualPeriod": {
+        "enum": [
+          "accrues_annually",
+          "accrues_hourly",
+          "accrues_per_paycheck",
+          null
+        ]
+      },
+      "AvsStreet": {
+        "enum": [
+          "Pass",
+          "Fail",
+          "NotAvailable",
+          null
+        ]
+      },
+      "AvsZip": {
+        "enum": [
+          "Pass",
+          "Fail",
+          "NotAvailable",
+          null
+        ]
+      },
+      "BillableStatus": {
+        "enum": [
+          "NotBillable",
+          "Billable",
+          "HasBeenBilled",
+          null
+        ]
+      },
+      "CardSecurityCodeMatch": {
+        "enum": [
+          "Pass",
+          "Fail",
+          "NotAvailable",
+          null
+        ]
+      },
+      "CashFlowClassification": {
+        "enum": [
+          "None",
+          "Operating",
+          "Investing",
+          "Financing",
+          "NotApplicable",
+          null
+        ]
+      },
+      "CitizenshipStatus": {
+        "enum": [
+          "citizen",
+          "non_citizen",
+          null
+        ]
+      },
+      "CreditCardTransactionType": {
+        "enum": [
+          "Authorization",
+          "Capture",
+          "Charge",
+          "Refund",
+          "VoiceAuthorization",
+          null
+        ]
+      },
+      "DisabilityStatus": {
+        "enum": [
+          "none",
+          "disabled",
+          "not_disabled",
+          null
+        ]
+      },
+      "EmployeeType": {
+        "enum": [
+          "officer",
+          "owner",
+          "regular",
+          "statutory",
+          null
+        ]
+      },
+      "EmploymentStatus": {
+        "enum": [
+          "full_time",
+          "part_time",
+          null
+        ]
+      },
+      "Ethnicity": {
+        "enum": [
+          "american_indian",
+          "asian",
+          "black",
+          "hawaiian",
+          "hispanic",
+          "white",
+          "two_or_more_races",
+          null
+        ]
+      },
+      "Gender": {
+        "enum": [
+          "male",
+          "female",
+          null
+        ]
+      },
+      "I9FileStatus": {
+        "enum": [
+          "on_file",
+          "not_on_file",
+          null
+        ]
+      },
+      "JobStatus": {
+        "enum": [
+          "None",
+          "Pending",
+          "Awarded",
+          "InProgress",
+          "Closed",
+          "NotAwarded",
+          null
+        ]
+      },
+      "KeyEmployeeStatus": {
+        "enum": [
+          "none",
+          "key_employee",
+          "not_key_employee",
+          null
+        ]
+      },
+      "MilitaryStatus": {
+        "enum": [
+          "active",
+          "reserve",
+          null
+        ]
+      },
+      "OvertimeExemptStatus": {
+        "enum": [
+          "exempt",
+          "non_exempt",
+          null
+        ]
+      },
+      "PayPeriod": {
+        "enum": [
+          "biweekly",
+          "daily",
+          "monthly",
+          "quarterly",
+          "semimonthly",
+          "weekly",
+          "yearly",
+          null
+        ]
+      },
+      "SpecialAccountType": {
+        "enum": [
+          "AccountsPayable",
+          "AccountsReceivable",
+          "CondenseItemAdjustmentExpenses",
+          "CostOfGoodsSold",
+          "DirectDepositLiabilities",
+          "Estimates",
+          "ExchangeGainLoss",
+          "InventoryAssets",
+          "ItemReceiptAccount",
+          "OpeningBalanceEquity",
+          "PayrollExpenses",
+          "PayrollLiabilities",
+          "PettyCash",
+          "PurchaseOrders",
+          "ReconciliationDifferences",
+          "RetainedEarnings",
+          "SalesOrders",
+          "SalesTaxPayable",
+          "UncategorizedExpenses",
+          "UncategorizedIncome",
+          "UndepositedFunds",
+          null
+        ]
+      },
+      "SpecialItemType": {
+        "enum": [
+          "FinanceCharge",
+          "ReimbursableExpenseGroup",
+          "ReimbursableExpenseSubtotal",
+          null
+        ]
+      },
+      "TransactionMode": {
+        "enum": [
+          "CardNotPresent",
+          "CardPresent",
+          null
+        ]
+      },
+      "UseTimedataToCreatePaychecks": {
+        "enum": [
+          "does_not_use_time_date",
+          "not_set",
+          "uses_time_data",
+          null
+        ]
+      },
+      "UsVeteranStatus": {
+        "enum": [
+          "veteran",
+          "non_veteran",
+          null
+        ]
       }
     },
     "securitySchemes": {

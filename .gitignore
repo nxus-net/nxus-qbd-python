@@ -1,6 +1,8 @@
 # Temporary files
 .tmp/
 REWRITE_PROMPT.md
+2026-05-17-232334-this-session-is-being-continued-from-a-previous-c.txt
+continue-codex-session.md
 
 # Byte-compiled / optimized
 __pycache__/
