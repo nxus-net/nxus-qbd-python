@@ -1,5 +1,7 @@
 """Nxus QuickBooks Desktop Python SDK."""
 
+from importlib.metadata import PackageNotFoundError, version as distribution_version
+
 from ._transport import NxusLogger
 from .client import AsyncNxusClient, NxusClient
 from .config import (
@@ -11,7 +13,11 @@ from .config import (
 from .errors import NxusApiError, NxusApiErrorCode, throw_if_error
 from .pagination import CursorPage, PaginationError
 
-__version__ = "0.6.2"
+try:
+    __version__ = distribution_version("nxus-qbd")
+except PackageNotFoundError:
+    __version__ = "0+unknown"
+
 __all__ = [
     "NxusClient",
     "AsyncNxusClient",
