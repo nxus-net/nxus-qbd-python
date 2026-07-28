@@ -18,6 +18,8 @@ import pytest
 from nxus_qbd.models import Vendor
 from nxus_qbd.resources import SYNC_RESOURCES
 
+from ._model_payloads import complete_model_payload
+
 
 class FakeSyncTransport:
     """Records every request and returns a queued response."""
@@ -55,7 +57,7 @@ def _wire_vendor(**overrides: Any) -> dict:
         "phone": "555-0100",
     }
     base.update(overrides)
-    return base
+    return complete_model_payload(Vendor, **base)
 
 
 def test_retrieve_returns_typed_vendor(vendors):
@@ -80,12 +82,8 @@ def test_create_accepts_pydantic_model(vendors):
     resource, transport = vendors
     transport.queue(_wire_vendor(companyName="Foo LLC"))
 
-    payload = Vendor(
-        id="placeholder",
-        createdAt="2025-01-01T00:00:00Z",
-        updatedAt="2025-01-01T00:00:00Z",
-        revisionNumber="1",
-        companyName="Foo LLC",
+    payload = Vendor.model_validate(
+        _wire_vendor(id="placeholder", companyName="Foo LLC")
     )
     result = resource.create(vendor=payload, connection_id="conn-1")
 
@@ -134,12 +132,15 @@ def test_create_accepts_snake_case_kwargs(vendors):
 
 
 def test_vendor_model_accepts_snake_case_fields():
-    vendor = Vendor(
-        id="80000001-1234567890",
-        created_at="2025-01-01T00:00:00Z",
-        updated_at="2025-01-01T00:00:00Z",
-        revision_number="1",
-        company_name="Snake Case LLC",
+    vendor = Vendor.model_validate(
+        complete_model_payload(
+            Vendor,
+            id="80000001-1234567890",
+            created_at="2025-01-01T00:00:00Z",
+            updated_at="2025-01-01T00:00:00Z",
+            revision_number="1",
+            company_name="Snake Case LLC",
+        )
     )
 
     assert vendor.company_name == "Snake Case LLC"
@@ -186,12 +187,8 @@ def test_update_serializes_pydantic_model(vendors):
     resource, transport = vendors
     transport.queue(_wire_vendor(companyName="Renamed"))
 
-    payload = Vendor(
-        id="80000001-1234567890",
-        createdAt="2025-01-01T00:00:00Z",
-        updatedAt="2025-01-01T00:00:00Z",
-        revisionNumber="2",
-        companyName="Renamed",
+    payload = Vendor.model_validate(
+        _wire_vendor(revisionNumber="2", companyName="Renamed")
     )
     result = resource.update("80000001-1234567890", vendor=payload, connection_id="conn-1")
 

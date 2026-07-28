@@ -7,6 +7,9 @@ import pytest
 
 from nxus_qbd.resources import ASYNC_RESOURCES, SYNC_RESOURCES, _RESOURCE_DEFS
 
+from ._model_payloads import complete_model_payload
+from nxus_qbd.models import Vendor, VoidResponse
+
 
 EXPECTED_VOID_RESOURCES = [
     "ar_refund_credit_cards",
@@ -65,26 +68,28 @@ class QueuedAsyncTransport:
 
 
 def _wire_vendor(vendor_id: str, company_name: str = "Acme") -> dict[str, Any]:
-    return {
-        "id": vendor_id,
-        "objectType": "qbd_vendor",
-        "name": company_name,
-        "createdAt": "2025-01-01T00:00:00Z",
-        "updatedAt": "2025-01-01T00:00:00Z",
-        "revisionNumber": "1",
-        "companyName": company_name,
-        "phone": "555-0100",
-    }
+    return complete_model_payload(
+        Vendor,
+        id=vendor_id,
+        objectType="qbd_vendor",
+        name=company_name,
+        createdAt="2025-01-01T00:00:00Z",
+        updatedAt="2025-01-01T00:00:00Z",
+        revisionNumber="1",
+        companyName=company_name,
+        phone="555-0100",
+    )
 
 
 def _wire_void_response(object_type: str = "Invoice") -> dict[str, Any]:
-    return {
-        "id": "txn_123",
-        "objectType": object_type,
-        "status": "voided",
-        "voided": True,
-        "refNumber": "REF-123",
-    }
+    return complete_model_payload(
+        VoidResponse,
+        id="txn_123",
+        objectType=object_type,
+        status="voided",
+        voided=True,
+        refNumber="REF-123",
+    )
 
 
 def test_void_resource_registry_matches_supported_qbd_transaction_endpoints():

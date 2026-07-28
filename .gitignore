@@ -68,6 +68,8 @@ temp/
 AGENTS.md
 CLAUDE.md
 spec/openapi_old.json
+spec/grouping.json
+spec/openapi.json
 
 tests/unit/test_vendor_pydantic_wiring.py
 tests/unit/test_generate_schema_normalization.py

@@ -351,6 +351,16 @@ class NxusClient:
         return self._resources["special_items"]
 
     @property
+    def custom_field_definitions(self) -> Any:
+        """Custom field definitions (DataExtDef) — create/list/update/delete."""
+        return self._resources["custom_field_definitions"]
+
+    @property
+    def custom_fields(self) -> Any:
+        """Custom field values (DataExt) — create/update/delete."""
+        return self._resources["custom_fields"]
+
+    @property
     def terms(self) -> Any:
         """Terms — full CRUD."""
         return self._resources["terms"]
@@ -785,6 +795,16 @@ class AsyncNxusClient:
     def special_items(self) -> Any:
         """Special Items — create only."""
         return self._resources["special_items"]
+
+    @property
+    def custom_field_definitions(self) -> Any:
+        """Custom field definitions (DataExtDef) — create/list/update/delete."""
+        return self._resources["custom_field_definitions"]
+
+    @property
+    def custom_fields(self) -> Any:
+        """Custom field values (DataExt) — create/update/delete."""
+        return self._resources["custom_fields"]
 
     @property
     def terms(self) -> Any:

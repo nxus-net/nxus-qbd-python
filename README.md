@@ -2,6 +2,8 @@
 
 Official Python SDK for the [Nxus](https://nx-us.net/docs) QuickBooks Desktop API.
 
+Requires Python 3.12 or newer.
+
 ## Installation
 
 ```bash
@@ -206,7 +208,7 @@ All QuickBooks Desktop resources are available as properties:
 | **Items** | `items`, `inventory_items`, `item_discounts`, `item_fixed_assets`, `item_groups`, `item_inventory_assemblies`, `item_non_inventory`, `item_other_charges`, `item_payments`, `item_sales_tax`, `item_sales_tax_groups`, `service_items`, `item_subtotals` |
 | **Payroll** | `payroll_item_non_wages`, `payroll_item_wages`, `workers_comp_codes` |
 | **Reports** | `reports.retrieve_general_detail()`, `reports.retrieve_aging()`, etc. |
-| **Platform** | `auth_sessions`, `connections` |
+| **Core** | `auth_sessions`, `connections` |
 
 ## License
 

@@ -145,8 +145,12 @@ def _parse_one(body: Any, model: Optional[type]) -> Any:
 
 
 def _parse_list_items(body: Any, model: Optional[type]) -> Any:
-    """Parse the `data: [...]` array in a list response through a model."""
-    if model is None or not isinstance(body, dict):
+    """Parse paginated or flat list response items through a model."""
+    if model is None:
+        return body
+    if isinstance(body, list):
+        return [model.model_validate(it) if isinstance(it, dict) else it for it in body]
+    if not isinstance(body, dict):
         return body
     items = body.get("data")
     if not isinstance(items, list):
@@ -875,6 +879,178 @@ class AsyncSpecialItems(_AsyncResourceBase):
 
 SYNC_RESOURCES["special_items"] = SyncSpecialItems
 ASYNC_RESOURCES["special_items"] = AsyncSpecialItems
+
+
+# ---------------------------------------------------------------------------
+# Custom Fields (DataExt) — definitions and values
+#
+# Two route families that do NOT follow the generic CRUD shape (no ``/{id}``
+# path — the target is carried in the JSON body). Definitions list via a plain
+# ``GET`` on the base route (flat array, not paginated); create/update use POST
+# (update on a ``/update`` sub-path); delete is a DELETE with a JSON body. These
+# are hand-written, mirroring the TypeScript ``client.customFieldDefinitions`` /
+# ``client.customFields`` resources.
+# ---------------------------------------------------------------------------
+
+_CUSTOM_FIELD_DEFINITIONS_PATH = "/api/v1/custom-field-definitions"
+_CUSTOM_FIELDS_PATH = "/api/v1/custom-fields"
+
+
+def _custom_field_def_model():
+    from nxus_qbd.models import DataExtDef
+    return DataExtDef
+
+
+def _custom_field_value_model():
+    from nxus_qbd.models import DataExtDataExt
+    return DataExtDataExt
+
+
+class SyncCustomFieldDefinitions(_SyncResourceBase):
+    """Manage custom field *definitions* (the schema). DataExtDef in QBXML."""
+
+    _list_path = _CUSTOM_FIELD_DEFINITIONS_PATH
+    _singular_path = ""
+    _create_path = _CUSTOM_FIELD_DEFINITIONS_PATH
+
+    def create(self, **kwargs: Any) -> Any:
+        connection_id, headers, timeout = _extract_options(kwargs)
+        body = _serialize_body(kwargs)
+        kw = _build_request_kwargs(connection_id, headers, timeout, json=body)
+        resp = self._t.request("POST", _CUSTOM_FIELD_DEFINITIONS_PATH, **kw)
+        return _parse_one(resp, _custom_field_def_model())
+
+    def list(self, **kwargs: Any) -> Any:
+        """List definitions (flat array). Optional filters: ``owner_ids`` and
+        ``assign_to_objects`` (lists), mapped to the ``OwnerIds`` /
+        ``AssignToObjects`` repeated query params."""
+        connection_id, headers, timeout = _extract_options(kwargs)
+        owner_ids = kwargs.pop("owner_ids", None)
+        assign_to_objects = kwargs.pop("assign_to_objects", None)
+        params: Dict[str, Any] = {}
+        if owner_ids is not None:
+            params["OwnerIds"] = owner_ids
+        if assign_to_objects is not None:
+            params["AssignToObjects"] = assign_to_objects
+        kw = _build_request_kwargs(connection_id, headers, timeout, params=params or None)
+        body = self._t.request("GET", _CUSTOM_FIELD_DEFINITIONS_PATH, **kw)
+        return _parse_list_items(body, _custom_field_def_model())
+
+    def update(self, **kwargs: Any) -> Any:
+        connection_id, headers, timeout = _extract_options(kwargs)
+        body = _serialize_body(kwargs)
+        kw = _build_request_kwargs(connection_id, headers, timeout, json=body)
+        resp = self._t.request("POST", _CUSTOM_FIELD_DEFINITIONS_PATH + "/update", **kw)
+        return _parse_one(resp, _custom_field_def_model())
+
+    def delete(self, **kwargs: Any) -> Any:
+        connection_id, headers, timeout = _extract_options(kwargs)
+        body = _serialize_body(kwargs)
+        kw = _build_request_kwargs(connection_id, headers, timeout, json=body)
+        return self._t.request("DELETE", _CUSTOM_FIELD_DEFINITIONS_PATH, **kw)
+
+
+class AsyncCustomFieldDefinitions(_AsyncResourceBase):
+    """Async custom field *definitions* (the schema). DataExtDef in QBXML."""
+
+    _list_path = _CUSTOM_FIELD_DEFINITIONS_PATH
+    _singular_path = ""
+    _create_path = _CUSTOM_FIELD_DEFINITIONS_PATH
+
+    async def create(self, **kwargs: Any) -> Any:
+        connection_id, headers, timeout = _extract_options(kwargs)
+        body = _serialize_body(kwargs)
+        kw = _build_request_kwargs(connection_id, headers, timeout, json=body)
+        resp = await self._t.request("POST", _CUSTOM_FIELD_DEFINITIONS_PATH, **kw)
+        return _parse_one(resp, _custom_field_def_model())
+
+    async def list(self, **kwargs: Any) -> Any:
+        connection_id, headers, timeout = _extract_options(kwargs)
+        owner_ids = kwargs.pop("owner_ids", None)
+        assign_to_objects = kwargs.pop("assign_to_objects", None)
+        params: Dict[str, Any] = {}
+        if owner_ids is not None:
+            params["OwnerIds"] = owner_ids
+        if assign_to_objects is not None:
+            params["AssignToObjects"] = assign_to_objects
+        kw = _build_request_kwargs(connection_id, headers, timeout, params=params or None)
+        body = await self._t.request("GET", _CUSTOM_FIELD_DEFINITIONS_PATH, **kw)
+        return _parse_list_items(body, _custom_field_def_model())
+
+    async def update(self, **kwargs: Any) -> Any:
+        connection_id, headers, timeout = _extract_options(kwargs)
+        body = _serialize_body(kwargs)
+        kw = _build_request_kwargs(connection_id, headers, timeout, json=body)
+        resp = await self._t.request("POST", _CUSTOM_FIELD_DEFINITIONS_PATH + "/update", **kw)
+        return _parse_one(resp, _custom_field_def_model())
+
+    async def delete(self, **kwargs: Any) -> Any:
+        connection_id, headers, timeout = _extract_options(kwargs)
+        body = _serialize_body(kwargs)
+        kw = _build_request_kwargs(connection_id, headers, timeout, json=body)
+        return await self._t.request("DELETE", _CUSTOM_FIELD_DEFINITIONS_PATH, **kw)
+
+
+class SyncCustomFields(_SyncResourceBase):
+    """Assign / change / clear custom field *values* on a target. DataExt."""
+
+    _list_path = _CUSTOM_FIELDS_PATH
+    _singular_path = ""
+    _create_path = _CUSTOM_FIELDS_PATH
+
+    def create(self, **kwargs: Any) -> Any:
+        connection_id, headers, timeout = _extract_options(kwargs)
+        body = _serialize_body(kwargs)
+        kw = _build_request_kwargs(connection_id, headers, timeout, json=body)
+        resp = self._t.request("POST", _CUSTOM_FIELDS_PATH, **kw)
+        return _parse_one(resp, _custom_field_value_model())
+
+    def update(self, **kwargs: Any) -> Any:
+        connection_id, headers, timeout = _extract_options(kwargs)
+        body = _serialize_body(kwargs)
+        kw = _build_request_kwargs(connection_id, headers, timeout, json=body)
+        resp = self._t.request("POST", _CUSTOM_FIELDS_PATH + "/update", **kw)
+        return _parse_one(resp, _custom_field_value_model())
+
+    def delete(self, **kwargs: Any) -> Any:
+        connection_id, headers, timeout = _extract_options(kwargs)
+        body = _serialize_body(kwargs)
+        kw = _build_request_kwargs(connection_id, headers, timeout, json=body)
+        return self._t.request("DELETE", _CUSTOM_FIELDS_PATH, **kw)
+
+
+class AsyncCustomFields(_AsyncResourceBase):
+    """Async custom field *values* on a target. DataExt in QBXML."""
+
+    _list_path = _CUSTOM_FIELDS_PATH
+    _singular_path = ""
+    _create_path = _CUSTOM_FIELDS_PATH
+
+    async def create(self, **kwargs: Any) -> Any:
+        connection_id, headers, timeout = _extract_options(kwargs)
+        body = _serialize_body(kwargs)
+        kw = _build_request_kwargs(connection_id, headers, timeout, json=body)
+        resp = await self._t.request("POST", _CUSTOM_FIELDS_PATH, **kw)
+        return _parse_one(resp, _custom_field_value_model())
+
+    async def update(self, **kwargs: Any) -> Any:
+        connection_id, headers, timeout = _extract_options(kwargs)
+        body = _serialize_body(kwargs)
+        kw = _build_request_kwargs(connection_id, headers, timeout, json=body)
+        resp = await self._t.request("POST", _CUSTOM_FIELDS_PATH + "/update", **kw)
+        return _parse_one(resp, _custom_field_value_model())
+
+    async def delete(self, **kwargs: Any) -> Any:
+        connection_id, headers, timeout = _extract_options(kwargs)
+        body = _serialize_body(kwargs)
+        kw = _build_request_kwargs(connection_id, headers, timeout, json=body)
+        return await self._t.request("DELETE", _CUSTOM_FIELDS_PATH, **kw)
+
+
+SYNC_RESOURCES["custom_field_definitions"] = SyncCustomFieldDefinitions
+ASYNC_RESOURCES["custom_field_definitions"] = AsyncCustomFieldDefinitions
+SYNC_RESOURCES["custom_fields"] = SyncCustomFields
+ASYNC_RESOURCES["custom_fields"] = AsyncCustomFields
 
 
 # ---------------------------------------------------------------------------

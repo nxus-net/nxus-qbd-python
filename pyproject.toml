@@ -4,16 +4,22 @@ build-backend = "hatchling.build"
 
 [project]
 name = "nxus-qbd"
-version = "0.6.2"
+version = "0.7.0"
 description = "Official Python SDK for the Nxus QuickBooks Desktop API"
 readme = "README.md"
 license = "MIT"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 dependencies = [
     "httpx>=0.25.0",
     "pydantic>=2.0",
 ]
 keywords = ["nxus", "quickbooks", "quickbooks-desktop", "qbd", "sdk", "api", "accounting"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
 
 [project.urls]
 Homepage = "https://nxus.app"
@@ -27,9 +33,10 @@ codegen = ["datamodel-code-generator[http]>=0.26.0"]
 [tool.datamodel-codegen]
 input-file-type = "openapi"
 output-model-type = "pydantic_v2.BaseModel"
-target-python-version = "3.10"
+target-python-version = "3.12"
 use-standard-collections = true
 use-union-operator = true
+strict-nullable = true
 field-constraints = true
 capitalise-enum-members = true
 snake-case-field = true
