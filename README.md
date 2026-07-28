@@ -210,6 +210,33 @@ All QuickBooks Desktop resources are available as properties:
 | **Reports** | `reports.retrieve_general_detail()`, `reports.retrieve_aging()`, etc. |
 | **Core** | `auth_sessions`, `connections` |
 
+
+## Custom fields and data extensions
+
+QuickBooks Desktop uses the same underlying mechanism for both UI-visible custom fields and application-only integration data:
+
+| QuickBooks concept | SDK/API name | Purpose |
+|---|---|---|
+| Data extension definition | `DataExtDef` / custom field definition | Describes a field's owner, name, data type, and supported object types. |
+| Data extension value | `DataExt` / custom field value | Stores the field's value on one specific QuickBooks list object, transaction, or transaction line. |
+
+A definition must exist before a value can be written. Definitions are identified by `ownerId + name`; values add the specific QuickBooks target to that composite identity. QuickBooks may omit `DataExtID` for private definitions, so SDK consumers must allow `DataExtDef.id` to be `null`.
+
+The `ownerId` determines how a definition is used:
+
+- **Public custom field:** use `"0"`. The field is visible in the QuickBooks UI and is limited to `STR255TYPE`. QuickBooks does not accept `AssignToObject` in the public definition request, so the backend omits it from the generated QBXML.
+- **Private data extension:** use an application-owned GUID such as `"{C3AA84E0-D242-47AB-A12B-3EDA3A2590A2}"`. The field is available only to applications that know that GUID and can be assigned to supported list or transaction object types. The GUID does not require separate registration with QuickBooks.
+
+The normal workflow is:
+
+1. Create the `DataExtDef`.
+2. Create a `DataExt` value using the same `ownerId` and field name, plus a target such as a Customer `ListID`, an Invoice `TxnID`, or a transaction-line `TxnLineID`.
+3. Update or delete the value using that same composite identity.
+4. Delete the definition only after its values are no longer needed.
+
+Public fields are typically used for information users should see or edit in QuickBooks. Private extensions are commonly used for external-system identifiers, synchronization or verification markers, workflow state, migration metadata, and other integration data that should not appear in the QuickBooks UI.
+
+
 ## License
 
 MIT
