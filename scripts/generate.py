@@ -104,10 +104,31 @@ def _normalize_nullable_allof_arrays(node):
             _normalize_nullable_allof_arrays(value)
 
 
+def _strip_string_constraints_from_temporal_schemas(node):
+    """Remove constraints that Pydantic cannot apply after parsing dates.
+
+    OpenAPI date and date-time values are encoded as strings, so the source
+    schema can contain string-only constraints. datamodel-code-generator turns
+    those values into ``date``/``datetime`` fields but retains the constraints,
+    causing Pydantic to call ``len()`` on temporal objects during validation.
+    """
+    if isinstance(node, dict):
+        if node.get("type") == "string" and node.get("format") in {"date", "date-time"}:
+            for constraint in ("minLength", "maxLength", "pattern"):
+                node.pop(constraint, None)
+
+        for value in node.values():
+            _strip_string_constraints_from_temporal_schemas(value)
+    elif isinstance(node, list):
+        for value in node:
+            _strip_string_constraints_from_temporal_schemas(value)
+
+
 def prepare_codegen_spec(spec_file: Path) -> Path:
     """Write a normalized OpenAPI copy for datamodel-code-generator."""
     spec = json.loads(spec_file.read_text(encoding="utf-8"))
     _normalize_nullable_allof_arrays(spec)
+    _strip_string_constraints_from_temporal_schemas(spec)
     MODELS_DIR.mkdir(parents=True, exist_ok=True)
     CODEGEN_SPEC_FILE.write_text(json.dumps(spec, separators=(",", ":")), encoding="utf-8")
     return CODEGEN_SPEC_FILE

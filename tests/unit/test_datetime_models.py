@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import date, datetime
 
-from nxus_qbd.models import AdditionalNote, Check
+from nxus_qbd.models import AdditionalNote, Check, CreateBillRequest
 
 from ._model_payloads import complete_model_payload
 
@@ -34,3 +34,15 @@ def test_check_accepts_date_only_transaction_date():
 
     assert isinstance(check.transaction_date, date)
     assert check.transaction_date == date(2026, 1, 30)
+
+
+def test_create_bill_accepts_date_with_source_string_length_constraint():
+    bill = CreateBillRequest.model_validate(
+        {
+            "vendorId": "vendor-1",
+            "transactionDate": "2026-04-27",
+        }
+    )
+
+    assert isinstance(bill.transaction_date, date)
+    assert bill.transaction_date == date(2026, 4, 27)
