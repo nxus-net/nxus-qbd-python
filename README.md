@@ -224,15 +224,19 @@ A definition must exist before a value can be written. Definitions are identifie
 
 The `ownerId` determines how a definition is used:
 
-- **Public custom field:** use `"0"`. The field is visible in the QuickBooks UI and is limited to `STR255TYPE`. QuickBooks does not accept `AssignToObject` in the public definition request, so the backend omits it from the generated QBXML.
-- **Private data extension:** use an application-owned GUID such as `"{C3AA84E0-D242-47AB-A12B-3EDA3A2590A2}"`. The field is available only to applications that know that GUID and can be assigned to supported list or transaction object types. The GUID does not require separate registration with QuickBooks.
+- **Public custom field:** use `"0"`. The field is visible in the QuickBooks UI, its type must be `STR255TYPE`, and `assignToObjects` must contain at least one of `Customer`, `Employee`, `Item`, or `Vendor`. Public definitions cannot be deleted through the SDK.
+- **Private data extension:** use an application-owned GUID such as `"{C3AA84E0-D242-47AB-A12B-3EDA3A2590A2}"`. The field is available only to applications that know that GUID. `assignToObjects` is optional; when supplied, it may contain any object type supported by QuickBooks for `DataExtDefAdd`. The GUID does not require separate registration with QuickBooks.
+
+The `assignToObjects` property is therefore optional in the SDK request type, but conditionally required by QuickBooks for public definitions. QuickBooks accepts a private definition with the property omitted and returns that definition with an empty `assignToObjects` list. Supply the intended object assignments before relying on `DataExt` value writes for those object types.
+
 
 The normal workflow is:
 
 1. Create the `DataExtDef`.
 2. Create a `DataExt` value using the same `ownerId` and field name, plus a target such as a Customer `ListID`, an Invoice `TxnID`, or a transaction-line `TxnLineID`.
 3. Update or delete the value using that same composite identity.
-4. Delete the definition only after its values are no longer needed.
+4. Delete a private definition only after its values are no longer needed. Public definitions must be managed in the QuickBooks UI because QuickBooks does not support deleting them through `DataExtDefDel`.
+
 
 Public fields are typically used for information users should see or edit in QuickBooks. Private extensions are commonly used for external-system identifiers, synchronization or verification markers, workflow state, migration metadata, and other integration data that should not appear in the QuickBooks UI.
 
