@@ -1,0 +1,11 @@
+# Pinned spec artifacts, produced by the nxus-sdks pipeline — collapsed by
+# default in GitHub reviews. openapi.json is ~10 MB; read the nxus-sdks
+# spec/CHANGES.md for the human-readable diff instead. Never hand-edit these;
+# re-pin them upstream.
+#
+# `linguist-generated=true` collapses the diff but keeps it textual, so local
+# `git diff` and regen-check's `git diff --exit-code` still work normally.
+#
+# nxus_qbd/models/ is generated too, but it is gitignored, so it never reaches
+# a diff in the first place.
+spec/*.json    linguist-generated=true
