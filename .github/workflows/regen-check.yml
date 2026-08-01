@@ -1,0 +1,60 @@
+# Guards the pinned-spec contract: regenerating from spec/openapi.json must
+# reproduce the committed tracked output exactly.
+#
+# nxus_qbd/models/ is generated and gitignored, so this cannot diff the models
+# themselves — ci.yml covers those by regenerating and running the suite. What
+# this adds is drift detection on the tracked artifacts a regen also rewrites:
+# nxus_qbd/resources.py (the route registry, synced from the spec) and spec/.
+#
+# Needs no network and no secrets — the spec is pinned in the repo.
+name: Regen check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  regen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: uv pip install -e ".[dev,codegen]" --system
+
+      - name: Regenerate from the pinned spec
+        run: python scripts/generate.py
+
+      - name: Verify tracked output is unchanged
+        run: |
+          if ! git diff --exit-code; then
+            echo "::error::Regenerating from spec/openapi.json changed tracked files."
+            echo "Run 'uv run --extra codegen python scripts/generate.py' and commit the result."
+            echo "If the spec itself needs to change, re-pin it in the nxus-sdks repo — never"
+            echo "hand-edit spec/openapi.json or spec/grouping.json."
+            exit 1
+          fi
+
+      # The pinned spec must stay in step with the placement artifact, or
+      # TypeScript and Python lay their models out differently.
+      - name: Verify grouping.json matches the pinned spec
+        run: |
+          python - <<'PY'
+          import hashlib, json, pathlib, sys
+          spec = pathlib.Path("spec/openapi.json").read_bytes()
+          grouping = json.loads(pathlib.Path("spec/grouping.json").read_text())
+          actual, expected = hashlib.sha256(spec).hexdigest(), grouping["generatedFrom"]
+          if actual != expected:
+              sys.exit(
+                  f"::error::grouping.json was generated from a different spec.\n"
+                  f"  grouping.generatedFrom: {expected}\n"
+                  f"  sha256(openapi.json):   {actual}\n"
+                  "Re-run the nxus-sdks spec pipeline so both artifacts are synced together."
+              )
+          print("grouping.json matches the pinned spec.")
+          PY
