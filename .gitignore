@@ -68,8 +68,10 @@ temp/
 AGENTS.md
 CLAUDE.md
 spec/openapi_old.json
-spec/grouping.json
-spec/openapi.json
+# spec/openapi.json + spec/grouping.json are the pinned generator inputs and are
+# committed on purpose — nxus_qbd/models/ is generated, so a checkout cannot
+# rebuild itself without them. Only the unpinned live fetch is ignored.
+spec/openapi.live.json
 
 tests/unit/test_vendor_pydantic_wiring.py
 tests/unit/test_generate_schema_normalization.py

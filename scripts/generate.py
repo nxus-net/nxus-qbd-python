@@ -3,19 +3,24 @@
 Generate typed Pydantic v2 models from the Nxus OpenAPI spec.
 
 Pipeline:
-    1. Fetch spec (URL or local file)
+    1. Load the pinned spec (spec/openapi.json) — or fetch one with --url
     2. Run datamodel-code-generator → single-file preview
     3. Run scripts/split_models.py → split into core/ + qbd/ subpackages
 
+spec/openapi.json is normalized and overlaid upstream by the nxus-sdks spec
+pipeline and committed here, so a standalone checkout regenerates identically.
+A --url fetch is the exception: it writes spec/openapi.live.json (leaving the
+pinned artifact intact) and is NOT normalized, so its output can differ.
+
 Usage:
-    # From live production API
+    # From the pinned spec (default)
     python scripts/generate.py
 
-    # From local dev server (TLS cert bypass is automatic for localhost)
-    python scripts/generate.py --url https://localhost:7242/openapi/v1.json
+    # From a different local spec file
+    python scripts/generate.py --file /path/to/openapi.json
 
-    # From a local spec file
-    python scripts/generate.py --file spec/openapi.json
+    # From a live server, unpinned (TLS bypass is automatic for localhost)
+    python scripts/generate.py --url https://api.nx-us.net/openapi/v1.json
 """
 
 import argparse
@@ -30,6 +35,7 @@ PREVIEW_FILE = MODELS_DIR / "_preview"
 SPLIT_SCRIPT = REPO_ROOT / "scripts" / "split_models.py"
 RESOURCE_REGISTRY_SCRIPT = REPO_ROOT / "scripts" / "generate_resource_registry.py"
 CODEGEN_SPEC_FILE = MODELS_DIR / "_codegen_openapi.json"
+PINNED_SPEC_FILE = REPO_ROOT / "spec" / "openapi.json"
 DEFAULT_URL = "https://api.nx-us.net/openapi/v1.json"
 LOCAL_FALLBACK_URL = "https://localhost:7242/openapi/v1.json"
 
@@ -67,41 +73,16 @@ def download_spec(url: str, *, allow_default_fallback: bool = False) -> Path:
         else:
             raise
 
+    # Never overwrite the pinned artifact — it is normalized upstream and a
+    # raw live spec dropped in its place silently changes generated output.
     spec_dir = REPO_ROOT / "spec"
     spec_dir.mkdir(exist_ok=True)
-    spec_file = spec_dir / "openapi.json"
+    spec_file = spec_dir / "openapi.live.json"
     spec_file.write_bytes(content)
-    print(f"Downloaded {len(content):,} bytes from {source_url} → {spec_file}\n")
+    print(f"Downloaded {len(content):,} bytes from {source_url} → {spec_file}")
+    print("[warn] Live spec is not normalized/overlaid — regenerate the pinned")
+    print("       spec via the nxus-sdks pipeline before committing models.\n")
     return spec_file
-
-
-def _normalize_nullable_allof_arrays(node):
-    """Inline `allOf: [{type: array, ...}]` schemas before Python model generation.
-
-    The backend OpenAPI emitter sometimes wraps array properties as
-    `allOf: [{type: array, ...}]` (with or without `nullable: true`).
-    datamodel-code-generator treats that shape as an empty wrapper model,
-    so live array responses fail Pydantic validation. Inlining the array
-    schema produces the expected `list[T]` / `list[T] | None` annotations.
-    """
-    if isinstance(node, dict):
-        all_of = node.get("allOf")
-        if (
-            isinstance(all_of, list)
-            and len(all_of) == 1
-            and isinstance(all_of[0], dict)
-            and all_of[0].get("type") == "array"
-        ):
-            array_schema = all_of[0]
-            node.pop("allOf")
-            for key, value in array_schema.items():
-                node.setdefault(key, value)
-
-        for value in node.values():
-            _normalize_nullable_allof_arrays(value)
-    elif isinstance(node, list):
-        for value in node:
-            _normalize_nullable_allof_arrays(value)
 
 
 def _strip_string_constraints_from_temporal_schemas(node):
@@ -125,9 +106,13 @@ def _strip_string_constraints_from_temporal_schemas(node):
 
 
 def prepare_codegen_spec(spec_file: Path) -> Path:
-    """Write a normalized OpenAPI copy for datamodel-code-generator."""
+    """Write a datamodel-code-generator-specific copy of the spec.
+
+    Composition-wrapper inlining now happens upstream in the nxus-sdks spec
+    pipeline (shared by all three SDKs). What remains here is the one
+    adjustment that is specific to this generator's Pydantic output.
+    """
     spec = json.loads(spec_file.read_text(encoding="utf-8"))
-    _normalize_nullable_allof_arrays(spec)
     _strip_string_constraints_from_temporal_schemas(spec)
     MODELS_DIR.mkdir(parents=True, exist_ok=True)
     CODEGEN_SPEC_FILE.write_text(json.dumps(spec, separators=(",", ":")), encoding="utf-8")
@@ -139,23 +124,35 @@ def main() -> None:
     source = parser.add_mutually_exclusive_group()
     source.add_argument(
         "--url",
-        default=DEFAULT_URL,
-        help=f"URL to fetch the OpenAPI spec from (default: {DEFAULT_URL})",
+        nargs="?",
+        const=DEFAULT_URL,
+        help=(
+            "Fetch the spec from a URL instead of using the pinned "
+            f"spec/openapi.json (bare --url means {DEFAULT_URL})"
+        ),
     )
     source.add_argument(
         "--file",
         type=Path,
-        help="Path to a local OpenAPI spec file",
+        help=f"Path to a local OpenAPI spec file (default: {PINNED_SPEC_FILE.relative_to(REPO_ROOT)})",
     )
     args = parser.parse_args()
 
-    # Resolve spec file — download if URL provided
+    # Resolve spec file — the pinned artifact unless a source was requested.
     if args.file:
         spec_file = args.file
-    else:
+    elif args.url:
         spec_file = download_spec(
             args.url,
             allow_default_fallback=args.url == DEFAULT_URL,
+        )
+    else:
+        spec_file = PINNED_SPEC_FILE
+
+    if not spec_file.exists():
+        raise SystemExit(
+            f"Spec not found: {spec_file}\n"
+            "The pinned spec ships with the repo; restore it or pass --file/--url."
         )
 
     # Clean previous preview artifacts

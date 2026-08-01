@@ -3,7 +3,9 @@
 Split a single-file datamodel-codegen output into per-tag modules.
 
 Reads:
-    spec/openapi.json           — to learn which schemas belong to which tag
+    spec/grouping.json          — which package/module each schema belongs to
+                                  (derived upstream by the root spec pipeline;
+                                  never hand-edit it)
     nxus_qbd/models/_preview    — single-file generated Pydantic models
 
 Writes:
@@ -16,80 +18,17 @@ from __future__ import annotations
 
 import ast
 import json
-import re
 import shutil
 from collections import defaultdict
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-SPEC = REPO / "spec" / "openapi.json"
+GROUPING = REPO / "spec" / "grouping.json"
 SOURCE = REPO / "nxus_qbd" / "models" / "_preview"
 OUT_DIR = REPO / "nxus_qbd" / "models"
 CORE_DIR = OUT_DIR / "core"
 QBD_DIR = OUT_DIR / "qbd"
 DATETIME_HELPER = OUT_DIR / "_datetime.py"
-
-# Tags that live under models/core/ (platform/connection/auth), not QBD resources.
-CORE_TAGS = {"Connections", "AuthSession", "QwcAuthSetup"}
-
-
-import keyword
-
-
-def tag_to_module(tag: str) -> str:
-    """Convert 'VendorCredit' → 'vendor_credit'. Suffix Python keywords with '_'."""
-    s = re.sub(r"(?<!^)(?=[A-Z])", "_", tag).lower()
-    if keyword.iskeyword(s):
-        s = s + "_"
-    return s
-
-
-def collect_schema_refs(node, out: set[str]) -> None:
-    """Walk a JSON object collecting every $ref schema name."""
-    if isinstance(node, dict):
-        ref = node.get("$ref")
-        if isinstance(ref, str) and ref.startswith("#/components/schemas/"):
-            out.add(ref.rsplit("/", 1)[-1])
-        for v in node.values():
-            collect_schema_refs(v, out)
-    elif isinstance(node, list):
-        for v in node:
-            collect_schema_refs(v, out)
-
-
-def transitive_refs(seed: set[str], schemas: dict) -> set[str]:
-    """Expand a set of schema names to include everything they reference."""
-    seen: set[str] = set()
-    stack = list(seed)
-    while stack:
-        name = stack.pop()
-        if name in seen or name not in schemas:
-            continue
-        seen.add(name)
-        refs: set[str] = set()
-        collect_schema_refs(schemas[name], refs)
-        stack.extend(refs - seen)
-    return seen
-
-
-def build_tag_index(spec: dict) -> dict[str, set[str]]:
-    """For each tag, return the set of schemas (transitively) used by its operations."""
-    schemas = spec.get("components", {}).get("schemas", {})
-    tag_to_schemas: dict[str, set[str]] = defaultdict(set)
-    for path, ops in spec.get("paths", {}).items():
-        if not isinstance(ops, dict):
-            continue
-        for method, op in ops.items():
-            if not isinstance(op, dict):
-                continue
-            tags = op.get("tags") or []
-            seed: set[str] = set()
-            collect_schema_refs(op, seed)
-            for t in tags:
-                tag_to_schemas[t].update(seed)
-    # Expand transitively
-    return {t: transitive_refs(s, schemas) for t, s in tag_to_schemas.items()}
-
 
 def parse_classes(source_file: Path) -> tuple[list[ast.stmt], dict[str, ast.stmt], list[ast.stmt]]:
     """Parse the generated file and split into (header_stmts, class_map, alias_stmts).
@@ -132,52 +71,39 @@ def class_dependencies(cls: ast.ClassDef, all_names: set[str]) -> set[str]:
 def main() -> None:
     if not SOURCE.exists():
         raise SystemExit(f"Source file not found: {SOURCE}")
-    if not SPEC.exists():
-        raise SystemExit(f"Spec not found: {SPEC}")
+    if not GROUPING.exists():
+        raise SystemExit(f"Grouping artifact not found: {GROUPING}")
 
-    spec = json.loads(SPEC.read_text(encoding="utf-8"))
-    tag_index = build_tag_index(spec)
-    print(f"Loaded {len(tag_index)} tags from spec")
+    grouping = json.loads(GROUPING.read_text(encoding="utf-8"))["schemas"]
+    print(f"Loaded placements for {len(grouping)} schemas from {GROUPING.name}")
 
     header, classes, aliases = parse_classes(SOURCE)
     all_class_names = set(classes.keys())
     print(f"Parsed {len(classes)} classes from {SOURCE.name}")
 
-    # Map: schema name (from spec) → which tags use it
-    schema_to_tags: dict[str, set[str]] = defaultdict(set)
-    for tag, schema_set in tag_index.items():
-        for s in schema_set:
-            schema_to_tags[s].add(tag)
-
     # Each class gets a (package, module) target.
     #   package ∈ {"core", "qbd", ""}  — "" means top-level (_shared only)
     #   module  = file stem (e.g. "vendor", "_shared")
     #
-    # Rules:
-    #   - Used by exactly 1 tag → goes in that tag's package/module
-    #   - Used by 2+ tags (or by zero) → goes in top-level _shared.py
+    # Placements come straight from grouping.json so Python and TypeScript lay
+    # models out identically. Classes datamodel-codegen synthesizes from inline
+    # schemas (e.g. the error `Code`/`Type` enums) have no top-level schema and
+    # so no placement — they fall back to _shared and the colocation rule below.
     assignments: dict[str, tuple[str, str]] = {}
-    class_tag_sets: dict[str, set[str]] = {}
+    unplaced: list[str] = []
     for class_name in all_class_names:
-        tags = schema_to_tags.get(class_name, set())
-        class_tag_sets[class_name] = tags
-        if len(tags) == 1:
-            tag = next(iter(tags))
-            pkg = "core" if tag in CORE_TAGS else "qbd"
-            assignments[class_name] = (pkg, tag_to_module(tag))
-        else:
+        placement = grouping.get(class_name)
+        if placement is None:
+            unplaced.append(class_name)
             assignments[class_name] = ("", "_shared")
+        else:
+            assignments[class_name] = (placement["package"], placement["module"])
+    if unplaced:
+        print(f"  {len(unplaced)} synthesized class(es) not in grouping.json: {', '.join(sorted(unplaced))}")
 
-    # Some helper/page models are not directly referenced by operations, so they
-    # have zero tag ownership even though they depend on exactly one tag-owned
-    # model. Colocate those helpers with that module instead of forcing a
-    # _shared -> qbd/core import edge that creates a circular import.
-    for class_name, target in list(assignments.items()):
-        if target != ("", "_shared"):
-            continue
-        if class_tag_sets.get(class_name):
-            continue
-
+    # Synthesized helpers depending on exactly one tag-owned model are colocated
+    # with it rather than forcing a _shared -> qbd/core import edge (circular).
+    for class_name in unplaced:
         deps = class_dependencies(classes[class_name], all_class_names)
         dep_targets = {
             assignments[dep]
@@ -187,11 +113,10 @@ def main() -> None:
         if len(dep_targets) == 1:
             assignments[class_name] = next(iter(dep_targets))
 
-    # Cycle prevention: _shared must never import from a subpackage. Any class
-    # currently in _shared whose dependency lives in qbd/ or core/ would force
-    # that import edge — promote the dependency up to _shared instead.
-    # Iterate to a fixed point (a promoted dep may itself depend on another
-    # subpackage class).
+    # Cycle prevention: _shared must never import from a subpackage. grouping.json
+    # is already closed under this rule, so this only ever fires for synthesized
+    # classes — if it promotes a placed class, Python and TypeScript layouts have
+    # diverged and the spec pipeline needs to be re-run.
     while True:
         changed = False
         for class_name, target in list(assignments.items()):
@@ -202,6 +127,12 @@ def main() -> None:
                 if dep_target is None:
                     continue
                 if dep_target[0] in ("qbd", "core"):
+                    if dep in grouping:
+                        print(
+                            f"  [warn] promoting {dep} to _shared — it is placed in "
+                            f"{dep_target[0]}/{dep_target[1]} by grouping.json; "
+                            f"TypeScript will not match"
+                        )
                     assignments[dep] = ("", "_shared")
                     changed = True
         if not changed:
@@ -386,72 +317,9 @@ def main() -> None:
     write_subpkg_init("core", CORE_DIR)
     write_subpkg_init("qbd", QBD_DIR)
 
-    # Tactical compatibility fix: the live BarCode response currently omits
-    # revisionNumber even though the schema marks it required. This endpoint is
-    # list/retrieve/delete only, so making the field optional in Python keeps
-    # the SDK usable while the backend/spec contract is corrected.
-    bar_code_file = QBD_DIR / "bar_code.py"
-    if bar_code_file.exists():
-        bar_code_text = bar_code_file.read_text(encoding="utf-8")
-        bar_code_text = bar_code_text.replace(
-            "revision_number: Annotated[str, Field(alias='revisionNumber')]",
-            "revision_number: Annotated[str | None, Field(alias='revisionNumber')] = None",
-        )
-        bar_code_file.write_text(bar_code_text, encoding="utf-8")
-
-    # Tactical compatibility fix: many nested QBD refs in live responses only
-    # include fullName and omit id. Making QbdRef.id optional keeps model
-    # parsing aligned with those payloads while the backend/spec contract is
-    # tightened.
-    shared_file = OUT_DIR / "_shared.py"
-    if shared_file.exists():
-        shared_text = shared_file.read_text(encoding="utf-8")
-        shared_text = shared_text.replace(
-            "class QbdRef(BaseModel):\n    model_config = ConfigDict(populate_by_name=True)\n    id: str\n    full_name:",
-            "class QbdRef(BaseModel):\n    model_config = ConfigDict(populate_by_name=True)\n    id: str | None = None\n    full_name:",
-        )
-        shared_file.write_text(shared_text, encoding="utf-8")
-
-    # datamodel-code-generator currently collapses nullable allOf array
-    # schemas into empty wrapper models for these Vendor fields. The live API
-    # returns arrays, so patch the generated Vendor models to the array shapes
-    # already emitted correctly by the TypeScript generator.
-    vendor_file = QBD_DIR / "vendor.py"
-    if vendor_file.exists():
-        vendor_text = vendor_file.read_text(encoding="utf-8")
-        vendor_text = vendor_text.replace(
-            "from .._shared import AdditionalContacts, AdditionalNotes, Address, AddressRequest, CustomContactFields, CustomFields, DefaultExpenseAccounts, QbdRef",
-            "from .._shared import AdditionalNote, Address, AddressRequest, Contact, CustomContactField, CustomFields, QbdRef",
-        )
-        vendor_text = vendor_text.replace(
-            "default_expense_accounts: Annotated[DefaultExpenseAccounts | None, Field(alias='defaultExpenseAccounts')] = None",
-            "default_expense_accounts: Annotated[list[QbdRef] | None, Field(alias='defaultExpenseAccounts')] = None",
-        )
-        vendor_text = vendor_text.replace(
-            "custom_contact_fields: Annotated[CustomContactFields | None, Field(alias='customContactFields', description='Custom contact fields (name/value pairs) defined for this vendor.')] = None",
-            "custom_contact_fields: Annotated[list[CustomContactField] | None, Field(alias='customContactFields', description='Custom contact fields (name/value pairs) defined for this vendor.')] = None",
-        )
-        vendor_text = vendor_text.replace(
-            "additional_contacts: Annotated[AdditionalContacts | None, Field(alias='additionalContacts', description='Additional contacts associated with this vendor.')] = None",
-            "additional_contacts: Annotated[list[Contact] | None, Field(alias='additionalContacts', description='Additional contacts associated with this vendor.')] = None",
-        )
-        vendor_text = vendor_text.replace(
-            "additional_notes: Annotated[AdditionalNotes | None, Field(alias='additionalNotes', description='Additional notes attached to this vendor record.')] = None",
-            "additional_notes: Annotated[list[AdditionalNote] | None, Field(alias='additionalNotes', description='Additional notes attached to this vendor record.')] = None",
-        )
-        vendor_text = vendor_text.replace(
-            "custom_contact_fields: Annotated[CustomContactFields | None, Field(alias='customContactFields')] = None",
-            "custom_contact_fields: Annotated[list[CustomContactField] | None, Field(alias='customContactFields')] = None",
-        )
-        vendor_text = vendor_text.replace(
-            "additional_contacts: Annotated[AdditionalContacts | None, Field(alias='additionalContacts')] = None",
-            "additional_contacts: Annotated[list[Contact] | None, Field(alias='additionalContacts')] = None",
-        )
-        vendor_text = vendor_text.replace(
-            "additional_notes: Annotated[AdditionalNotes | None, Field(alias='additionalNotes')] = None",
-            "additional_notes: Annotated[list[AdditionalNote] | None, Field(alias='additionalNotes')] = None",
-        )
-        vendor_file.write_text(vendor_text, encoding="utf-8")
+    # No post-generation string surgery here by design. Spec-level corrections
+    # (optional fields, wrapper inlining) belong in the root spec pipeline's
+    # overlay/normalizer so all three SDKs get them — see spec/overlay.json.
 
     # Build top-level models/__init__.py that re-exports everything flat
     init_lines = ['"""Auto-generated. Do not edit by hand."""', ""]
