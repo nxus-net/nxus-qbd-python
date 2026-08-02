@@ -46,9 +46,10 @@ jobs:
             echo "::error::Tag ${GITHUB_REF_NAME} does not match pyproject version ${project_version}."
             exit 1
           fi
-          # nxus_qbd.__version__ reads installed distribution metadata, so this
-          # catches the two drifting apart — which has happened before.
-          runtime_version="$(uv run python -c "import nxus_qbd; print(nxus_qbd.__version__)")"
+          # Read the same installed distribution metadata that
+          # nxus_qbd.__version__ exposes without importing the package. The
+          # generated models are intentionally absent until the next step.
+          runtime_version="$(uv run python -c "from importlib.metadata import version; print(version('nxus-qbd'))")"
           if [ "${runtime_version}" != "${project_version}" ]; then
             echo "::error::nxus_qbd.__version__ is ${runtime_version} but pyproject says ${project_version}."
             exit 1
