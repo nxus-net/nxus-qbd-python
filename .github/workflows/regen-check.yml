@@ -21,14 +21,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
 
-      - run: uv pip install -e ".[dev,codegen]" --system
+      # Frozen, matching ci.yml and the release preflight — the generator
+      # version has to be identical everywhere or "no drift" means nothing.
+      - run: uv sync --frozen --extra dev --extra codegen --python 3.12
 
       - name: Regenerate from the pinned spec
-        run: python scripts/generate.py
+        run: uv run python scripts/generate.py
 
       - name: Verify tracked output is unchanged
         run: |
@@ -44,7 +43,7 @@ jobs:
       # TypeScript and Python lay their models out differently.
       - name: Verify grouping.json matches the pinned spec
         run: |
-          python - <<'PY'
+          uv run python - <<'PY'
           import hashlib, json, pathlib, sys
           spec = pathlib.Path("spec/openapi.json").read_bytes()
           grouping = json.loads(pathlib.Path("spec/grouping.json").read_text())

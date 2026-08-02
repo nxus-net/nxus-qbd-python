@@ -1,3 +1,20 @@
+# Release on a v* tag, in two jobs.
+#
+# preflight builds the exact wheel and sdist and holds NO credentials. publish
+# runs in the `production` environment, which GitHub gates behind an approval —
+# and it withholds that environment's secrets until the approval happens, so
+# preflight cannot reach PyPI even if something in the build were compromised.
+#
+# After approval, publish uploads the artifact preflight already produced. It
+# does not reinstall, regenerate, or rebuild: what was inspected is what ships.
+#
+# One-time repo setup (Settings > Environments > production):
+#   - Required reviewers: yourself. As sole maintainer this is not a security
+#     boundary — it is a deliberate "I looked at the package and mean to ship
+#     it" pause that stops accidental releases.
+#   - Deployment branches and tags: restrict to the tag pattern v*
+#   - Environment secret: PYPI_TOKEN  (remove the repo-level copy once this works)
+#   - Disable "Allow administrators to bypass configured protection rules"
 name: Publish to PyPI
 
 on:
@@ -5,20 +22,85 @@ on:
     tags: ["v*"]
 
 jobs:
-  publish:
+  preflight:
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
       - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install build
-      - run: pip install "datamodel-code-generator[http]>=0.26.0"
-      - run: python scripts/generate.py
-      - run: python -m build
-      - name: Publish to PyPI
+
+      # --frozen resolves strictly from uv.lock. This is what pins
+      # datamodel-code-generator: the pyproject constraint is an open range, and
+      # an unpinned install could change every generated model at release time.
+      - run: uv sync --frozen --extra dev --extra codegen
+
+      - name: Verify the tag matches the package version
+        run: |
+          set -euo pipefail
+          project_version="$(uv run python -c "import tomllib,pathlib; print(tomllib.loads(pathlib.Path('pyproject.toml').read_text())['project']['version'])")"
+          if [ "v${project_version}" != "${GITHUB_REF_NAME}" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match pyproject version ${project_version}."
+            exit 1
+          fi
+          # nxus_qbd.__version__ reads installed distribution metadata, so this
+          # catches the two drifting apart — which has happened before.
+          runtime_version="$(uv run python -c "import nxus_qbd; print(nxus_qbd.__version__)")"
+          if [ "${runtime_version}" != "${project_version}" ]; then
+            echo "::error::nxus_qbd.__version__ is ${runtime_version} but pyproject says ${project_version}."
+            exit 1
+          fi
+          echo "Releasing ${GITHUB_REF_NAME} (pyproject and runtime agree: ${project_version})."
+
+      - name: Regenerate and verify no drift
+        run: |
+          uv run python scripts/generate.py
+          if ! git diff --exit-code; then
+            echo "::error::Regenerating from the pinned spec changed tracked files."
+            echo "The tag points at a commit whose generated output is stale. Do not publish it."
+            exit 1
+          fi
+
+      # nxus_qbd/models/ is gitignored, so the diff above cannot see the models;
+      # the suite is what proves the freshly generated ones are sound.
+      #
+      # This is the OFFLINE suite. preflight holds no secrets by design, so
+      # NXUS_API_KEY is absent and conftest.py skips every live integration
+      # test. That is intended — a release must not depend on QuickBooks
+      # Desktop being awake — but it means a green preflight is not evidence of
+      # production integration coverage. Live coverage is a separate, manually
+      # dispatched run.
+      - name: Offline test suite (integration tests self-skip without credentials)
+        run: uv run pytest -q
+
+      - name: Build wheel and sdist
+        run: uv build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: python-package
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    needs: preflight
+    runs-on: ubuntu-latest
+    # Gates on approval AND is where PYPI_TOKEN becomes readable.
+    environment: production
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: python-package
+          path: dist
+
+      - name: Publish the approved distributions
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
+          packages-dir: dist
           password: ${{ secrets.PYPI_TOKEN }}

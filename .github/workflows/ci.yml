@@ -15,10 +15,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-      - run: uv pip install -e ".[dev,codegen]" --system
-      - run: python scripts/generate.py --file spec/openapi.json
-      - run: python -c "from nxus_qbd import NxusClient; print('Import OK')"
-      - run: pytest --tb=short -q
+
+      # `uv sync --frozen` resolves strictly from uv.lock, the same path the
+      # release preflight takes, so branch CI and a release cannot disagree
+      # about which packages were used. It replaced `uv pip install -e`, which
+      # ignored the lock entirely: the codegen extra is an open range
+      # (datamodel-code-generator[http]>=0.26.0), so an unpinned install could
+      # change every generated model without a single file changing here.
+      - run: uv sync --frozen --extra dev --extra codegen --python ${{ matrix.python-version }}
+
+      - run: uv run python scripts/generate.py
+      - run: uv run python -c "from nxus_qbd import NxusClient; print('Import OK')"
+
+      # Integration tests self-skip without NXUS_API_KEY, so this is the
+      # offline suite: unit tests plus whatever integration cases can run
+      # without live credentials or a reachable backend.
+      - name: Offline test suite
+        run: uv run pytest --tb=short -q

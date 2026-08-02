@@ -6925,7 +6925,7 @@
         "type": "object"
       },
       "CheckBillPayment": {
-        "description": "Request model for creating a new Check transaction to pay bills.\nBased on the CheckAddRq QBXML type.",
+        "description": "A payment made by check against one vendor’s open bills.",
         "properties": {
           "id": {
             "description": "The unique identifier assigned by QuickBooks to this transaction.\n\nThis ID is unique across **all** transaction types in the QuickBooks company file,\nnot just within its own type. This value is assigned by QuickBooks and never changes.",
@@ -7000,7 +7000,7 @@
                 "$ref": "#/components/schemas/QbdRef"
               }
             ],
-            "description": "Reference to the Accounts Payable (AP) account.",
+            "description": "Reference to the Accounts Payable account.",
             "nullable": true
           },
           "address": {
@@ -7027,7 +7027,7 @@
             "type": "boolean"
           },
           "appliedToTransactions": {
-            "description": "List of transactions this payment is applied to (e.g., Bills).\nThis is the equivalent of \"line items\" for a BillPayment.",
+            "description": "List of transactions this payment is applied to e.g. Bills.\nThis is the equivalent of line items for a BillPayment.",
             "items": {
               "$ref": "#/components/schemas/AppliedToTxn"
             },
@@ -8179,7 +8179,7 @@
         "type": "object"
       },
       "CreateCheckBillPaymentRequest": {
-        "description": "Request model for creating a new Check transaction to pay bills.\nBased on the CheckAddRq QBXML type.",
+        "description": "Represents a request to create a new Check transaction to pay bills.",
         "properties": {
           "payeeId": {
             "description": "(Required) The ListID of the payee (Vendor, Customer, Employee, or OtherName).\nMax length: 209 characters.",
@@ -8255,8 +8255,8 @@
             "nullable": true,
             "type": "string"
           },
-          "appliedToTransactions": {
-            "description": "(Required) List of transactions (bills) to apply this check to.\nQBD requiring at least one AppliedToTransactionAddRequest for BillPaymentCheckAdd.",
+          "applyToTransactions": {
+            "description": "(Required) List of transactions (bills) to apply this check to.\nQBD requiring at least one AppliedToTransactionAddRequest for BillPaymentCheckAdd.\npaymentAmount, applyCredits, discountAmount, or any combination of these must be specified.",
             "items": {
               "$ref": "#/components/schemas/AppliedToTransactionRequest"
             },
@@ -8478,12 +8478,12 @@
             "type": "number"
           },
           "externalId": {
-            "description": "An optional, client-provided GUID for external tracking.\nIf not provided, a new GUID will be generated automatically.",
+            "description": "An optional, client-provided GUID for external tracking.",
             "nullable": true,
             "type": "string"
           },
           "applyToTransactions": {
-            "description": "Bills being paid by this credit card payment\nAt least one bill must be specified",
+            "description": "Bills being paid by this credit card payment\n<remarks>At least one bill must be specified.</remarks>",
             "items": {
               "$ref": "#/components/schemas/ApplyToTransactionRequest"
             },
@@ -12712,14 +12712,16 @@
             "nullable": true,
             "type": "string"
           },
-          "other1": {
-            "description": "(Optional) User-defined field 1. (Max 29 characters)",
+          "otherCustomField1": {
+            "description": "The primary native custom field used to store supplemental line item information.\n\nFunctions similarly to CustomField object as a standard QuickBooks field built into\nall purchase orders, separate from the dynamic custom field collection. It provides\nextra storage for non-standard order tracking and is hidden by default in the QuickBooks UI.",
+            "example": "\"Sample text value\"",
             "maxLength": 29,
             "nullable": true,
             "type": "string"
           },
-          "other2": {
-            "description": "(Optional) User-defined field 2. (Max 29 characters)",
+          "otherCustomField2": {
+            "description": "The secondary native custom field used to store supplemental line item information.\n\nFunctions similarly to CustomField object as a standard QuickBooks field built into\nall purchase orders, separate from the dynamic custom field collection. It provides\nextra storage for non-standard order tracking and is hidden by default in the QuickBooks UI.",
+            "example": "\"Sample text value\"",
             "maxLength": 29,
             "nullable": true,
             "type": "string"
@@ -12854,15 +12856,13 @@
             "type": "string"
           },
           "otherCustomField1": {
-            "description": "The Other1 associated with this object.",
-            "example": "\"Sample text value\"",
+            "description": "Creates a primary native custom field used to store supplemental purchase order information.\n\nUnlike elements in the dynamic custom field array, this is a built-in\nQuickBooks field available on all purchase orders. It is typically used for tracking custom\nmetadata that lacks a dedicated standard field. Note that this field is hidden in the\ndefault QuickBooks UI.",
             "maxLength": 25,
             "nullable": true,
             "type": "string"
           },
           "otherCustomField2": {
-            "description": "The Other2 associated with this object.",
-            "example": "\"Sample text value\"",
+            "description": "Creates a secondary native custom field used to store additional purchase order details.\n\nFunctions similarly to custom field array as a standard QuickBooks field built into\nall purchase orders, separate from the dynamic custom field collection. It provides\nextra storage for non-standard order tracking and is hidden by default in the QuickBooks UI.",
             "maxLength": 29,
             "nullable": true,
             "type": "string"
@@ -20036,7 +20036,7 @@
         "type": "object"
       },
       "Invoice": {
-        "description": "Data transfer object for a customer invoice.\nAn invoice is a transaction representing a request for payment for goods or services.\nIt inherits core transaction fields (like TxnID, TxnDate, Amount, and Line Items) \nfrom BaseTransactionDto.",
+        "description": "An invoice is a transaction representing a request for payment for goods or services.",
         "properties": {
           "id": {
             "description": "The unique identifier assigned by QuickBooks to this transaction.\n\nThis ID is unique across **all** transaction types in the QuickBooks company file,\nnot just within its own type. This value is assigned by QuickBooks and never changes.",
@@ -27545,13 +27545,13 @@
             "nullable": true
           },
           "otherCustomField1": {
-            "description": "The Other1 associated with this object.",
+            "description": "The primary native custom field used to store supplemental purchase order information.\n\nFunctions similarly to custom field object as a standard QuickBooks field built into\nall purchase orders, separate from the dynamic custom field collection. It provides\nextra storage for non-standard order tracking and is hidden by default in the QuickBooks UI.",
             "example": "\"Sample text value\"",
             "nullable": true,
             "type": "string"
           },
           "otherCustomField2": {
-            "description": "The Other2 associated with this object.",
+            "description": "The secondary native custom field used to store supplemental purchase order information.\n\nFunctions similarly to custom field object as a standard QuickBooks field built into\nall purchase orders, separate from the dynamic custom field collection. It provides\nextra storage for non-standard order tracking and is hidden by default in the QuickBooks UI.",
             "example": "\"Sample text value\"",
             "nullable": true,
             "type": "string"
@@ -27833,20 +27833,18 @@
             "type": "boolean"
           },
           "otherCustomField1": {
-            "description": "The Other1 associated with this object.",
+            "description": "The primary native custom field used to store supplemental line item information.\n\nFunctions similarly to custom field object as a standard QuickBooks field built into\nall purchase orders, separate from the dynamic custom field collection. It provides\nextra storage for non-standard order tracking and is hidden by default in the QuickBooks UI.",
             "example": "\"Sample text value\"",
             "nullable": true,
             "type": "string"
           },
           "otherCustomField2": {
-            "description": "The Other2 associated with this object.",
+            "description": "The secondary native custom field used to store supplemental line item information.\n\nFunctions similarly to custom field object as a standard QuickBooks field built into\nall purchase orders, separate from the dynamic custom field collection. It provides\nextra storage for non-standard order tracking and is hidden by default in the QuickBooks UI.",
             "example": "\"Sample text value\"",
             "nullable": true,
             "type": "string"
           },
           "customFields": {
-            "description": "The DataExtRet associated with this object.",
-            "example": "\"Sample text value\"",
             "items": {
               "$ref": "#/components/schemas/QbdDataExt"
             },
@@ -32523,7 +32521,7 @@
         "type": "object"
       },
       "UpdateCheckBillPaymentRequest": {
-        "description": "Request model for updating an existing Check transaction used to pay bills.",
+        "description": "Represents a request to update an existing Check transaction used to pay bills.",
         "properties": {
           "revisionNumber": {
             "description": "(Required) The current EditSequence of the transaction to ensure concurrency.\nMax length: 16 characters.",
@@ -32600,7 +32598,7 @@
             "nullable": true,
             "type": "boolean"
           },
-          "appliedToTransactions": {
+          "applyToTransactions": {
             "description": "(Optional) List of transactions to apply updates to.",
             "items": {
               "$ref": "#/components/schemas/AppliedToTransactionRequest"
@@ -32629,7 +32627,7 @@
             "nullable": true,
             "type": "string"
           },
-          "traansactionDate": {
+          "transactionDate": {
             "description": "Transaction date",
             "format": "date",
             "nullable": true,
@@ -32833,7 +32831,7 @@
             "type": "string"
           },
           "applyToTransactions": {
-            "description": "Bills being paid by this credit card payment\nIf provided, will replace existing applied bills",
+            "description": "Bills being paid by this credit card payment\n<remarks>If provided, will replace existing applied bills.</remarks>",
             "items": {
               "$ref": "#/components/schemas/ApplyToTransactionRequest"
             },
@@ -37048,13 +37046,15 @@
             "type": "string"
           },
           "otherCustomField1": {
-            "description": "(Optional) User-defined field 1. (Max 29 characters)",
+            "description": "The primary native custom field used to store supplemental line item information.\n\nFunctions similarly to CustomField object as a standard QuickBooks field built into\nall purchase orders, separate from the dynamic custom field collection. It provides\nextra storage for non-standard order tracking and is hidden by default in the QuickBooks UI.",
+            "example": "\"Sample text value\"",
             "maxLength": 29,
             "nullable": true,
             "type": "string"
           },
           "otherCustomField2": {
-            "description": "(Optional) User-defined field 2. (Max 29 characters)",
+            "description": "The secondary native custom field used to store supplemental line item information.\n\nFunctions similarly to CustomField object as a standard QuickBooks field built into\nall purchase orders, separate from the dynamic custom field collection. It provides\nextra storage for non-standard order tracking and is hidden by default in the QuickBooks UI.",
+            "example": "\"Sample text value\"",
             "maxLength": 29,
             "nullable": true,
             "type": "string"
@@ -37208,16 +37208,14 @@
             "nullable": true,
             "type": "number"
           },
-          "other1": {
-            "description": "The Other1 associated with this object.",
-            "example": "\"Sample text value\"",
+          "otherCustomField1": {
+            "description": "Updates a primary native custom field used to store supplemental purchase order information.\n\nUnlike elements in the dynamic custom field array array, this is a built-in\nQuickBooks field available on all purchase orders. It is typically used for tracking custom\nmetadata that lacks a dedicated standard field. Note that this field is hidden in the\ndefault QuickBooks UI.",
             "maxLength": 25,
             "nullable": true,
             "type": "string"
           },
-          "other2": {
-            "description": "The Other2 associated with this object.",
-            "example": "\"Sample text value\"",
+          "otherCustomField2": {
+            "description": "Updates a secondary native custom field used to store additional purchase order details.\n\nFunctions similarly to custom field array as a standard QuickBooks field built into\nall purchase orders, separate from the dynamic custom field collection. It provides\nextra storage for non-standard order tracking and is hidden by default in the QuickBooks UI.",
             "maxLength": 29,
             "nullable": true,
             "type": "string"
